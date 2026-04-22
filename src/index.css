@@ -1,0 +1,20 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --color-text-primary: #2c2a27;
+  --color-text-secondary: #6b6560;
+  --color-background: #f7f4ef;
+  --color-accent: #4a6741;
+  --color-border: #d6cfc5;
+}
+
+body {
+  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--color-text-primary);
+  background: var(--color-background);
+  min-height: 100vh;
+}
