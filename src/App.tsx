@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 const Page = styled.div`
@@ -60,14 +61,46 @@ const Contact = styled.a`
   }
 `
 
+const LangSwitcher = styled.div`
+  position: fixed;
+  top: 1.25rem;
+  right: 1.5rem;
+  display: flex;
+  gap: 0.5rem;
+`
+
+const LangButton = styled.button<{ $active: boolean }>`
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 0;
+  color: ${({ $active }) => ($active ? 'var(--color-accent)' : 'var(--color-text-secondary)')};
+  border-bottom: 1px solid ${({ $active }) => ($active ? 'var(--color-accent)' : 'transparent')};
+  transition: color 0.2s;
+
+  &:hover {
+    color: var(--color-accent);
+  }
+`
+
 export default function App() {
+  const { t, i18n } = useTranslation()
+
   return (
     <Page>
+      <LangSwitcher>
+        <LangButton $active={i18n.language === 'sv'} onClick={() => void i18n.changeLanguage('sv')}>SV</LangButton>
+        <LangButton $active={i18n.language === 'en'} onClick={() => void i18n.changeLanguage('en')}>EN</LangButton>
+      </LangSwitcher>
       <Title>Svampskogen</Title>
-      <Subtitle>Specialbutik för svampplockaren</Subtitle>
+      <Subtitle>{t('subtitle')}</Subtitle>
       <Divider />
-      <Opening>Öppnar sommaren 2026</Opening>
-      <Location>Malmö</Location>
+      <Opening>{t('opening')}</Opening>
+      <Location>{t('location')}</Location>
       <Contact href="mailto:kristian@svampskogen.com">kristian@svampskogen.com</Contact>
     </Page>
   )
