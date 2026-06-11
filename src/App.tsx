@@ -141,7 +141,6 @@ export default function App() {
       <Subtitle>{t('subtitle')}</Subtitle>
       <Divider />
       <Section>
-        <SectionHeading>{t('about_heading')}</SectionHeading>
         <BodyText>{t('about_p1')}</BodyText>
         <BodyText>{t('about_p2')}</BodyText>
         <BodyText>{t('about_p3')}</BodyText>
