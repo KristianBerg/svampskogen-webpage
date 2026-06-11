@@ -61,6 +61,32 @@ const Contact = styled.a`
   }
 `
 
+const Section = styled.div`
+  width: min(560px, 90vw);
+  text-align: left;
+  margin-bottom: 3rem;
+`
+
+const SectionHeading = styled.h2`
+  font-size: 0.8rem;
+  font-weight: normal;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  margin-bottom: 1rem;
+`
+
+const BodyText = styled.p`
+  font-size: 0.95rem;
+  color: var(--color-text-primary);
+  line-height: 1.7;
+  margin-bottom: 0.75rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+`
+
 const MapWrapper = styled.div`
   margin-top: 3rem;
   width: min(480px, 90vw);
@@ -113,6 +139,17 @@ export default function App() {
       </LangSwitcher>
       <Title>Svampskogen</Title>
       <Subtitle>{t('subtitle')}</Subtitle>
+      <Divider />
+      <Section>
+        <SectionHeading>{t('about_heading')}</SectionHeading>
+        <BodyText>{t('about_p1')}</BodyText>
+        <BodyText>{t('about_p2')}</BodyText>
+        <BodyText>{t('about_p3')}</BodyText>
+      </Section>
+      <Section>
+        <SectionHeading>{t('suppliers_heading')}</SectionHeading>
+        <BodyText>{t('suppliers_p1')}</BodyText>
+      </Section>
       <Divider />
       <Opening>{t('opening')}</Opening>
       <Location>{t('location')}</Location>
