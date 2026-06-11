@@ -61,6 +61,21 @@ const Contact = styled.a`
   }
 `
 
+const MapWrapper = styled.div`
+  margin-top: 3rem;
+  width: min(480px, 90vw);
+  aspect-ratio: 4 / 3;
+  border: 1px solid var(--color-border);
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+    filter: grayscale(30%);
+  }
+`
+
 const LangSwitcher = styled.div`
   position: fixed;
   top: 1.25rem;
@@ -102,6 +117,14 @@ export default function App() {
       <Opening>{t('opening')}</Opening>
       <Location>{t('location')}</Location>
       <Contact href="mailto:kristian@svampskogen.com">kristian@svampskogen.com</Contact>
+      <MapWrapper>
+        <iframe
+          src="https://maps.google.com/maps?q=Claesgatan+8%2C+214+26+Malm%C3%B6%2C+Sweden&output=embed"
+          title="Svampskogen location"
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        />
+      </MapWrapper>
     </Page>
   )
 }
