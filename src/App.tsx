@@ -140,6 +140,7 @@ export default function App() {
       <Title>Svampskogen</Title>
       <Subtitle>{t('subtitle')}</Subtitle>
       <Divider />
+      <Opening>{t('opening')}</Opening>
       <Section>
         <BodyText>{t('about_p1')}</BodyText>
         <BodyText>{t('about_p2')}</BodyText>
@@ -150,7 +151,6 @@ export default function App() {
         <BodyText>{t('suppliers_p1')}</BodyText>
       </Section>
       <Divider />
-      <Opening>{t('opening')}</Opening>
       <Location>{t('location')}</Location>
       <Contact href="mailto:kristian@svampskogen.com">kristian@svampskogen.com</Contact>
       <Contact href="https://instagram.com/svampskogen_malmo" target="_blank" rel="noopener noreferrer" style={{ marginTop: '0.75rem' }}>@svampskogen_malmo</Contact>
