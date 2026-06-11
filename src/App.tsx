@@ -117,6 +117,7 @@ export default function App() {
       <Opening>{t('opening')}</Opening>
       <Location>{t('location')}</Location>
       <Contact href="mailto:kristian@svampskogen.com">kristian@svampskogen.com</Contact>
+      <Contact href="https://instagram.com/svampskogen_malmo" target="_blank" rel="noopener noreferrer" style={{ marginTop: '0.75rem' }}>@svampskogen_malmo</Contact>
       <MapWrapper>
         <iframe
           src="https://maps.google.com/maps?q=Claesgatan+8%2C+214+26+Malm%C3%B6%2C+Sweden&output=embed"
