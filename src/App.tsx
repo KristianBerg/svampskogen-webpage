@@ -139,8 +139,8 @@ export default function App() {
       </LangSwitcher>
       <Title>Svampskogen</Title>
       <Subtitle>{t('subtitle')}</Subtitle>
-      <Divider />
       <Opening>{t('opening')}</Opening>
+      <Divider />
       <Section>
         <BodyText>{t('about_p1')}</BodyText>
         <BodyText>{t('about_p2')}</BodyText>
