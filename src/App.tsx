@@ -40,6 +40,21 @@ const Opening = styled.p`
   margin-bottom: 0.75rem;
 `
 
+const HoursLabel = styled.p`
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  margin-top: 1.5rem;
+  margin-bottom: 0.4rem;
+`
+
+const HoursDays = styled.p`
+  font-size: 0.95rem;
+  color: var(--color-text-primary);
+  margin-bottom: 0;
+`
+
 const Location = styled.p`
   font-size: 0.95rem;
   color: var(--color-text-secondary);
@@ -140,7 +155,9 @@ export default function App() {
       <Title>Svampskogen</Title>
       <Subtitle>{t('subtitle')}</Subtitle>
       <Opening>{t('opening')}</Opening>
-      <Divider />
+      <HoursLabel>{t('hours_heading')}</HoursLabel>
+      <HoursDays>{t('hours_days')}</HoursDays>
+      <Divider style={{ marginTop: '2rem' }} />
       <Section>
         <BodyText>{t('about_p1')}</BodyText>
         <BodyText>{t('about_p2')}</BodyText>
