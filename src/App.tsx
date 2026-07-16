@@ -158,6 +158,7 @@ export default function App() {
       <HoursLabel>{t('hours_heading')}</HoursLabel>
       <HoursDays>{t('hours_days_1')}</HoursDays>
       <HoursDays>{t('hours_days_2')}</HoursDays>
+      <HoursDays>{t('hours_days_3')}</HoursDays>
       <Divider style={{ marginTop: '2rem' }} />
       <Section>
         <BodyText>{t('about_p1')}</BodyText>
