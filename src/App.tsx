@@ -47,12 +47,6 @@ const Divider = styled.hr`
   margin: 0 auto 3rem;
 `
 
-const Opening = styled.p`
-  font-size: clamp(1rem, 2.5vw, 1.25rem);
-  color: var(--color-text-primary);
-  margin-bottom: 0.75rem;
-`
-
 const HoursLabel = styled.p`
   font-size: 0.8rem;
   letter-spacing: 0.12em;
@@ -177,8 +171,7 @@ export default function App() {
         <Subtitle style={{ marginTop: '1.5rem', marginBottom: 0 }}>{t('subtitle')}</Subtitle>
       </Hero>
       <Page>
-        <Opening style={{ marginTop: '2rem' }}>{t('opening')}</Opening>
-        <HoursLabel>{t('hours_heading')}</HoursLabel>
+        <HoursLabel style={{ marginTop: '2rem' }}>{t('hours_heading')}</HoursLabel>
         <HoursDays>{t('hours_days_1')}</HoursDays>
         <HoursDays>{t('hours_days_2')}</HoursDays>
         <HoursDays>{t('hours_days_3')}</HoursDays>
