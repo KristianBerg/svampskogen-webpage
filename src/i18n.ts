@@ -13,8 +13,13 @@ void i18n
       en: { translation: en },
       sv: { translation: sv },
     },
-    fallbackLng: 'sv',
+    fallbackLng: 'en',
     supportedLngs: ['sv', 'en'],
+    load: 'languageOnly',
+    detection: {
+      order: ['localStorage', 'navigator'],
+      caches: ['localStorage'],
+    },
     interpolation: { escapeValue: false },
   })
 
