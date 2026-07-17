@@ -1,22 +1,35 @@
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+import logotype from './assets/logo/svampskogen-logotype.png'
+import heroImage from './assets/hero/purple-moss.jpg'
 
-const Page = styled.div`
-  min-height: 100vh;
+const Hero = styled.div`
+  --color-text-secondary: #e4ddd0;
+
+  width: 100%;
+  min-height: 48vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 2rem;
   text-align: center;
+  background-image: linear-gradient(180deg, rgba(18, 20, 14, 0.4), rgba(18, 20, 14, 0.65)), url(${heroImage});
+  background-size: cover;
+  background-position: center 15%;
 `
 
-const Title = styled.h1`
-  font-size: clamp(2.5rem, 8vw, 5rem);
-  font-weight: normal;
-  letter-spacing: 0.05em;
-  color: var(--color-accent);
-  margin-bottom: 0.5rem;
+const Page = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+`
+
+const Logo = styled.img`
+  width: min(380px, 70vw);
+  height: auto;
 `
 
 const Subtitle = styled.p`
@@ -118,11 +131,18 @@ const MapWrapper = styled.div`
 `
 
 const LangSwitcher = styled.div`
+  --color-text-secondary: #e4ddd0;
+  --color-accent: #cfe0b8;
+
   position: fixed;
   top: 1.25rem;
   right: 1.5rem;
   display: flex;
   gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(18, 20, 14, 0.35);
+  backdrop-filter: blur(2px);
 `
 
 const LangButton = styled.button<{ $active: boolean }>`
@@ -147,41 +167,45 @@ export default function App() {
   const { t, i18n } = useTranslation()
 
   return (
-    <Page>
+    <>
       <LangSwitcher>
         <LangButton $active={i18n.language === 'sv'} onClick={() => void i18n.changeLanguage('sv')}>SV</LangButton>
         <LangButton $active={i18n.language === 'en'} onClick={() => void i18n.changeLanguage('en')}>EN</LangButton>
       </LangSwitcher>
-      <Title>Svampskogen</Title>
-      <Subtitle>{t('subtitle')}</Subtitle>
-      <Opening>{t('opening')}</Opening>
-      <HoursLabel>{t('hours_heading')}</HoursLabel>
-      <HoursDays>{t('hours_days_1')}</HoursDays>
-      <HoursDays>{t('hours_days_2')}</HoursDays>
-      <HoursDays>{t('hours_days_3')}</HoursDays>
-      <Divider style={{ marginTop: '2rem' }} />
-      <Section>
-        <BodyText>{t('about_p1')}</BodyText>
-        <BodyText>{t('about_p2')}</BodyText>
-        <BodyText>{t('about_p3')}</BodyText>
-      </Section>
-      <Section>
-        <SectionHeading>{t('suppliers_heading')}</SectionHeading>
-        <BodyText>{t('suppliers_p1')}</BodyText>
-      </Section>
-      <Divider />
-      <Location>{t('location')}</Location>
-      <Contact href="mailto:kristian@svampskogen.com">kristian@svampskogen.com</Contact>
-      <Contact href="https://instagram.com/svampskogen_malmo" target="_blank" rel="noopener noreferrer" style={{ marginTop: '0.75rem' }}>@svampskogen_malmo</Contact>
-      <Contact href="https://maps.app.goo.gl/mXn7tpBWJwmRNEf89" target="_blank" rel="noopener noreferrer" style={{ marginTop: '0.75rem' }}>{t('gbp_link')}</Contact>
-      <MapWrapper>
-        <iframe
-          src="https://maps.google.com/maps?q=Claesgatan+8%2C+214+26+Malm%C3%B6%2C+Sweden&output=embed"
-          title="Svampskogen location"
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-        />
-      </MapWrapper>
-    </Page>
+      <Hero>
+        <Logo src={logotype} alt="Svampskogen" />
+        <Subtitle style={{ marginTop: '1.5rem', marginBottom: 0 }}>{t('subtitle')}</Subtitle>
+      </Hero>
+      <Page>
+        <Opening style={{ marginTop: '2rem' }}>{t('opening')}</Opening>
+        <HoursLabel>{t('hours_heading')}</HoursLabel>
+        <HoursDays>{t('hours_days_1')}</HoursDays>
+        <HoursDays>{t('hours_days_2')}</HoursDays>
+        <HoursDays>{t('hours_days_3')}</HoursDays>
+        <Divider style={{ marginTop: '2rem' }} />
+        <Section>
+          <BodyText>{t('about_p1')}</BodyText>
+          <BodyText>{t('about_p2')}</BodyText>
+          <BodyText>{t('about_p3')}</BodyText>
+        </Section>
+        <Section>
+          <SectionHeading>{t('suppliers_heading')}</SectionHeading>
+          <BodyText>{t('suppliers_p1')}</BodyText>
+        </Section>
+        <Divider />
+        <Location>{t('location')}</Location>
+        <Contact href="mailto:kristian@svampskogen.com">kristian@svampskogen.com</Contact>
+        <Contact href="https://instagram.com/svampskogen_malmo" target="_blank" rel="noopener noreferrer" style={{ marginTop: '0.75rem' }}>@svampskogen_malmo</Contact>
+        <Contact href="https://maps.app.goo.gl/mXn7tpBWJwmRNEf89" target="_blank" rel="noopener noreferrer" style={{ marginTop: '0.75rem' }}>{t('gbp_link')}</Contact>
+        <MapWrapper>
+          <iframe
+            src="https://maps.google.com/maps?q=Claesgatan+8%2C+214+26+Malm%C3%B6%2C+Sweden&output=embed"
+            title="Svampskogen location"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
+        </MapWrapper>
+      </Page>
+    </>
   )
 }
