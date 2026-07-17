@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local notes, not tracked
+CLAUDE.md
+docs/
