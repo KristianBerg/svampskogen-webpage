@@ -7,6 +7,7 @@ import ProductPage from './pages/ProductPage'
 import CheckoutSuccessPage from './pages/CheckoutSuccessPage'
 import CheckoutCancelPage from './pages/CheckoutCancelPage'
 import ReturnsPage from './pages/ReturnsPage'
+import NotFoundPage from './pages/NotFoundPage'
 
 const LangSwitcher = styled.div`
   --color-text-secondary: #e4ddd0;
@@ -57,6 +58,7 @@ export default function App() {
         <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
         <Route path="/checkout/cancel" element={<CheckoutCancelPage />} />
         <Route path="/returns" element={<ReturnsPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   )

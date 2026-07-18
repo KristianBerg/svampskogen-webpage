@@ -21,5 +21,8 @@
   "checkout_cancel_heading": "Köpet avbröts",
   "checkout_cancel_body": "Din varukorg är sparad, så du kan fortsätta där du slutade.",
   "returns_heading": "Retur och villkor",
-  "returns_body": "Information om ångerrätt och köpvillkor publiceras här."
+  "returns_body": "Information om ångerrätt och köpvillkor publiceras här.",
+  "not_found_heading": "Sidan hittades inte",
+  "not_found_body": "Sidan du letar efter finns inte.",
+  "back_to_home": "Tillbaka till startsidan"
 }

@@ -21,5 +21,8 @@
   "checkout_cancel_heading": "Checkout cancelled",
   "checkout_cancel_body": "Your cart has been saved, so you can pick up where you left off.",
   "returns_heading": "Returns and terms",
-  "returns_body": "Information about the right of withdrawal and purchase terms will be published here."
+  "returns_body": "Information about the right of withdrawal and purchase terms will be published here.",
+  "not_found_heading": "Page not found",
+  "not_found_body": "The page you're looking for doesn't exist.",
+  "back_to_home": "Back to home"
 }
