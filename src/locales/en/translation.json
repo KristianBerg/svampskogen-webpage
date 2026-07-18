@@ -11,5 +11,15 @@
   "about_p3": "Whether you're looking for a gift, a new hobby, or quality gear, you're welcome to come in!",
   "suppliers_heading": "Suppliers and artists",
   "suppliers_p1": "I'm actively looking to collaborate with Scandinavian producers, makers, and artists whose products and work fit the profile of Svampskogen. I'm happy to get in touch!",
-  "gbp_link": "Find us on Google Maps"
+  "gbp_link": "Find us on Google Maps",
+  "store_heading": "Store",
+  "store_coming_soon": "The online store is coming soon.",
+  "product_not_found": "Product not found.",
+  "back_to_store": "Back to store",
+  "checkout_success_heading": "Thank you for your order!",
+  "checkout_success_body": "A receipt has been sent to your email.",
+  "checkout_cancel_heading": "Checkout cancelled",
+  "checkout_cancel_body": "Your cart has been saved, so you can pick up where you left off.",
+  "returns_heading": "Returns and terms",
+  "returns_body": "Information about the right of withdrawal and purchase terms will be published here."
 }

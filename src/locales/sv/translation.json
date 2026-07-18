@@ -11,5 +11,15 @@
   "about_p3": "Oavsett om du letar efter en present, en ny hobby eller kvalitetsutrustning är du varmt välkommen in!",
   "suppliers_heading": "Leverantörer och konstnärer",
   "suppliers_p1": "Jag söker aktivt samarbeten med skandinaviska producenter, hantverkare och konstnärer vars produkter och verk passar Svampskogens profil. Hör gärna av dig!",
-  "gbp_link": "Hitta oss på Google Maps"
+  "gbp_link": "Hitta oss på Google Maps",
+  "store_heading": "Butik",
+  "store_coming_soon": "Webbutiken kommer snart.",
+  "product_not_found": "Produkten hittades inte.",
+  "back_to_store": "Tillbaka till butiken",
+  "checkout_success_heading": "Tack för din beställning!",
+  "checkout_success_body": "Ett kvitto har skickats till din e-post.",
+  "checkout_cancel_heading": "Köpet avbröts",
+  "checkout_cancel_body": "Din varukorg är sparad, så du kan fortsätta där du slutade.",
+  "returns_heading": "Retur och villkor",
+  "returns_body": "Information om ångerrätt och köpvillkor publiceras här."
 }
