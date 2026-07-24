@@ -98,6 +98,23 @@ const BackLink = styled(Link)`
   margin-top: 1.5rem;
 `
 
+const TermsNotice = styled.p`
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 1.5rem;
+`
+
+const TermsLink = styled(Link)`
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 1px;
+
+  &:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+`
+
 export default function CartPage() {
   const { t, i18n } = useTranslation()
   const lang = i18n.language === 'sv' ? 'sv' : 'en'
@@ -176,6 +193,11 @@ export default function CartPage() {
           <Subtotal>
             {t('cart_subtotal')}: {formatPrice({ amount: subtotal, currency: 'sek' })}
           </Subtotal>
+          <TermsNotice>
+            {t('cart_terms_prefix')}
+            {' '}
+            <TermsLink to="/returns">{t('footer_returns_link')}</TermsLink>.
+          </TermsNotice>
           <CheckoutButton onClick={() => void handleCheckout()} disabled={isCheckingOut}>
             {t('cart_checkout')}
           </CheckoutButton>

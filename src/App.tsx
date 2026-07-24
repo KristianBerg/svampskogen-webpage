@@ -14,6 +14,7 @@ import { useCart } from './hooks/useCart'
 import { useStorePreview } from './hooks/useStorePreview'
 import { CartIcon } from './components/icons/CartIcon'
 import { SiteHeader } from './components/SiteHeader'
+import { SiteFooter } from './components/SiteFooter'
 import { StoreGate } from './components/StoreGate'
 
 const TopBar = styled.div`
@@ -133,6 +134,7 @@ function AppContent() {
         <Route path="/returns" element={<ReturnsPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
+      <SiteFooter />
     </>
   )
 }
