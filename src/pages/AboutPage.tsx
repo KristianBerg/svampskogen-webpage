@@ -24,10 +24,19 @@ const HoursDays = styled.p`
   margin-bottom: 0;
 `
 
-const Location = styled.p`
+const LocationLink = styled.a`
   font-size: 0.95rem;
   color: var(--color-text-secondary);
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 2px;
   margin-bottom: 3rem;
+  transition: color 0.2s, border-color 0.2s;
+
+  &:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
 `
 
 const Contact = styled.a`
@@ -91,10 +100,9 @@ export default function AboutPage() {
         <BodyText>{t('suppliers_p1')}</BodyText>
       </Section>
       <Divider />
-      <Location>{t('location')}</Location>
+      <LocationLink href="https://maps.app.goo.gl/mXn7tpBWJwmRNEf89" target="_blank" rel="noopener noreferrer">{t('location')}</LocationLink>
       <Contact href="mailto:kristian@svampskogen.com">kristian@svampskogen.com</Contact>
       <Contact href="https://instagram.com/svampskogen_malmo" target="_blank" rel="noopener noreferrer" style={{ marginTop: '0.75rem' }}>@svampskogen_malmo</Contact>
-      <Contact href="https://maps.app.goo.gl/mXn7tpBWJwmRNEf89" target="_blank" rel="noopener noreferrer" style={{ marginTop: '0.75rem' }}>{t('gbp_link')}</Contact>
     </Page>
   )
 }
