@@ -1,0 +1,9 @@
+name = "svampskogen-checkout"
+main = "src/index.ts"
+compatibility_date = "2026-08-06"
+
+[vars]
+SITE_ORIGIN = "http://localhost:5173"
+
+[env.production]
+vars = { SITE_ORIGIN = "https://svampskogen.com" }
