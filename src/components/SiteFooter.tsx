@@ -26,6 +26,10 @@ const CompanyDetails = styled.p`
   margin-bottom: 0.5rem;
 `
 
+const OrgNumber = styled.span`
+  user-select: all;
+`
+
 const FooterLink = styled(Link)`
   font-size: 0.8rem;
   letter-spacing: 0.05em;
@@ -49,7 +53,7 @@ export function SiteFooter() {
       <CompanyDetails>
         Svampstugan AB
         <br />
-        Org.nr 559583-9159
+        Org.nr <OrgNumber>559583-9159</OrgNumber>
       </CompanyDetails>
       <FooterLink to="/returns">{t('footer_returns_link')}</FooterLink>
     </Footer>
