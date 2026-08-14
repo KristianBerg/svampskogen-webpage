@@ -27,6 +27,7 @@
   "cart_remove": "Remove",
   "cart_subtotal": "Subtotal",
   "cart_checkout": "Checkout",
+  "cart_checkout_error": "Something went wrong starting checkout. Please try again.",
   "checkout_success_heading": "Thank you for your order!",
   "checkout_success_body": "A receipt has been sent to your email.",
   "checkout_cancel_heading": "Checkout cancelled",

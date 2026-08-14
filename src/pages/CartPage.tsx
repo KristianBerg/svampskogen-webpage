@@ -104,6 +104,12 @@ const TermsNotice = styled.p`
   margin-bottom: 1.5rem;
 `
 
+const ErrorNotice = styled.p`
+  font-size: 0.85rem;
+  color: var(--color-accent);
+  margin-bottom: 1rem;
+`
+
 const TermsLink = styled(Link)`
   color: var(--color-text-secondary);
   border-bottom: 1px solid var(--color-border);
@@ -120,6 +126,7 @@ export default function CartPage() {
   const lang = i18n.language === 'sv' ? 'sv' : 'en'
   const { items, setQuantity, removeItem } = useCart()
   const [isCheckingOut, setIsCheckingOut] = useState(false)
+  const [checkoutError, setCheckoutError] = useState(false)
 
   interface CartRow {
     item: (typeof items)[number]
@@ -139,12 +146,14 @@ export default function CartPage() {
 
   const handleCheckout = async () => {
     setIsCheckingOut(true)
+    setCheckoutError(false)
     try {
       const session = await createCheckoutSession(
         rows.map((row) => ({ stripePriceId: row.product.stripePriceId, quantity: row.item.quantity })),
       )
       window.location.href = session.url
-    } finally {
+    } catch {
+      setCheckoutError(true)
       setIsCheckingOut(false)
     }
   }
@@ -198,6 +207,7 @@ export default function CartPage() {
             {' '}
             <TermsLink to="/returns">{t('footer_returns_link')}</TermsLink>.
           </TermsNotice>
+          {checkoutError && <ErrorNotice>{t('cart_checkout_error')}</ErrorNotice>}
           <CheckoutButton onClick={() => void handleCheckout()} disabled={isCheckingOut}>
             {t('cart_checkout')}
           </CheckoutButton>

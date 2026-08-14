@@ -27,6 +27,7 @@
   "cart_remove": "Ta bort",
   "cart_subtotal": "Delsumma",
   "cart_checkout": "Till kassan",
+  "cart_checkout_error": "Något gick fel när kassan skulle startas. Försök igen.",
   "checkout_success_heading": "Tack för din beställning!",
   "checkout_success_body": "Ett kvitto har skickats till din e-post.",
   "checkout_cancel_heading": "Köpet avbröts",

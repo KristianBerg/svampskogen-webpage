@@ -21,7 +21,7 @@ export interface Product {
 export const products: Product[] = [
   {
     slug: 'opinel-svampkniv',
-    stripePriceId: 'price_REPLACE_ME_opinel_knife',
+    stripePriceId: 'price_1U1QcP1HnhNtqQNvxC61NKYx',
     vatRate: 0.25,
     inStock: true,
     images: [placeholderImage],
@@ -36,7 +36,7 @@ export const products: Product[] = [
   },
   {
     slug: 'flatad-svampkorg',
-    stripePriceId: 'price_REPLACE_ME_basket',
+    stripePriceId: 'price_1U1QcU1HnhNtqQNvKtmhEpdh',
     vatRate: 0.25,
     inStock: true,
     images: [placeholderImage],
@@ -51,7 +51,7 @@ export const products: Product[] = [
   },
   {
     slug: 'torkad-kantarell',
-    stripePriceId: 'price_REPLACE_ME_dried_chanterelle',
+    stripePriceId: 'price_1U1QcW1HnhNtqQNvIVGkrz0t',
     vatRate: 0.12,
     inStock: true,
     images: [placeholderImage],
@@ -66,7 +66,7 @@ export const products: Product[] = [
   },
   {
     slug: 'odlingskit-ostronskivling',
-    stripePriceId: 'price_REPLACE_ME_growing_kit',
+    stripePriceId: 'price_1U1QcX1HnhNtqQNvSGUknyg0',
     vatRate: 0.25,
     inStock: true,
     images: [placeholderImage],
@@ -81,7 +81,7 @@ export const products: Product[] = [
   },
   {
     slug: 'svampboken-faltguide',
-    stripePriceId: 'price_REPLACE_ME_book',
+    stripePriceId: 'price_1U1QcZ1HnhNtqQNvNnw8BWxj',
     vatRate: 0.06,
     inStock: true,
     images: [placeholderImage],
@@ -96,7 +96,7 @@ export const products: Product[] = [
   },
   {
     slug: 'tygkasse-med-tryck',
-    stripePriceId: 'price_REPLACE_ME_tote',
+    stripePriceId: 'price_1U1Qca1HnhNtqQNvsgh5RICZ',
     vatRate: 0.25,
     inStock: true,
     images: [placeholderImage],
