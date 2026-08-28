@@ -68,6 +68,7 @@ export function SiteHeader() {
       </Hero>
       <NavRow>
         <NavLink to="/store" $active={pathname.startsWith('/store')}>{t('nav_store')}</NavLink>
+        <NavLink to="/course" $active={pathname.startsWith('/course')}>{t('nav_course')}</NavLink>
         <NavLink to="/" $active={pathname === '/'}>{t('nav_about')}</NavLink>
       </NavRow>
     </>

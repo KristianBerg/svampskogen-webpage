@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import styled, { css, keyframes } from 'styled-components'
 import StorePage from './pages/StorePage'
 import AboutPage from './pages/AboutPage'
+import CoursePage from './pages/CoursePage'
 import ProductPage from './pages/ProductPage'
 import CartPage from './pages/CartPage'
 import CheckoutSuccessPage from './pages/CheckoutSuccessPage'
@@ -126,6 +127,7 @@ function AppContent() {
       <Routes>
         <Route path="/" element={<AboutPage />} />
         <Route path="/about" element={<Navigate to="/" replace />} />
+        <Route path="/course" element={<CoursePage />} />
         <Route path="/store" element={<StoreGate enabled={storePreviewEnabled}><StorePage /></StoreGate>} />
         <Route path="/store/:slug" element={<StoreGate enabled={storePreviewEnabled}><ProductPage /></StoreGate>} />
         <Route path="/cart" element={<StoreGate enabled={storePreviewEnabled}><CartPage /></StoreGate>} />

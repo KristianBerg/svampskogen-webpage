@@ -24,13 +24,12 @@ const HoursDays = styled.p`
   margin-bottom: 0;
 `
 
-const LocationLink = styled.a`
+const CourseLink = styled.a`
   font-size: 0.95rem;
   color: var(--color-text-secondary);
   text-decoration: none;
   border-bottom: 1px solid var(--color-border);
   padding-bottom: 2px;
-  margin-bottom: 3rem;
   transition: color 0.2s, border-color 0.2s;
 
   &:hover {
@@ -91,6 +90,14 @@ export default function AboutPage() {
       <HoursDays>{t('hours_days_3')}</HoursDays>
       <Divider style={{ marginTop: '2rem' }} />
       <Section>
+        <SectionHeading>{t('course_heading')}</SectionHeading>
+        <BodyText>{t('course_body')}</BodyText>
+        <CourseLink href="https://forms.gle/kHKPecGfUpDTbDU96" target="_blank" rel="noopener noreferrer">
+          {t('course_link_label')}
+        </CourseLink>
+      </Section>
+      <Divider />
+      <Section>
         <BodyText>{t('about_p1')}</BodyText>
         <BodyText>{t('about_p2')}</BodyText>
         <BodyText>{t('about_p3')}</BodyText>
@@ -100,7 +107,6 @@ export default function AboutPage() {
         <BodyText>{t('suppliers_p1')}</BodyText>
       </Section>
       <Divider />
-      <LocationLink href="https://maps.app.goo.gl/mXn7tpBWJwmRNEf89" target="_blank" rel="noopener noreferrer">{t('location')}</LocationLink>
       <Contact href="mailto:kristian@svampskogen.com">kristian@svampskogen.com</Contact>
       <Contact href="https://instagram.com/svampskogen_malmo" target="_blank" rel="noopener noreferrer" style={{ marginTop: '0.75rem' }}>@svampskogen_malmo</Contact>
     </Page>
