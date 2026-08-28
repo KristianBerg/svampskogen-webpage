@@ -174,9 +174,11 @@ export default function CoursePage() {
             <PlainList>
               <li>{t('course_park_date_1')}</li>
               <li>{t('course_park_date_2')}</li>
+              <li>{t('course_park_date_3')}</li>
             </PlainList>
 
             <BodyText>{t('course_park_practical')}</BodyText>
+            <BodyText>{t('course_questions')}</BodyText>
           </DetailsBody>
         </Details>
       </Offering>
