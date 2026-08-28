@@ -53,6 +53,8 @@ export function SiteFooter() {
       <CompanyDetails>
         Svampstugan AB
         <br />
+        Claesgatan 8, 214 26 Malmö
+        <br />
         Org.nr <OrgNumber>559583-9159</OrgNumber>
       </CompanyDetails>
       <FooterLink to="/returns">{t('footer_returns_link')}</FooterLink>
