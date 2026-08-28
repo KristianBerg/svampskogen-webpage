@@ -2,7 +2,8 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { Page } from '../components/Page'
 
-const SIGNUP_URL = 'https://forms.gle/kHKPecGfUpDTbDU96'
+const FOREST_SIGNUP_URL = 'https://forms.gle/kHKPecGfUpDTbDU96'
+const PARK_SIGNUP_URL = 'https://forms.gle/6qpctsUzPH5VFokHA'
 
 const Heading = styled.h1`
   font-size: 1.4rem;
@@ -54,6 +55,7 @@ const SignUpLink = styled.a`
 `
 
 const BookingNote = styled.p`
+  margin-top: 0.75rem;
   font-size: 0.9rem;
   color: var(--color-text-secondary);
   line-height: 1.7;
@@ -135,7 +137,7 @@ export default function CoursePage() {
       <Offering>
         <OfferingTitle>{t('course_forest_title')}</OfferingTitle>
         <OfferingBody>{t('course_body')}</OfferingBody>
-        <SignUpLink href={SIGNUP_URL} target="_blank" rel="noopener noreferrer">
+        <SignUpLink href={FOREST_SIGNUP_URL} target="_blank" rel="noopener noreferrer">
           {t('course_link_label')}
         </SignUpLink>
         <Details>
@@ -160,6 +162,9 @@ export default function CoursePage() {
       <Offering>
         <OfferingTitle>{t('course_park_title')}</OfferingTitle>
         <OfferingBody>{t('course_park_body')}</OfferingBody>
+        <SignUpLink href={PARK_SIGNUP_URL} target="_blank" rel="noopener noreferrer">
+          {t('course_link_label')}
+        </SignUpLink>
         <BookingNote>{t('course_park_booking_note')}</BookingNote>
         <Details>
           <summary>{t('course_details_toggle')}</summary>
