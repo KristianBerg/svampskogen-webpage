@@ -40,22 +40,23 @@ const OfferingBody = styled.p`
 
 const SignUpLink = styled.a`
   display: inline-block;
-  font-size: 0.95rem;
-  letter-spacing: 0.05em;
-  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.7rem 1.75rem;
+  border: 1px solid var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-background);
   text-decoration: none;
-  border-bottom: 1px solid var(--color-border);
-  padding-bottom: 2px;
-  transition: color 0.2s, border-color 0.2s;
+  transition: opacity 0.2s;
 
   &:hover {
-    color: var(--color-accent);
-    border-color: var(--color-accent);
+    opacity: 0.85;
   }
 `
 
 const BookingNote = styled.p`
-  margin-top: 0.75rem;
+  margin-top: 1rem;
   font-size: 0.9rem;
   color: var(--color-text-secondary);
   line-height: 1.7;
