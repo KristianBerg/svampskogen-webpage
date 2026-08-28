@@ -9,25 +9,42 @@ const Heading = styled.h1`
   font-weight: normal;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 `
 
-const Intro = styled.p`
+const Offering = styled.section`
+  width: min(560px, 90vw);
+  text-align: left;
+  margin-bottom: 2.5rem;
+
+  &:not(:last-child) {
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+`
+
+const OfferingTitle = styled.h2`
+  font-size: 1rem;
+  font-weight: normal;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.75rem;
+`
+
+const OfferingBody = styled.p`
   font-size: 0.95rem;
-  color: var(--color-text-secondary);
-  max-width: 560px;
+  color: var(--color-text-primary);
   line-height: 1.7;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 `
 
 const SignUpLink = styled.a`
+  display: inline-block;
   font-size: 0.95rem;
   letter-spacing: 0.05em;
   color: var(--color-text-secondary);
   text-decoration: none;
   border-bottom: 1px solid var(--color-border);
   padding-bottom: 2px;
-  margin-bottom: 3rem;
   transition: color 0.2s, border-color 0.2s;
 
   &:hover {
@@ -36,26 +53,57 @@ const SignUpLink = styled.a`
   }
 `
 
-const Section = styled.section`
-  width: min(560px, 90vw);
-  text-align: left;
-  margin-bottom: 2.5rem;
+const BookingNote = styled.p`
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
 `
 
-const SectionHeading = styled.h2`
+const Details = styled.details`
+  margin-top: 1.25rem;
+
+  summary {
+    cursor: pointer;
+    list-style: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    transition: color 0.2s;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary::after {
+    content: ' ▸';
+  }
+
+  &[open] summary::after {
+    content: ' ▾';
+  }
+
+  summary:hover {
+    color: var(--color-accent);
+  }
+`
+
+const DetailsBody = styled.div`
+  margin-top: 1rem;
+`
+
+const SubHeading = styled.h3`
   font-size: 0.85rem;
   font-weight: normal;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-accent);
-  margin-bottom: 1rem;
-`
-
-const SubHeading = styled.h3`
-  font-size: 0.9rem;
-  font-weight: normal;
-  color: var(--color-text-primary);
   margin: 1.5rem 0 0.5rem;
+
+  &:first-child {
+    margin-top: 0;
+  }
 `
 
 const BodyText = styled.p`
@@ -69,12 +117,12 @@ const BodyText = styled.p`
   }
 `
 
-const BringList = styled.ul`
+const PlainList = styled.ul`
   font-size: 0.95rem;
   color: var(--color-text-primary);
   line-height: 1.7;
   padding-left: 1.25rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.75rem;
 `
 
 export default function CoursePage() {
@@ -82,26 +130,50 @@ export default function CoursePage() {
 
   return (
     <Page style={{ minHeight: '60vh' }}>
-      <Heading>{t('course_heading')}</Heading>
-      <Intro>{t('course_body')}</Intro>
-      <SignUpLink href={SIGNUP_URL} target="_blank" rel="noopener noreferrer">
-        {t('course_link_label')}
-      </SignUpLink>
+      <Heading>{t('course_page_heading')}</Heading>
 
-      <Section>
-        <SectionHeading>{t('course_practical_heading')}</SectionHeading>
-        <BodyText>{t('course_details_logistics')}</BodyText>
+      <Offering>
+        <OfferingTitle>{t('course_forest_title')}</OfferingTitle>
+        <OfferingBody>{t('course_body')}</OfferingBody>
+        <SignUpLink href={SIGNUP_URL} target="_blank" rel="noopener noreferrer">
+          {t('course_link_label')}
+        </SignUpLink>
+        <Details>
+          <summary>{t('course_details_toggle')}</summary>
+          <DetailsBody>
+            <SubHeading>{t('course_practical_heading')}</SubHeading>
+            <BodyText>{t('course_details_logistics')}</BodyText>
 
-        <SubHeading>{t('course_bring_heading')}</SubHeading>
-        <BringList>
-          <li>{t('course_bring_1')}</li>
-          <li>{t('course_bring_2')}</li>
-          <li>{t('course_bring_3')}</li>
-        </BringList>
+            <SubHeading>{t('course_bring_heading')}</SubHeading>
+            <PlainList>
+              <li>{t('course_bring_1')}</li>
+              <li>{t('course_bring_2')}</li>
+              <li>{t('course_bring_3')}</li>
+            </PlainList>
 
-        <BodyText>{t('course_cost')}</BodyText>
-        <BodyText>{t('course_questions')}</BodyText>
-      </Section>
+            <BodyText>{t('course_cost')}</BodyText>
+            <BodyText>{t('course_questions')}</BodyText>
+          </DetailsBody>
+        </Details>
+      </Offering>
+
+      <Offering>
+        <OfferingTitle>{t('course_park_title')}</OfferingTitle>
+        <OfferingBody>{t('course_park_body')}</OfferingBody>
+        <BookingNote>{t('course_park_booking_note')}</BookingNote>
+        <Details>
+          <summary>{t('course_details_toggle')}</summary>
+          <DetailsBody>
+            <SubHeading>{t('course_park_dates_heading')}</SubHeading>
+            <PlainList>
+              <li>{t('course_park_date_1')}</li>
+              <li>{t('course_park_date_2')}</li>
+            </PlainList>
+
+            <BodyText>{t('course_park_practical')}</BodyText>
+          </DetailsBody>
+        </Details>
+      </Offering>
     </Page>
   )
 }
