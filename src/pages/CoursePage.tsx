@@ -62,6 +62,14 @@ const BookingNote = styled.p`
   line-height: 1.7;
 `
 
+const MovedNotice = styled.p`
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  line-height: 1.7;
+  margin-bottom: 1.25rem;
+`
+
 const Details = styled.details`
   margin-top: 1.25rem;
 
@@ -163,6 +171,7 @@ export default function CoursePage() {
       <Offering>
         <OfferingTitle>{t('course_park_title')}</OfferingTitle>
         <OfferingBody>{t('course_park_body')}</OfferingBody>
+        <MovedNotice>{t('course_park_moved_note')}</MovedNotice>
         <SignUpLink href={PARK_SIGNUP_URL} target="_blank" rel="noopener noreferrer">
           {t('course_link_label')}
         </SignUpLink>
@@ -174,7 +183,6 @@ export default function CoursePage() {
             <PlainList>
               <li>{t('course_park_date_1')}</li>
               <li>{t('course_park_date_2')}</li>
-              <li>{t('course_park_date_3')}</li>
             </PlainList>
 
             <BodyText>{t('course_park_practical')}</BodyText>
