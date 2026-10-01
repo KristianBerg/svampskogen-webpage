@@ -26,6 +26,7 @@ jobs:
       - run: npm run build
         env:
           VITE_CHECKOUT_WORKER_URL: ${{ vars.VITE_CHECKOUT_WORKER_URL }}
+          VITE_CATALOG_MODE: live
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
