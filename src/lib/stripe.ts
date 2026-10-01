@@ -23,6 +23,15 @@ const placeholderPrices: Record<string, Price> = {
   price_1U1QcX1HnhNtqQNvSGUknyg0: { amount: 29900, currency: 'sek' }, // odlingskit-ostronskivling
   price_1U1QcZ1HnhNtqQNvNnw8BWxj: { amount: 19900, currency: 'sek' }, // svampboken-faltguide
   price_1U1Qca1HnhNtqQNvsgh5RICZ: { amount: 14900, currency: 'sek' }, // tygkasse-med-tryck
+
+  // Live catalog (products.live.ts), amounts pulled from the live Stripe account.
+  price_1ULlXv09vQZGLxR7wyD2J7rh: { amount: 39500, currency: 'sek' }, // notknappare
+  price_1ULlkK09vQZGLxR7ajghaWk6: { amount: 16500, currency: 'sek' }, // flaskkork-ekorre
+  price_1ULlkM09vQZGLxR7fV715Xdj: { amount: 16500, currency: 'sek' }, // flaskkork-groda
+  price_1ULlXy09vQZGLxR7z8K5Gsxu: { amount: 45000, currency: 'sek' }, // skrin-skata
+  price_1ULlkF09vQZGLxR7dSzAs50R: { amount: 24500, currency: 'sek' }, // svampkrok-kantarell
+  price_1ULlkH09vQZGLxR7o2cVaoY1: { amount: 24500, currency: 'sek' }, // svampkrok-stensopp
+  price_1ULlkJ09vQZGLxR73vY6ESHb: { amount: 24500, currency: 'sek' }, // svampkrok-flugsvamp
 }
 
 export async function getProductPrice(stripePriceId: string): Promise<Price> {
