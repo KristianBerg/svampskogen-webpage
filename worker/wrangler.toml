@@ -8,5 +8,10 @@ TAX_RATE_6 = "txr_1UGgDf1HnhNtqQNvDb1kGe6v"
 TAX_RATE_12 = "txr_1UGgE41HnhNtqQNvwtj874Gv"
 TAX_RATE_25 = "txr_1UGgEJ1HnhNtqQNvyln8VWc7"
 
+# NOTE: TAX_RATE_* here must stay in the same Stripe mode as the STRIPE_SECRET_KEY GitHub
+# secret currently deployed to this environment. They're test-mode IDs now because
+# STRIPE_SECRET_KEY is still a test key (Phase 7 — switching to live — not done yet).
+# When that switch happens, these three IDs must be swapped to the live txr_... IDs
+# in the same change, or Checkout will fail with "No such tax rate".
 [env.production]
-vars = { SITE_ORIGIN = "https://svampskogen.com", TAX_RATE_6 = "txr_1UGfsi09vQZGLxR7bIqSevqq", TAX_RATE_12 = "txr_1UGfsv09vQZGLxR79W6tz1xN", TAX_RATE_25 = "txr_1UGfP709vQZGLxR7oKdfeYus" }
+vars = { SITE_ORIGIN = "https://svampskogen.com", TAX_RATE_6 = "txr_1UGgDf1HnhNtqQNvDb1kGe6v", TAX_RATE_12 = "txr_1UGgE41HnhNtqQNvwtj874Gv", TAX_RATE_25 = "txr_1UGgEJ1HnhNtqQNvyln8VWc7" }
