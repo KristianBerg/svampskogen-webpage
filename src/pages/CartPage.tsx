@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { Page } from '../components/Page'
 import { products, type Product } from '../data/products'
+import { DEFAULT_SHIPPING_METHOD_ID, shippingMethods } from '../data/shippingMethods'
 import { useCart } from '../hooks/useCart'
 import { useProductPrices } from '../hooks/useProductPrices'
 import { formatPrice } from '../lib/formatPrice'
@@ -65,7 +66,35 @@ const RemoveButton = styled.button`
 
 const Subtotal = styled.p`
   font-size: 1rem;
+  margin-bottom: 0.5rem;
+`
+
+const Total = styled.p`
+  font-size: 1.1rem;
   margin-bottom: 1.5rem;
+`
+
+const ShippingFieldset = styled.fieldset`
+  border: none;
+  padding: 0;
+  margin: 0 0 1rem;
+`
+
+const ShippingLegend = styled.legend`
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.5rem;
+`
+
+const ShippingOption = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  padding: 0.35rem 0;
+  cursor: pointer;
 `
 
 const CheckoutButton = styled.button`
@@ -127,6 +156,7 @@ export default function CartPage() {
   const { items, setQuantity, removeItem } = useCart()
   const [isCheckingOut, setIsCheckingOut] = useState(false)
   const [checkoutError, setCheckoutError] = useState(false)
+  const [shippingMethodId, setShippingMethodId] = useState(DEFAULT_SHIPPING_METHOD_ID)
 
   interface CartRow {
     item: (typeof items)[number]
@@ -137,20 +167,31 @@ export default function CartPage() {
     .map((item) => ({ item, product: products.find((candidate) => candidate.slug === item.slug) }))
     .filter((row): row is CartRow => Boolean(row.product))
 
-  const prices = useProductPrices(rows.map((row) => row.product.stripePriceId))
+  const selectedShippingMethod =
+    shippingMethods.find((method) => method.id === shippingMethodId) ?? shippingMethods[0]
+
+  const prices = useProductPrices([
+    ...rows.map((row) => row.product.stripePriceId),
+    ...shippingMethods.map((method) => method.stripePriceId),
+  ])
 
   const subtotal = rows.reduce((sum, row) => {
     const price = prices[row.product.stripePriceId]
     return price ? sum + price.amount * row.item.quantity : sum
   }, 0)
 
+  const shippingPrice = selectedShippingMethod ? prices[selectedShippingMethod.stripePriceId] : undefined
+  const total = subtotal + (shippingPrice?.amount ?? 0)
+
   const handleCheckout = async () => {
+    if (!selectedShippingMethod) return
     setIsCheckingOut(true)
     setCheckoutError(false)
     try {
-      const session = await createCheckoutSession(
-        rows.map((row) => ({ stripePriceId: row.product.stripePriceId, quantity: row.item.quantity })),
-      )
+      const session = await createCheckoutSession([
+        ...rows.map((row) => ({ stripePriceId: row.product.stripePriceId, quantity: row.item.quantity })),
+        { stripePriceId: selectedShippingMethod.stripePriceId, quantity: 1 },
+      ])
       window.location.href = session.url
     } catch {
       setCheckoutError(true)
@@ -202,6 +243,27 @@ export default function CartPage() {
           <Subtotal>
             {t('cart_subtotal')}: {formatPrice({ amount: subtotal, currency: 'sek' })}
           </Subtotal>
+          <ShippingFieldset>
+            <ShippingLegend>{t('cart_shipping_heading')}</ShippingLegend>
+            {shippingMethods.map((method) => {
+              const price = prices[method.stripePriceId]
+              return (
+                <ShippingOption key={method.id}>
+                  <input
+                    type="radio"
+                    name="shipping-method"
+                    value={method.id}
+                    checked={method.id === shippingMethodId}
+                    onChange={() => setShippingMethodId(method.id)}
+                  />
+                  {method.name[lang]} — {price ? formatPrice({ amount: price.amount, currency: price.currency }) : '—'}
+                </ShippingOption>
+              )
+            })}
+          </ShippingFieldset>
+          <Total>
+            {t('cart_total')}: {formatPrice({ amount: total, currency: 'sek' })}
+          </Total>
           <TermsNotice>
             {t('cart_terms_prefix')}
             {' '}

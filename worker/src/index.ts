@@ -115,6 +115,7 @@ export default {
       session = await stripe.checkout.sessions.create({
         mode: 'payment',
         line_items: sessionLineItems,
+        shipping_address_collection: { allowed_countries: ['SE'] },
         success_url: `${origin}/checkout/success`,
         cancel_url: `${origin}/checkout/cancel`,
       })

@@ -32,6 +32,12 @@ const placeholderPrices: Record<string, Price> = {
   price_1ULlkF09vQZGLxR7dSzAs50R: { amount: 24500, currency: 'sek' }, // svampkrok-kantarell
   price_1ULlkH09vQZGLxR7o2cVaoY1: { amount: 24500, currency: 'sek' }, // svampkrok-stensopp
   price_1ULlkJ09vQZGLxR73vY6ESHb: { amount: 24500, currency: 'sek' }, // svampkrok-flugsvamp
+
+  // Shipping methods (shippingMethods.ts) — sandbox, then live.
+  price_1UM4sb1HnhNtqQNv3Q8EJ6fz: { amount: 6000, currency: 'sek' }, // dhl
+  price_1UM4sa1HnhNtqQNvd4WCJUdb: { amount: 7000, currency: 'sek' }, // postnord
+  price_1UM4sj09vQZGLxR7CQ9r1Xa5: { amount: 6000, currency: 'sek' }, // dhl
+  price_1UM4si09vQZGLxR707KNAcH0: { amount: 7000, currency: 'sek' }, // postnord
 }
 
 export async function getProductPrice(stripePriceId: string): Promise<Price> {

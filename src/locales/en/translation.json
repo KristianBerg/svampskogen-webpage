@@ -48,6 +48,8 @@
   "cart_price_column": "Price",
   "cart_remove": "Remove",
   "cart_subtotal": "Subtotal",
+  "cart_shipping_heading": "Shipping",
+  "cart_total": "Total",
   "cart_checkout": "Checkout",
   "cart_checkout_error": "Something went wrong starting checkout. Please try again.",
   "checkout_success_heading": "Thank you for your order!",

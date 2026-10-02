@@ -48,6 +48,8 @@
   "cart_price_column": "Pris",
   "cart_remove": "Ta bort",
   "cart_subtotal": "Delsumma",
+  "cart_shipping_heading": "Frakt",
+  "cart_total": "Totalt",
   "cart_checkout": "Till kassan",
   "cart_checkout_error": "Något gick fel när kassan skulle startas. Försök igen.",
   "checkout_success_heading": "Tack för din beställning!",
