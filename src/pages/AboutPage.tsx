@@ -24,20 +24,6 @@ const HoursDays = styled.p`
   margin-bottom: 0;
 `
 
-const CourseLink = styled.a`
-  font-size: 0.95rem;
-  color: var(--color-text-secondary);
-  text-decoration: none;
-  border-bottom: 1px solid var(--color-border);
-  padding-bottom: 2px;
-  transition: color 0.2s, border-color 0.2s;
-
-  &:hover {
-    color: var(--color-accent);
-    border-color: var(--color-accent);
-  }
-`
-
 const Contact = styled.a`
   font-size: 0.9rem;
   color: var(--color-text-secondary);
@@ -90,14 +76,6 @@ export default function AboutPage() {
       <HoursDays>{t('hours_days_3')}</HoursDays>
       <HoursDays>{t('hours_days_4')}</HoursDays>
       <Divider style={{ marginTop: '2rem' }} />
-      <Section>
-        <SectionHeading>{t('course_heading')}</SectionHeading>
-        <BodyText>{t('course_body')}</BodyText>
-        <CourseLink href="https://forms.gle/kHKPecGfUpDTbDU96" target="_blank" rel="noopener noreferrer">
-          {t('course_link_label')}
-        </CourseLink>
-      </Section>
-      <Divider />
       <Section>
         <BodyText>{t('about_p1')}</BodyText>
         <BodyText>{t('about_p2')}</BodyText>

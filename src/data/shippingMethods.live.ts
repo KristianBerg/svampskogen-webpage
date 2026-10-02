@@ -8,7 +8,7 @@ export const shippingMethods: ShippingMethod[] = [
   },
   {
     id: 'postnord',
-    stripePriceId: 'price_1UM4si09vQZGLxR707KNAcH0',
+    stripePriceId: 'price_1UM70v09vQZGLxR78YxwVPRe',
     name: { sv: 'PostNord', en: 'PostNord' },
   },
 ]

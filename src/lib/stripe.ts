@@ -35,9 +35,9 @@ const placeholderPrices: Record<string, Price> = {
 
   // Shipping methods (shippingMethods.ts) — sandbox, then live.
   price_1UM4sb1HnhNtqQNv3Q8EJ6fz: { amount: 6000, currency: 'sek' }, // dhl
-  price_1UM4sa1HnhNtqQNvd4WCJUdb: { amount: 7000, currency: 'sek' }, // postnord
+  price_1UM70u1HnhNtqQNvfm3JwSPj: { amount: 8000, currency: 'sek' }, // postnord
   price_1UM4sj09vQZGLxR7CQ9r1Xa5: { amount: 6000, currency: 'sek' }, // dhl
-  price_1UM4si09vQZGLxR707KNAcH0: { amount: 7000, currency: 'sek' }, // postnord
+  price_1UM70v09vQZGLxR78YxwVPRe: { amount: 8000, currency: 'sek' }, // postnord
 }
 
 export async function getProductPrice(stripePriceId: string): Promise<Price> {

@@ -14,7 +14,7 @@ const pages = [
     route: 'course',
     title: 'Kurser och turer – Svampskogen',
     description:
-      'Svampkursen är nu öppen för anmälan! Följ med ut i skogen och lär dig om ätbara och giftiga svampar.',
+      'Säsongens svampkurser är avslutade. Nya kurser kommer under svampsäsongen 2027.',
     image: 'https://svampskogen.com/og/course.jpg',
   },
 ]
