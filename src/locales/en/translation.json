@@ -31,7 +31,6 @@
   "cart_remove": "Remove",
   "cart_subtotal": "Subtotal",
   "cart_shipping_heading": "Shipping",
-  "cart_shipping_note": "We currently only offer DHL shipping.",
   "cart_total": "Total",
   "cart_checkout": "Checkout",
   "cart_checkout_error": "Something went wrong starting checkout. Please try again.",

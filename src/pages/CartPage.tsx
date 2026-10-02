@@ -97,12 +97,6 @@ const Total = styled.p`
 
 const Shipping = styled.p`
   font-size: 1rem;
-  margin-bottom: 0.25rem;
-`
-
-const ShippingNote = styled.p`
-  font-size: 0.8rem;
-  color: var(--color-text-secondary);
   margin-bottom: 1.5rem;
 `
 
@@ -248,10 +242,9 @@ export default function CartPage() {
             {t('cart_subtotal')}: {formatPrice({ amount: subtotal, currency: 'sek' })}
           </Subtotal>
           <Shipping>
-            {t('cart_shipping_heading')}: {shippingMethod.name[lang]} —{' '}
+            {t('cart_shipping_heading')} ({shippingMethod.name[lang]}):{' '}
             {shippingPrice ? formatPrice({ amount: shippingPrice.amount, currency: shippingPrice.currency }) : '—'}
           </Shipping>
-          <ShippingNote>{t('cart_shipping_note')}</ShippingNote>
           <Total>
             {t('cart_total')}: {formatPrice({ amount: total, currency: 'sek' })}
           </Total>
