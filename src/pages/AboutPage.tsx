@@ -88,6 +88,7 @@ export default function AboutPage() {
       <HoursDays>{t('hours_days_1')}</HoursDays>
       <HoursDays>{t('hours_days_2')}</HoursDays>
       <HoursDays>{t('hours_days_3')}</HoursDays>
+      <HoursDays>{t('hours_days_4')}</HoursDays>
       <Divider style={{ marginTop: '2rem' }} />
       <Section>
         <SectionHeading>{t('course_heading')}</SectionHeading>
