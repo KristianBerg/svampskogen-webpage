@@ -1,10 +1,8 @@
-import { shippingMethods as liveShippingMethods } from './shippingMethods.live'
-import { shippingMethods as sandboxShippingMethods } from './shippingMethods.sandbox'
+import { shippingMethod as liveShippingMethod } from './shippingMethods.live'
+import { shippingMethod as sandboxShippingMethod } from './shippingMethods.sandbox'
 
 export type { ShippingMethod } from './shippingMethodTypes'
 
 // Same live/sandbox switch as products.ts — keep the two changing together.
-export const shippingMethods =
-  import.meta.env.VITE_CATALOG_MODE === 'live' ? liveShippingMethods : sandboxShippingMethods
-
-export const DEFAULT_SHIPPING_METHOD_ID = 'dhl'
+// DHL only — PostNord was ruled out (80 kr even for small packages).
+export const shippingMethod = import.meta.env.VITE_CATALOG_MODE === 'live' ? liveShippingMethod : sandboxShippingMethod
