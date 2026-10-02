@@ -10,6 +10,12 @@ import { useProductPrices } from '../hooks/useProductPrices'
 import { formatPrice } from '../lib/formatPrice'
 import { createCheckoutSession } from '../lib/stripe'
 
+// Pulled out of the component so the redirect (a plain function, not a
+// component/hook) doesn't trip react-hooks/immutability on window.location.
+function redirectTo(url: string) {
+  window.location.href = url
+}
+
 const Heading = styled.h1`
   font-size: 1.4rem;
   font-weight: normal;
@@ -35,9 +41,24 @@ const Table = styled.table`
   }
 
   td {
-    padding: 0.75rem 0;
+    text-align: left;
+    padding: 1rem 0;
     border-bottom: 1px solid var(--color-border);
   }
+`
+
+const ProductCell = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+`
+
+const ProductImage = styled.img`
+  width: 3.5rem;
+  height: 3.5rem;
+  object-fit: cover;
+  border: 1px solid var(--color-border);
+  flex-shrink: 0;
 `
 
 const QuantityInput = styled.input`
@@ -66,7 +87,7 @@ const RemoveButton = styled.button`
 
 const Subtotal = styled.p`
   font-size: 1rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
 `
 
 const Total = styled.p`
@@ -192,7 +213,7 @@ export default function CartPage() {
         ...rows.map((row) => ({ stripePriceId: row.product.stripePriceId, quantity: row.item.quantity })),
         { stripePriceId: selectedShippingMethod.stripePriceId, quantity: 1 },
       ])
-      window.location.href = session.url
+      redirectTo(session.url)
     } catch {
       setCheckoutError(true)
       setIsCheckingOut(false)
@@ -221,7 +242,10 @@ export default function CartPage() {
                 return (
                   <tr key={product.slug}>
                     <td>
-                      <Link to={`/store/${product.slug}`}>{product.name[lang]}</Link>
+                      <ProductCell>
+                        <ProductImage src={product.images[0]} alt="" />
+                        <Link to={`/store/${product.slug}`}>{product.name[lang]}</Link>
+                      </ProductCell>
                     </td>
                     <td>
                       <QuantityInput
