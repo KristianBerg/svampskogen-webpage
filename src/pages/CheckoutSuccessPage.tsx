@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { Page } from '../components/Page'
 import { products, type Product } from '../data/products'
+import { shippingMethod } from '../data/shippingMethods'
 import { useCart } from '../hooks/useCart'
 import type { CartItem } from '../context/cartContext'
 import { useProductPrices } from '../hooks/useProductPrices'
@@ -41,6 +42,16 @@ const Table = styled.table`
 
 const Subtotal = styled.p`
   font-size: 1rem;
+  margin-bottom: 0.5rem;
+`
+
+const Shipping = styled.p`
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+`
+
+const Total = styled.p`
+  font-size: 1.1rem;
   margin-bottom: 1.5rem;
 `
 
@@ -79,12 +90,15 @@ export default function CheckoutSuccessPage() {
     .map((item) => ({ item, product: products.find((candidate) => candidate.slug === item.slug) }))
     .filter((row): row is OrderRow => Boolean(row.product))
 
-  const prices = useProductPrices(rows.map((row) => row.product.stripePriceId))
+  const prices = useProductPrices([...rows.map((row) => row.product.stripePriceId), shippingMethod.stripePriceId])
 
-  const total = rows.reduce((sum, row) => {
+  const subtotal = rows.reduce((sum, row) => {
     const price = prices[row.product.stripePriceId]
     return price ? sum + price.amount * row.item.quantity : sum
   }, 0)
+
+  const shippingPrice = prices[shippingMethod.stripePriceId]
+  const total = subtotal + (shippingPrice?.amount ?? 0)
 
   return (
     <Page style={{ minHeight: '60vh' }}>
@@ -113,9 +127,18 @@ export default function CheckoutSuccessPage() {
         </Table>
       )}
       {rows.length > 0 && (
-        <Subtotal>
-          {t('cart_subtotal')}: {formatPrice({ amount: total, currency: 'sek' })}
-        </Subtotal>
+        <>
+          <Subtotal>
+            {t('cart_subtotal')}: {formatPrice({ amount: subtotal, currency: 'sek' })}
+          </Subtotal>
+          <Shipping>
+            {t('cart_shipping_heading')} ({shippingMethod.name[lang]}):{' '}
+            {shippingPrice ? formatPrice({ amount: shippingPrice.amount, currency: shippingPrice.currency }) : '—'}
+          </Shipping>
+          <Total>
+            {t('cart_total')}: {formatPrice({ amount: total, currency: 'sek' })}
+          </Total>
+        </>
       )}
       <p>{t('checkout_success_body')}</p>
       <BackLink to="/store">{t('back_to_store')}</BackLink>
