@@ -1,4 +1,3 @@
-import placeholderImage from '../assets/products/placeholder.svg'
 import type { Product } from './productTypes'
 
 // Placeholder catalog — replace stripePriceId with a real Stripe Price
@@ -9,7 +8,6 @@ export const products: Product[] = [
     stripePriceId: 'price_1U1QcP1HnhNtqQNvxC61NKYx',
     vatRate: 0.25,
     inStock: true,
-    images: [placeholderImage],
     name: {
       sv: 'Opinel svampkniv',
       en: 'Opinel mushroom knife',
@@ -24,7 +22,6 @@ export const products: Product[] = [
     stripePriceId: 'price_1U1QcU1HnhNtqQNvKtmhEpdh',
     vatRate: 0.25,
     inStock: true,
-    images: [placeholderImage],
     name: {
       sv: 'Flätad svampkorg',
       en: 'Woven mushroom basket',
@@ -39,7 +36,6 @@ export const products: Product[] = [
     stripePriceId: 'price_1U1QcW1HnhNtqQNvIVGkrz0t',
     vatRate: 0.06,
     inStock: true,
-    images: [placeholderImage],
     name: {
       sv: 'Torkad kantarell',
       en: 'Dried chanterelle',
@@ -54,7 +50,6 @@ export const products: Product[] = [
     stripePriceId: 'price_1U1QcX1HnhNtqQNvSGUknyg0',
     vatRate: 0.25,
     inStock: true,
-    images: [placeholderImage],
     name: {
       sv: 'Odlingskit – ostronskivling',
       en: 'Growing kit – oyster mushroom',
@@ -69,7 +64,6 @@ export const products: Product[] = [
     stripePriceId: 'price_1U1QcZ1HnhNtqQNvNnw8BWxj',
     vatRate: 0.06,
     inStock: true,
-    images: [placeholderImage],
     name: {
       sv: 'Svampboken – en fälthandbok',
       en: 'The Mushroom Book – a field guide',
@@ -84,7 +78,6 @@ export const products: Product[] = [
     stripePriceId: 'price_1U1Qca1HnhNtqQNvsgh5RICZ',
     vatRate: 0.25,
     inStock: true,
-    images: [placeholderImage],
     name: {
       sv: 'Tygkasse med tryck',
       en: 'Printed canvas tote',

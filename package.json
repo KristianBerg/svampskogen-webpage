@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "postbuild": "cp dist/index.html dist/404.html && node scripts/generate-og-pages.mjs",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "process-images": "node scripts/process-images.mjs"
   },
   "dependencies": {
     "i18next": "^26.0.6",
@@ -30,6 +31,7 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
+    "sharp": "^0.35.5",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
     "vite": "^7.2.4"

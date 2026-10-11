@@ -6,6 +6,7 @@ import { products } from '../data/products'
 import { useCart } from '../hooks/useCart'
 import { useProductPrices } from '../hooks/useProductPrices'
 import { formatPrice } from '../lib/formatPrice'
+import { getProductImages } from '../lib/productImages'
 
 const Heading = styled.h1`
   font-size: 1.4rem;
@@ -96,7 +97,7 @@ export default function StorePage() {
             return (
               <ProductCard key={product.slug}>
                 <ProductImageLink to={`/store/${product.slug}`}>
-                  <ProductImage src={product.images[0]} alt={product.name[lang]} />
+                  <ProductImage src={getProductImages(product)[0].thumb} alt={product.name[lang]} loading="lazy" />
                 </ProductImageLink>
                 <ProductName to={`/store/${product.slug}`}>{product.name[lang]}</ProductName>
                 {price && <ProductPrice>{formatPrice(price)}</ProductPrice>}

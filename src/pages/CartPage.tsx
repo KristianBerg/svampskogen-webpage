@@ -8,6 +8,7 @@ import { shippingMethod } from '../data/shippingMethods'
 import { useCart } from '../hooks/useCart'
 import { useProductPrices } from '../hooks/useProductPrices'
 import { formatPrice } from '../lib/formatPrice'
+import { getProductImages } from '../lib/productImages'
 import { createCheckoutSession } from '../lib/stripe'
 
 // Pulled out of the component so the redirect (a plain function, not a
@@ -217,7 +218,7 @@ export default function CartPage() {
                   <tr key={product.slug}>
                     <td>
                       <ProductCell>
-                        <ProductImage src={product.images[0]} alt="" />
+                        <ProductImage src={getProductImages(product)[0].thumb} alt="" loading="lazy" />
                         <Link to={`/store/${product.slug}`}>{product.name[lang]}</Link>
                       </ProductCell>
                     </td>
