@@ -9,7 +9,8 @@
     "postbuild": "cp dist/index.html dist/404.html && node scripts/generate-og-pages.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
-    "process-images": "node scripts/process-images.mjs"
+    "process-images": "node scripts/process-images.mjs",
+    "upload-images": "node scripts/image-uploader/server.mjs"
   },
   "dependencies": {
     "i18next": "^26.0.6",

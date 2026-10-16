@@ -7,12 +7,11 @@
 import { mkdir, readdir, stat, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { resizeProductImage, SIZES } from './lib/resizeProductImage.mjs'
+import { SOURCE_EXTENSIONS } from './lib/sourceExtensions.mjs'
 
 const rawDir = path.resolve(import.meta.dirname, '..', 'assets')
 const outDir = path.resolve(import.meta.dirname, '..', 'public', 'products')
 const manifestPath = path.resolve(import.meta.dirname, '..', 'src', 'data', 'productImageCounts.generated.ts')
-
-const SOURCE_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png'])
 
 async function findRawPhotosBySlug() {
   const slugDirs = await readdir(rawDir, { withFileTypes: true }).catch(() => [])
