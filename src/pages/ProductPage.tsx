@@ -59,6 +59,7 @@ const BodyText = styled.p`
   font-size: 0.95rem;
   line-height: 1.7;
   max-width: 560px;
+  white-space: pre-line;
   margin-bottom: 1.5rem;
 `
 

@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:live": "VITE_CATALOG_MODE=live vite",
     "build": "tsc -b && vite build",
     "postbuild": "cp dist/index.html dist/404.html && node scripts/generate-og-pages.mjs",
     "lint": "eslint .",
