@@ -20,6 +20,38 @@ interface CheckoutLineItem {
   quantity: number
 }
 
+type Locale = 'sv' | 'en'
+
+// A line item resolved against the in-repo catalog: everything shown or charged
+// except the amount, which always comes from the Stripe Price itself.
+interface ResolvedLineItem {
+  name: string
+  vatRate: number
+  metadata: Record<string, string>
+}
+
+const SHIPPING_LABEL: Record<Locale, string> = { sv: 'Frakt', en: 'Shipping' }
+
+function resolveLineItem(env: Env, stripePriceId: string, locale: Locale): ResolvedLineItem | null {
+  const live = env.CATALOG_MODE === 'live'
+  const products = live ? liveProducts : sandboxProducts
+  const shippingMethod = live ? liveShippingMethod : sandboxShippingMethod
+
+  const product = products.find((entry) => entry.stripePriceId === stripePriceId)
+  if (product) {
+    return { name: product.name[locale], vatRate: product.vatRate, metadata: { slug: product.slug } }
+  }
+  // The cart sends the shipping fee as an ordinary line item, so it's resolved here too.
+  if (shippingMethod.stripePriceId === stripePriceId) {
+    return {
+      name: `${SHIPPING_LABEL[locale]} – ${shippingMethod.name[locale]}`,
+      vatRate: shippingMethod.vatRate,
+      metadata: { shipping_method: shippingMethod.id },
+    }
+  }
+  return null
+}
+
 function corsHeaders(origin: string): Record<string, string> {
   return {
     'Access-Control-Allow-Origin': origin,
@@ -80,9 +112,13 @@ export default {
     }
 
     let lineItems: CheckoutLineItem[] | null
+    // Falls back to Swedish rather than rejecting, so a frontend from before
+    // locale was sent still checks out.
+    let locale: Locale = 'sv'
     try {
-      const body = (await request.json()) as { lineItems?: unknown }
+      const body = (await request.json()) as { lineItems?: unknown; locale?: unknown }
       lineItems = parseLineItems(body.lineItems)
+      if (body.locale === 'en') locale = 'en'
     } catch {
       lineItems = null
     }
@@ -90,25 +126,17 @@ export default {
       return jsonResponse({ error: 'Invalid request body' }, 400, origin)
     }
 
-    // The tax rate for each line item is resolved here from the in-repo catalog's vatRate,
-    // never accepted from the request body — the same trust boundary already used for
-    // price itself, so a tampered request can't under-charge VAT.
-    // The cart sends the shipping fee as an ordinary line item, so it's resolved the same way.
-    const catalog =
-      env.CATALOG_MODE === 'live'
-        ? [...liveProducts, liveShippingMethod]
-        : [...sandboxProducts, sandboxShippingMethod]
-    const sessionLineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = []
+    // Name and tax rate for each line item are resolved here from the in-repo catalog,
+    // never accepted from the request body — the request only carries Price IDs, so a
+    // tampered one can't change what's charged, what VAT applies, or what the receipt
+    // and packing list say.
+    const resolved: ResolvedLineItem[] = []
     for (const item of lineItems) {
-      const entry = catalog.find((candidate) => candidate.stripePriceId === item.stripePriceId)
+      const entry = resolveLineItem(env, item.stripePriceId, locale)
       if (!entry) {
         return jsonResponse({ error: `Unknown price: ${item.stripePriceId}` }, 400, origin)
       }
-      const taxRateId = taxRateIdForVatRate(env, entry.vatRate)
-      if (!taxRateId) {
-        return jsonResponse({ error: `Price ${item.stripePriceId} has no recognized vatRate` }, 500, origin)
-      }
-      sessionLineItems.push({ price: item.stripePriceId, quantity: item.quantity, tax_rates: [taxRateId] })
+      resolved.push(entry)
     }
 
     const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
@@ -117,15 +145,46 @@ export default {
 
     let session: Stripe.Checkout.Session
     try {
+      // Line items are built with price_data rather than the Price ID because a Price ID
+      // always shows its Product's single (Swedish) name. The amount is still the
+      // Price's own, read here; the one-off product's metadata links back to the catalog.
+      const prices = await Promise.all(lineItems.map((item) => stripe.prices.retrieve(item.stripePriceId)))
+      const sessionLineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = lineItems.map((item, index) => {
+        const price = prices[index]!
+        const entry = resolved[index]!
+        const taxRateId = taxRateIdForVatRate(env, entry.vatRate)
+        if (!price.active || price.unit_amount === null || !taxRateId) {
+          throw new Error(`Price ${item.stripePriceId} is inactive, has no fixed amount, or has no recognized vatRate`)
+        }
+        return {
+          price_data: {
+            currency: price.currency,
+            unit_amount: price.unit_amount,
+            tax_behavior: 'inclusive',
+            product_data: {
+              name: entry.name,
+              metadata: {
+                ...entry.metadata,
+                stripe_price_id: price.id,
+                stripe_product_id: typeof price.product === 'string' ? price.product : price.product.id,
+              },
+            },
+          },
+          quantity: item.quantity,
+          tax_rates: [taxRateId],
+        }
+      })
+
       session = await stripe.checkout.sessions.create({
         mode: 'payment',
+        locale,
         line_items: sessionLineItems,
         shipping_address_collection: { allowed_countries: ['SE'] },
         success_url: `${origin}/checkout/success`,
         cancel_url: `${origin}/checkout/cancel`,
       })
     } catch (error) {
-      const message = error instanceof Stripe.errors.StripeError ? error.message : 'Failed to create checkout session'
+      const message = error instanceof Error ? error.message : 'Failed to create checkout session'
       return jsonResponse({ error: message }, 502, origin)
     }
 

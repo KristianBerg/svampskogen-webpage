@@ -184,10 +184,13 @@ export default function CartPage() {
     setIsCheckingOut(true)
     setCheckoutError(false)
     try {
-      const session = await createCheckoutSession([
-        ...rows.map((row) => ({ stripePriceId: row.product.stripePriceId, quantity: row.item.quantity })),
-        { stripePriceId: shippingMethod.stripePriceId, quantity: 1 },
-      ])
+      const session = await createCheckoutSession(
+        [
+          ...rows.map((row) => ({ stripePriceId: row.product.stripePriceId, quantity: row.item.quantity })),
+          { stripePriceId: shippingMethod.stripePriceId, quantity: 1 },
+        ],
+        lang,
+      )
       redirectTo(session.url)
     } catch {
       setCheckoutError(true)
