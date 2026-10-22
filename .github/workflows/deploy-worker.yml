@@ -7,7 +7,9 @@ on:
       - 'worker/**'
       # The Worker bundles the in-repo catalog for VAT rates, so catalog edits must redeploy it.
       - 'src/data/products.live.ts'
+      - 'src/data/products.live.json'
       - 'src/data/products.sandbox.ts'
+      - 'src/data/products.sandbox.json'
       - 'src/data/productTypes.ts'
       - '.github/workflows/deploy-worker.yml'
   workflow_dispatch:

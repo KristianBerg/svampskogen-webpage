@@ -1,8 +1,8 @@
-// Local-only admin tool: lists products from products.live.ts, lets you pick
+// Local-only admin tool: lists products from products.live.json, lets you pick
 // photos for one through the browser's file picker, and writes them into
 // assets/<slug>/ in submission order. Also lets you set each product's
-// category and VAT rate, which are written back into products.live.ts. Never deployed, never exposed off this
-// machine — the server only binds to 127.0.0.1.
+// category and VAT rate, which are written back into products.live.json.
+// Never deployed, never exposed off this machine — the server only binds to 127.0.0.1.
 import { spawn } from 'node:child_process'
 import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises'
 import { createServer } from 'node:http'
@@ -12,16 +12,34 @@ import { SOURCE_EXTENSIONS } from '../lib/sourceExtensions.mjs'
 const repoRoot = path.resolve(import.meta.dirname, '..', '..')
 const rawDir = path.join(repoRoot, 'assets')
 const indexHtmlPath = path.join(import.meta.dirname, 'index.html')
-const liveProductsPath = path.join(repoRoot, 'src', 'data', 'products.live.ts')
+const liveProductsPath = path.join(repoRoot, 'src', 'data', 'products.live.json')
 const PORT = 4500
 
+// Read per request (not cached) so hand edits to products.live.json show up
+// without restarting the server.
 async function loadLiveProducts() {
-  // Re-imported per request (not cached) so edits to products.live.ts show
-  // up without restarting the server — this tool is used rarely enough that
-  // the cost doesn't matter. Cache-busted via a query param since Node's ESM
-  // loader caches modules by specifier.
-  const module = await import(`../../src/data/products.live.ts?t=${Date.now()}`)
-  return module.products
+  return JSON.parse(await readFile(liveProductsPath, 'utf8'))
+}
+
+// Matches the field order in productTypes.ts, so a field the uploader adds
+// (e.g. a first category) lands where a hand-written entry would put it
+// instead of at the end. Unknown fields keep their place after these.
+const FIELD_ORDER = ['slug', 'stripePriceId', 'vatRate', 'inStock', 'category', 'name', 'description']
+
+function orderFields(product) {
+  const ordered = {}
+  for (const key of FIELD_ORDER) if (key in product) ordered[key] = product[key]
+  return Object.assign(ordered, product)
+}
+
+// Applies `update` to one product and writes the file back in the same
+// 2-space format it's stored in, so diffs only show the changed fields.
+async function updateLiveProduct(slug, update) {
+  const products = await loadLiveProducts()
+  const index = products.findIndex((product) => product.slug === slug)
+  if (index === -1) throw new Error(`Unknown product slug: ${slug}`)
+  products[index] = orderFields(update({ ...products[index] }))
+  await writeFile(liveProductsPath, `${JSON.stringify(products, null, 2)}\n`)
 }
 
 async function loadImageCounts() {
@@ -82,41 +100,6 @@ async function handleUpload(req, res, slug) {
   sendJson(res, 200, { wrote: path.relative(repoRoot, outPath) })
 }
 
-// Edits products.live.ts as text rather than regenerating it, so comments and
-// formatting elsewhere in the file survive. Relies on the file's layout: each
-// product is an object literal whose closing brace sits one indent level
-// left of its `slug:` line. `literal` is the field's value as TS source, or
-// null to remove the field; a missing field is inserted after `anchor`.
-function setFieldInSource(source, slug, field, literal, anchor) {
-  const lines = source.split('\n')
-  const slugLine = `slug: '${slug}',`
-  const start = lines.findIndex((line) => line.trim() === slugLine)
-  if (start === -1) throw new Error(`Could not find ${slugLine} in products.live.ts`)
-
-  const indent = lines[start].match(/^\s*/)[0]
-  const closingIndent = indent.slice(0, -2)
-  let end = lines.findIndex((line, i) => i > start && line.startsWith(`${closingIndent}}`))
-  if (end === -1) end = lines.length
-
-  const isProp = (name) => (line) => line.startsWith(`${indent}${name}:`)
-  const blockIndexOf = (name) => {
-    const i = lines.slice(start, end).findIndex(isProp(name))
-    return i === -1 ? -1 : start + i
-  }
-
-  const existing = blockIndexOf(field)
-  const newLine = `${indent}${field}: ${literal},`
-
-  if (existing !== -1) {
-    if (literal !== null) lines[existing] = newLine
-    else lines.splice(existing, 1)
-  } else if (literal !== null) {
-    const anchorIndex = blockIndexOf(anchor)
-    lines.splice((anchorIndex === -1 ? start : anchorIndex) + 1, 0, newLine)
-  }
-  return lines.join('\n')
-}
-
 async function handleSetCategory(req, res, slug) {
   const products = await loadLiveProducts()
   if (!products.some((product) => product.slug === slug)) {
@@ -131,10 +114,11 @@ async function handleSetCategory(req, res, slug) {
     return
   }
 
-  const escaped = category.replace(/\\/g, '\\\\').replace(/'/g, "\\'")
-  const source = await readFile(liveProductsPath, 'utf8')
-  // Matches the field order in productTypes.ts (category follows inStock).
-  await writeFile(liveProductsPath, setFieldInSource(source, slug, 'category', category ? `'${escaped}'` : null, 'inStock'))
+  await updateLiveProduct(slug, (product) => {
+    if (category) product.category = category
+    else delete product.category
+    return product
+  })
   sendJson(res, 200, { category: category || null })
 }
 
@@ -155,8 +139,7 @@ async function handleSetVatRate(req, res, slug) {
     return
   }
 
-  const source = await readFile(liveProductsPath, 'utf8')
-  await writeFile(liveProductsPath, setFieldInSource(source, slug, 'vatRate', String(vatRate), 'stripePriceId'))
+  await updateLiveProduct(slug, (product) => ({ ...product, vatRate }))
   sendJson(res, 200, { vatRate })
 }
 
