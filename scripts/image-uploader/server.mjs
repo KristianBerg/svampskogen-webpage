@@ -1,6 +1,7 @@
 // Local-only admin tool: lists products from products.live.ts, lets you pick
 // photos for one through the browser's file picker, and writes them into
-// assets/<slug>/ in submission order. Never deployed, never exposed off this
+// assets/<slug>/ in submission order. Also lets you set each product's
+// category, which is written back into products.live.ts. Never deployed, never exposed off this
 // machine — the server only binds to 127.0.0.1.
 import { spawn } from 'node:child_process'
 import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises'
@@ -11,6 +12,7 @@ import { SOURCE_EXTENSIONS } from '../lib/sourceExtensions.mjs'
 const repoRoot = path.resolve(import.meta.dirname, '..', '..')
 const rawDir = path.join(repoRoot, 'assets')
 const indexHtmlPath = path.join(import.meta.dirname, 'index.html')
+const liveProductsPath = path.join(repoRoot, 'src', 'data', 'products.live.ts')
 const PORT = 4500
 
 async function loadLiveProducts() {
@@ -79,6 +81,61 @@ async function handleUpload(req, res, slug) {
   sendJson(res, 200, { wrote: path.relative(repoRoot, outPath) })
 }
 
+// Edits products.live.ts as text rather than regenerating it, so comments and
+// formatting elsewhere in the file survive. Relies on the file's layout: each
+// product is an object literal whose closing brace sits one indent level
+// left of its `slug:` line.
+function setCategoryInSource(source, slug, category) {
+  const lines = source.split('\n')
+  const slugLine = `slug: '${slug}',`
+  const start = lines.findIndex((line) => line.trim() === slugLine)
+  if (start === -1) throw new Error(`Could not find ${slugLine} in products.live.ts`)
+
+  const indent = lines[start].match(/^\s*/)[0]
+  const closingIndent = indent.slice(0, -2)
+  let end = lines.findIndex((line, i) => i > start && line.startsWith(`${closingIndent}}`))
+  if (end === -1) end = lines.length
+
+  const isProp = (name) => (line) => line.startsWith(`${indent}${name}:`)
+  const blockIndexOf = (name) => {
+    const i = lines.slice(start, end).findIndex(isProp(name))
+    return i === -1 ? -1 : start + i
+  }
+
+  const existing = blockIndexOf('category')
+  const escaped = category.replace(/\\/g, '\\\\').replace(/'/g, "\\'")
+  const newLine = `${indent}category: '${escaped}',`
+
+  if (existing !== -1) {
+    if (category) lines[existing] = newLine
+    else lines.splice(existing, 1)
+  } else if (category) {
+    // Matches the field order in productTypes.ts (category follows inStock).
+    const anchor = blockIndexOf('inStock')
+    lines.splice((anchor === -1 ? start : anchor) + 1, 0, newLine)
+  }
+  return lines.join('\n')
+}
+
+async function handleSetCategory(req, res, slug) {
+  const products = await loadLiveProducts()
+  if (!products.some((product) => product.slug === slug)) {
+    sendJson(res, 404, { error: `Unknown product slug: ${slug}` })
+    return
+  }
+
+  const { category: raw } = JSON.parse((await readBody(req)).toString('utf8') || '{}')
+  const category = typeof raw === 'string' ? raw.trim() : ''
+  if (/[\r\n]/.test(category) || category.length > 60) {
+    sendJson(res, 400, { error: 'Category must be a single line of at most 60 characters.' })
+    return
+  }
+
+  const source = await readFile(liveProductsPath, 'utf8')
+  await writeFile(liveProductsPath, setCategoryInSource(source, slug, category))
+  sendJson(res, 200, { category: category || null })
+}
+
 async function handleProcess(res) {
   const child = spawn('node', [path.join(repoRoot, 'scripts', 'process-images.mjs')], { cwd: repoRoot })
   let output = ''
@@ -105,6 +162,9 @@ const server = createServer((req, res) => {
 
     const uploadMatch = req.method === 'POST' && pathname.match(/^\/api\/products\/([^/]+)\/upload$/)
     if (uploadMatch) return handleUpload(req, res, decodeURIComponent(uploadMatch[1]))
+
+    const categoryMatch = req.method === 'PUT' && pathname.match(/^\/api\/products\/([^/]+)\/category$/)
+    if (categoryMatch) return handleSetCategory(req, res, decodeURIComponent(categoryMatch[1]))
 
     sendJson(res, 404, { error: 'Not found' })
   }

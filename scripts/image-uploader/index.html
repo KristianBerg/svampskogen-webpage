@@ -11,6 +11,7 @@
   .product-name { flex: 1; }
   .product-count { color: #888; font-size: 0.85rem; min-width: 5rem; }
   .product-status { font-size: 0.85rem; color: #888; min-width: 10rem; }
+  .product-category { font: inherit; font-size: 0.85rem; width: 9rem; padding: 0.2rem 0.4rem; }
   button { font: inherit; padding: 0.3rem 0.75rem; cursor: pointer; }
   input[type="file"] { display: none; }
 </style>
@@ -18,7 +19,9 @@
 <body>
 <h1>Svampskogen image uploader</h1>
 <p>Pick a product, then pick one or more photos. They're copied into <code>assets/&lt;slug&gt;/</code> in the order you select them, then resized automatically.</p>
+<p>Type in a product's category field and press Enter (or click away) to save it to <code>products.live.ts</code>. Clear the field to remove the category.</p>
 <div id="app">Loading products…</div>
+<datalist id="category-options"></datalist>
 
 <script>
 async function loadProducts() {
@@ -34,6 +37,18 @@ function groupByCategory(products) {
     groups.get(key).push(product)
   }
   return groups
+}
+
+async function saveCategory(slug, category) {
+  const res = await fetch(`/api/products/${encodeURIComponent(slug)}/category`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ category }),
+  })
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    throw new Error(body.error ?? `Saving category failed (${res.status})`)
+  }
 }
 
 async function uploadFiles(slug, files, statusEl) {
@@ -75,6 +90,23 @@ function renderProductRow(product) {
   const status = document.createElement('span')
   status.className = 'product-status'
 
+  const category = document.createElement('input')
+  category.className = 'product-category'
+  category.placeholder = 'Category'
+  category.value = product.category ?? ''
+  category.setAttribute('list', 'category-options')
+  category.onkeydown = (event) => { if (event.key === 'Enter') category.blur() }
+  category.onchange = () => {
+    category.disabled = true
+    status.textContent = 'Saving category…'
+    saveCategory(product.slug, category.value)
+      .then(() => render())
+      .catch((error) => {
+        status.textContent = `Error: ${error.message}`
+        category.disabled = false
+      })
+  }
+
   const input = document.createElement('input')
   input.type = 'file'
   input.multiple = true
@@ -93,15 +125,23 @@ function renderProductRow(product) {
       .finally(() => { button.disabled = false; input.value = '' })
   }
 
-  row.append(name, count, status, button, input)
+  row.append(name, category, count, status, button, input)
   return row
 }
 
-async function main() {
+async function render() {
   const app = document.getElementById('app')
   const products = await loadProducts()
   const groups = groupByCategory(products)
   app.innerHTML = ''
+
+  const datalist = document.getElementById('category-options')
+  datalist.innerHTML = ''
+  for (const category of new Set(products.map((p) => p.category).filter(Boolean))) {
+    const option = document.createElement('option')
+    option.value = category
+    datalist.appendChild(option)
+  }
 
   for (const [category, items] of groups) {
     const heading = document.createElement('h2')
@@ -113,7 +153,7 @@ async function main() {
   }
 }
 
-main().catch((error) => {
+render().catch((error) => {
   document.getElementById('app').textContent = `Failed to load products: ${error.message}`
 })
 </script>

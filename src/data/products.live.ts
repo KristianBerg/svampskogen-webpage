@@ -9,6 +9,7 @@ export const products: Product[] = [
     stripePriceId: 'price_1ULlXv09vQZGLxR7wyD2J7rh',
     vatRate: 0.25,
     inStock: true,
+    category: 'Wildlife Garden',
     name: {
       sv: 'Nötknäppare',
       en: 'TODO: write copy',
@@ -23,6 +24,7 @@ export const products: Product[] = [
     stripePriceId: 'price_1ULlkK09vQZGLxR7ajghaWk6',
     vatRate: 0.25,
     inStock: true,
+    category: 'Wildlife Garden',
     name: {
       sv: 'Flaskkork – Ekorre',
       en: 'TODO: write copy',
@@ -37,6 +39,7 @@ export const products: Product[] = [
     stripePriceId: 'price_1ULlkM09vQZGLxR7fV715Xdj',
     vatRate: 0.25,
     inStock: true,
+    category: 'Wildlife Garden',
     name: {
       sv: 'Flaskkork – Groda',
       en: 'TODO: write copy',
@@ -51,6 +54,7 @@ export const products: Product[] = [
     stripePriceId: 'price_1ULlXy09vQZGLxR7z8K5Gsxu',
     vatRate: 0.25,
     inStock: true,
+    category: 'Wildlife Garden',
     name: {
       sv: 'Skrin skata',
       en: 'TODO: write copy',
@@ -65,6 +69,7 @@ export const products: Product[] = [
     stripePriceId: 'price_1ULlkF09vQZGLxR7dSzAs50R',
     vatRate: 0.25,
     inStock: true,
+    category: 'Wildlife Garden',
     name: {
       sv: 'Svampkrok – Kantarell',
       en: 'TODO: write copy',
@@ -79,6 +84,7 @@ export const products: Product[] = [
     stripePriceId: 'price_1ULlkH09vQZGLxR7o2cVaoY1',
     vatRate: 0.25,
     inStock: true,
+    category: 'Wildlife Garden',
     name: {
       sv: 'Svampkrok – Stensopp',
       en: 'TODO: write copy',
@@ -93,6 +99,7 @@ export const products: Product[] = [
     stripePriceId: 'price_1ULlkJ09vQZGLxR73vY6ESHb',
     vatRate: 0.25,
     inStock: true,
+    category: 'Wildlife Garden',
     name: {
       sv: 'Svampkrok – Flugsvamp',
       en: 'TODO: write copy',
