@@ -1,7 +1,7 @@
 // Local-only admin tool: lists products from products.live.ts, lets you pick
 // photos for one through the browser's file picker, and writes them into
 // assets/<slug>/ in submission order. Also lets you set each product's
-// category, which is written back into products.live.ts. Never deployed, never exposed off this
+// category and VAT rate, which are written back into products.live.ts. Never deployed, never exposed off this
 // machine — the server only binds to 127.0.0.1.
 import { spawn } from 'node:child_process'
 import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises'
@@ -55,6 +55,7 @@ async function handleGetProducts(res) {
     slug: product.slug,
     name: product.name.sv,
     category: product.category ?? null,
+    vatRate: product.vatRate,
     imageCount: counts[product.slug] ?? 0,
   }))
   sendJson(res, 200, list)
@@ -84,8 +85,9 @@ async function handleUpload(req, res, slug) {
 // Edits products.live.ts as text rather than regenerating it, so comments and
 // formatting elsewhere in the file survive. Relies on the file's layout: each
 // product is an object literal whose closing brace sits one indent level
-// left of its `slug:` line.
-function setCategoryInSource(source, slug, category) {
+// left of its `slug:` line. `literal` is the field's value as TS source, or
+// null to remove the field; a missing field is inserted after `anchor`.
+function setFieldInSource(source, slug, field, literal, anchor) {
   const lines = source.split('\n')
   const slugLine = `slug: '${slug}',`
   const start = lines.findIndex((line) => line.trim() === slugLine)
@@ -102,17 +104,15 @@ function setCategoryInSource(source, slug, category) {
     return i === -1 ? -1 : start + i
   }
 
-  const existing = blockIndexOf('category')
-  const escaped = category.replace(/\\/g, '\\\\').replace(/'/g, "\\'")
-  const newLine = `${indent}category: '${escaped}',`
+  const existing = blockIndexOf(field)
+  const newLine = `${indent}${field}: ${literal},`
 
   if (existing !== -1) {
-    if (category) lines[existing] = newLine
+    if (literal !== null) lines[existing] = newLine
     else lines.splice(existing, 1)
-  } else if (category) {
-    // Matches the field order in productTypes.ts (category follows inStock).
-    const anchor = blockIndexOf('inStock')
-    lines.splice((anchor === -1 ? start : anchor) + 1, 0, newLine)
+  } else if (literal !== null) {
+    const anchorIndex = blockIndexOf(anchor)
+    lines.splice((anchorIndex === -1 ? start : anchorIndex) + 1, 0, newLine)
   }
   return lines.join('\n')
 }
@@ -131,9 +131,33 @@ async function handleSetCategory(req, res, slug) {
     return
   }
 
+  const escaped = category.replace(/\\/g, '\\\\').replace(/'/g, "\\'")
   const source = await readFile(liveProductsPath, 'utf8')
-  await writeFile(liveProductsPath, setCategoryInSource(source, slug, category))
+  // Matches the field order in productTypes.ts (category follows inStock).
+  await writeFile(liveProductsPath, setFieldInSource(source, slug, 'category', category ? `'${escaped}'` : null, 'inStock'))
   sendJson(res, 200, { category: category || null })
+}
+
+// Swedish VAT rates; the Worker maps each to a Stripe Tax Rate object, so
+// anything outside this list would fail at checkout.
+const VAT_RATES = [0.25, 0.12, 0.06]
+
+async function handleSetVatRate(req, res, slug) {
+  const products = await loadLiveProducts()
+  if (!products.some((product) => product.slug === slug)) {
+    sendJson(res, 404, { error: `Unknown product slug: ${slug}` })
+    return
+  }
+
+  const { vatRate } = JSON.parse((await readBody(req)).toString('utf8') || '{}')
+  if (!VAT_RATES.includes(vatRate)) {
+    sendJson(res, 400, { error: `VAT rate must be one of ${VAT_RATES.join(', ')}.` })
+    return
+  }
+
+  const source = await readFile(liveProductsPath, 'utf8')
+  await writeFile(liveProductsPath, setFieldInSource(source, slug, 'vatRate', String(vatRate), 'stripePriceId'))
+  sendJson(res, 200, { vatRate })
 }
 
 async function handleProcess(res) {
@@ -165,6 +189,9 @@ const server = createServer((req, res) => {
 
     const categoryMatch = req.method === 'PUT' && pathname.match(/^\/api\/products\/([^/]+)\/category$/)
     if (categoryMatch) return handleSetCategory(req, res, decodeURIComponent(categoryMatch[1]))
+
+    const vatRateMatch = req.method === 'PUT' && pathname.match(/^\/api\/products\/([^/]+)\/vat-rate$/)
+    if (vatRateMatch) return handleSetVatRate(req, res, decodeURIComponent(vatRateMatch[1]))
 
     sendJson(res, 404, { error: 'Not found' })
   }

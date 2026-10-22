@@ -1,8 +1,13 @@
 import Stripe from 'stripe'
+import { products as liveProducts } from '../../src/data/products.live'
+import { products as sandboxProducts } from '../../src/data/products.sandbox'
 
 export interface Env {
   STRIPE_SECRET_KEY: string
   SITE_ORIGIN: string
+  // Which in-repo catalog to resolve line items against. Must match the Stripe mode of
+  // STRIPE_SECRET_KEY, the same way the frontend's VITE_CATALOG_MODE does.
+  CATALOG_MODE: 'sandbox' | 'live'
   TAX_RATE_6: string
   TAX_RATE_12: string
   TAX_RATE_25: string
@@ -28,17 +33,8 @@ function jsonResponse(body: unknown, status: number, origin: string): Response {
   })
 }
 
-// metadata.vat_rate is a plain Stripe metadata string, so it's normalized here rather than
-// assumed to be in one format — it may have been written as either "25" or "0.25".
-function normalizeVatPercent(raw: string): number | null {
-  const value = Number(raw)
-  if (!Number.isFinite(value)) return null
-  const percent = Math.round(value <= 1 ? value * 100 : value)
-  return [6, 12, 25].includes(percent) ? percent : null
-}
-
-function taxRateIdForPercent(env: Env, percent: number): string | null {
-  switch (percent) {
+function taxRateIdForVatRate(env: Env, vatRate: number): string | null {
+  switch (Math.round(vatRate * 100)) {
     case 6:
       return env.TAX_RATE_6
     case 12:
@@ -92,26 +88,29 @@ export default {
       return jsonResponse({ error: 'Invalid request body' }, 400, origin)
     }
 
+    // The tax rate for each line item is resolved here from the in-repo catalog's vatRate,
+    // never accepted from the request body — the same trust boundary already used for
+    // price itself, so a tampered request can't under-charge VAT.
+    const catalog = env.CATALOG_MODE === 'live' ? liveProducts : sandboxProducts
+    const sessionLineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = []
+    for (const item of lineItems) {
+      const product = catalog.find((entry) => entry.stripePriceId === item.stripePriceId)
+      if (!product) {
+        return jsonResponse({ error: `Unknown price: ${item.stripePriceId}` }, 400, origin)
+      }
+      const taxRateId = taxRateIdForVatRate(env, product.vatRate)
+      if (!taxRateId) {
+        return jsonResponse({ error: `Product ${product.slug} has no recognized vatRate` }, 500, origin)
+      }
+      sessionLineItems.push({ price: item.stripePriceId, quantity: item.quantity, tax_rates: [taxRateId] })
+    }
+
     const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
       httpClient: Stripe.createFetchHttpClient(),
     })
 
     let session: Stripe.Checkout.Session
     try {
-      // The tax rate for each line item is resolved here from the Price's own metadata,
-      // never accepted from the request body — the same trust boundary already used for
-      // price itself, so a tampered request can't under-charge VAT.
-      const prices = await Promise.all(lineItems.map((item) => stripe.prices.retrieve(item.stripePriceId)))
-      const sessionLineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = lineItems.map((item, index) => {
-        const vatRateRaw = prices[index]?.metadata.vat_rate
-        const percent = vatRateRaw ? normalizeVatPercent(vatRateRaw) : null
-        const taxRateId = percent !== null ? taxRateIdForPercent(env, percent) : null
-        if (!taxRateId) {
-          throw new Error(`Price ${item.stripePriceId} has no recognized vat_rate metadata`)
-        }
-        return { price: item.stripePriceId, quantity: item.quantity, tax_rates: [taxRateId] }
-      })
-
       session = await stripe.checkout.sessions.create({
         mode: 'payment',
         line_items: sessionLineItems,

@@ -12,6 +12,7 @@
   .product-count { color: #888; font-size: 0.85rem; min-width: 5rem; }
   .product-status { font-size: 0.85rem; color: #888; min-width: 10rem; }
   .product-category { font: inherit; font-size: 0.85rem; width: 9rem; padding: 0.2rem 0.4rem; }
+  .product-vat { font: inherit; font-size: 0.85rem; padding: 0.2rem 0.4rem; }
   button { font: inherit; padding: 0.3rem 0.75rem; cursor: pointer; }
   input[type="file"] { display: none; }
 </style>
@@ -20,6 +21,7 @@
 <h1>Svampskogen image uploader</h1>
 <p>Pick a product, then pick one or more photos. They're copied into <code>assets/&lt;slug&gt;/</code> in the order you select them, then resized automatically.</p>
 <p>Type in a product's category field and press Enter (or click away) to save it to <code>products.live.ts</code>. Clear the field to remove the category.</p>
+<p>The VAT dropdown saves to <code>products.live.ts</code> as soon as you change it. It's the rate charged at checkout: 25% for most goods, 12% for food (6% until end of 2027), 6% for books.</p>
 <div id="app">Loading products…</div>
 <datalist id="category-options"></datalist>
 
@@ -48,6 +50,18 @@ async function saveCategory(slug, category) {
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
     throw new Error(body.error ?? `Saving category failed (${res.status})`)
+  }
+}
+
+async function saveVatRate(slug, vatRate) {
+  const res = await fetch(`/api/products/${encodeURIComponent(slug)}/vat-rate`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ vatRate }),
+  })
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    throw new Error(body.error ?? `Saving VAT rate failed (${res.status})`)
   }
 }
 
@@ -107,6 +121,27 @@ function renderProductRow(product) {
       })
   }
 
+  const vat = document.createElement('select')
+  vat.className = 'product-vat'
+  vat.title = 'VAT rate'
+  for (const rate of [0.25, 0.12, 0.06]) {
+    const option = document.createElement('option')
+    option.value = String(rate)
+    option.textContent = `${Math.round(rate * 100)}% moms`
+    vat.appendChild(option)
+  }
+  vat.value = String(product.vatRate)
+  vat.onchange = () => {
+    vat.disabled = true
+    status.textContent = 'Saving VAT rate…'
+    saveVatRate(product.slug, Number(vat.value))
+      .then(() => render())
+      .catch((error) => {
+        status.textContent = `Error: ${error.message}`
+        vat.disabled = false
+      })
+  }
+
   const input = document.createElement('input')
   input.type = 'file'
   input.multiple = true
@@ -125,7 +160,7 @@ function renderProductRow(product) {
       .finally(() => { button.disabled = false; input.value = '' })
   }
 
-  row.append(name, category, count, status, button, input)
+  row.append(name, category, vat, count, status, button, input)
   return row
 }
 

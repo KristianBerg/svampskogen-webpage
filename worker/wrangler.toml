@@ -4,11 +4,12 @@ compatibility_date = "2026-08-06"
 
 [vars]
 SITE_ORIGIN = "http://localhost:5173"
+CATALOG_MODE = "sandbox"
 TAX_RATE_6 = "txr_1UGgDf1HnhNtqQNvDb1kGe6v"
 TAX_RATE_12 = "txr_1UGgE41HnhNtqQNvwtj874Gv"
 TAX_RATE_25 = "txr_1UGgEJ1HnhNtqQNvyln8VWc7"
 
-# NOTE: TAX_RATE_* here must stay in the same Stripe mode as the STRIPE_SECRET_KEY GitHub
+# NOTE: TAX_RATE_* and CATALOG_MODE here must stay in the same Stripe mode as the STRIPE_SECRET_KEY GitHub
 # secret currently deployed to this environment. Live as of Phase 7.
 [env.production]
-vars = { SITE_ORIGIN = "https://svampskogen.com", TAX_RATE_6 = "txr_1UGfsi09vQZGLxR7bIqSevqq", TAX_RATE_12 = "txr_1UGfsv09vQZGLxR79W6tz1xN", TAX_RATE_25 = "txr_1UGfP709vQZGLxR7oKdfeYus" }
+vars = { SITE_ORIGIN = "https://svampskogen.com", CATALOG_MODE = "live", TAX_RATE_6 = "txr_1UGfsi09vQZGLxR7bIqSevqq", TAX_RATE_12 = "txr_1UGfsv09vQZGLxR79W6tz1xN", TAX_RATE_25 = "txr_1UGfP709vQZGLxR7oKdfeYus" }
