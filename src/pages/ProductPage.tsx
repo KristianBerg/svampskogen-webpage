@@ -23,7 +23,30 @@ const ProductImage = styled.img`
   aspect-ratio: 1;
   object-fit: cover;
   border: 1px solid var(--color-border);
+`
+
+const ThumbRow = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
   margin-bottom: 1.5rem;
+`
+
+const Thumb = styled.button<{ $active: boolean }>`
+  display: block;
+  width: 56px;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 1px solid ${(props) => (props.$active ? 'var(--color-text-primary)' : 'var(--color-border)')};
+  background: none;
+  cursor: pointer;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `
 
 const Price = styled.p`
@@ -88,6 +111,7 @@ export default function ProductPage() {
   const product = products.find((candidate) => candidate.slug === slug)
   const { addItem } = useCart()
   const [quantity, setQuantity] = useState(1)
+  const [selectedImage, setSelectedImage] = useState(0)
   const prices = useProductPrices(product ? [product.stripePriceId] : [])
 
   if (!product) {
@@ -100,10 +124,23 @@ export default function ProductPage() {
   }
 
   const price = prices[product.stripePriceId]
+  const images = getProductImages(product)
 
   return (
     <Page style={{ minHeight: '60vh' }}>
-      <ProductImage src={getProductImages(product)[0].full} alt={product.name[lang]} />
+      <ProductImage
+        src={images[Math.min(selectedImage, images.length - 1)].full}
+        alt={product.name[lang]}
+      />
+      {images.length > 1 && (
+        <ThumbRow>
+          {images.map((image, index) => (
+            <Thumb key={image.thumb} $active={index === selectedImage} onClick={() => setSelectedImage(index)}>
+              <img src={image.thumb} alt="" />
+            </Thumb>
+          ))}
+        </ThumbRow>
+      )}
       <Heading>{product.name[lang]}</Heading>
       {price && <Price>{formatPrice(price)}</Price>}
       <BodyText>{product.description[lang]}</BodyText>
