@@ -6,12 +6,12 @@
     "inStock": true,
     "category": "Wildlife Garden",
     "name": {
-      "sv": "Nötknäppare",
-      "en": "TODO: write copy"
+      "sv": "Nötknäppare ekorre",
+      "en": "Squirrel nutcracker"
     },
     "description": {
-      "sv": "TODO: write copy",
-      "en": "TODO: write copy"
+      "sv": "",
+      "en": ""
     }
   },
   {
@@ -21,12 +21,12 @@
     "inStock": true,
     "category": "Wildlife Garden",
     "name": {
-      "sv": "Flaskkork – Ekorre",
-      "en": "TODO: write copy"
+      "sv": "Flaskkork ekorre",
+      "en": "Bottle Cork Squirrel"
     },
     "description": {
-      "sv": "TODO: write copy",
-      "en": "TODO: write copy"
+      "sv": "",
+      "en": ""
     }
   },
   {
@@ -36,12 +36,12 @@
     "inStock": true,
     "category": "Wildlife Garden",
     "name": {
-      "sv": "Flaskkork – Groda",
-      "en": "TODO: write copy"
+      "sv": "Flaskkork groda",
+      "en": "Bottle Stopper Frog"
     },
     "description": {
-      "sv": "TODO: write copy",
-      "en": "TODO: write copy"
+      "sv": "",
+      "en": ""
     }
   },
   {
@@ -66,12 +66,12 @@
     "inStock": true,
     "category": "Wildlife Garden",
     "name": {
-      "sv": "Svampkrok – Kantarell",
-      "en": "TODO: write copy"
+      "sv": "Svampkrok kantarell",
+      "en": "Chanterelle Hook"
     },
     "description": {
-      "sv": "TODO: write copy",
-      "en": "TODO: write copy"
+      "sv": "",
+      "en": ""
     }
   },
   {
@@ -81,12 +81,12 @@
     "inStock": true,
     "category": "Wildlife Garden",
     "name": {
-      "sv": "Svampkrok – Stensopp",
-      "en": "TODO: write copy"
+      "sv": "Svampkrok stensopp",
+      "en": "Penny Bun Hook"
     },
     "description": {
-      "sv": "TODO: write copy",
-      "en": "TODO: write copy"
+      "sv": "",
+      "en": ""
     }
   },
   {
@@ -96,7 +96,125 @@
     "inStock": true,
     "category": "Wildlife Garden",
     "name": {
-      "sv": "Svampkrok – Flugsvamp",
+      "sv": "Svampkrok flugsvamp",
+      "en": "Fly Agaric Hook"
+    },
+    "description": {
+      "sv": "",
+      "en": ""
+    }
+  },
+  {
+    "slug": "pluggar-ostronskivling",
+    "stripePriceId": "price_1UTL9E09vQZGLxR7wFnq03eq",
+    "vatRate": 0.25,
+    "inStock": true,
+    "category": "Odlingskit",
+    "name": {
+      "sv": "Pluggar ostronskivling",
+      "en": "TODO: write copy"
+    },
+    "description": {
+      "sv": "TODO: write copy",
+      "en": "TODO: write copy"
+    }
+  },
+  {
+    "slug": "odlingskit-rosa-ostronskivling-rund",
+    "stripePriceId": "price_1UTL8V09vQZGLxR7daWlkehA",
+    "vatRate": 0.25,
+    "inStock": true,
+    "category": "Odlingskit",
+    "name": {
+      "sv": "Odlingskit rosa ostronskivling rund",
+      "en": "TODO: write copy"
+    },
+    "description": {
+      "sv": "TODO: write copy",
+      "en": "TODO: write copy"
+    }
+  },
+  {
+    "slug": "odlingskit-citronmussling-rund",
+    "stripePriceId": "price_1UTL7v09vQZGLxR7shWLXHD5",
+    "vatRate": 0.25,
+    "inStock": true,
+    "category": "Odlingskit",
+    "name": {
+      "sv": "Odlingskit citronmussling rund",
+      "en": "TODO: write copy"
+    },
+    "description": {
+      "sv": "TODO: write copy",
+      "en": "TODO: write copy"
+    }
+  },
+  {
+    "slug": "odlingskit-kungsmussling-fyrkant",
+    "stripePriceId": "price_1UTL7E09vQZGLxR7EJ0N9tKU",
+    "vatRate": 0.25,
+    "inStock": true,
+    "category": "Odlingskit",
+    "name": {
+      "sv": "Odlingskit kungsmussling fyrkant",
+      "en": "TODO: write copy"
+    },
+    "description": {
+      "sv": "TODO: write copy",
+      "en": "TODO: write copy"
+    }
+  },
+  {
+    "slug": "odlingskit-rosa-ostronskivling-fyrkant",
+    "stripePriceId": "price_1UTL6f09vQZGLxR7ZuxBFtzL",
+    "vatRate": 0.25,
+    "inStock": true,
+    "category": "Odlingskit",
+    "name": {
+      "sv": "Odlingskit rosa ostronskivling fyrkant",
+      "en": "TODO: write copy"
+    },
+    "description": {
+      "sv": "TODO: write copy",
+      "en": "TODO: write copy"
+    }
+  },
+  {
+    "slug": "odlingskit-igelkottstaggsvamp-fyrkant",
+    "stripePriceId": "price_1UTL4k09vQZGLxR7WZv9pgRG",
+    "vatRate": 0.25,
+    "inStock": true,
+    "category": "Odlingskit",
+    "name": {
+      "sv": "Odlingskit igelkottstaggsvamp fyrkant",
+      "en": "TODO: write copy"
+    },
+    "description": {
+      "sv": "TODO: write copy",
+      "en": "TODO: write copy"
+    }
+  },
+  {
+    "slug": "plockpase-broderad",
+    "stripePriceId": "price_1UTL3Y09vQZGLxR7DFSqWmXR",
+    "vatRate": 0.25,
+    "inStock": true,
+    "name": {
+      "sv": "Plockpåse broderad",
+      "en": "TODO: write copy"
+    },
+    "description": {
+      "sv": "TODO: write copy",
+      "en": "TODO: write copy"
+    }
+  },
+  {
+    "slug": "plockpase",
+    "stripePriceId": "price_1UTL2D09vQZGLxR7CuiZ1V2P",
+    "vatRate": 0.25,
+    "inStock": true,
+    "name": {
+      "sv": "Plockpåse",
       "en": "TODO: write copy"
     },
     "description": {
