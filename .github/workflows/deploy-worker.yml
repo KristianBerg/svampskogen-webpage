@@ -11,6 +11,9 @@ on:
       - 'src/data/products.sandbox.ts'
       - 'src/data/products.sandbox.json'
       - 'src/data/productTypes.ts'
+      - 'src/data/shippingMethods.live.ts'
+      - 'src/data/shippingMethods.sandbox.ts'
+      - 'src/data/shippingMethodTypes.ts'
       - '.github/workflows/deploy-worker.yml'
   workflow_dispatch:
 

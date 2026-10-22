@@ -1,6 +1,8 @@
 import Stripe from 'stripe'
 import { products as liveProducts } from '../../src/data/products.live'
 import { products as sandboxProducts } from '../../src/data/products.sandbox'
+import { shippingMethod as liveShippingMethod } from '../../src/data/shippingMethods.live'
+import { shippingMethod as sandboxShippingMethod } from '../../src/data/shippingMethods.sandbox'
 
 export interface Env {
   STRIPE_SECRET_KEY: string
@@ -91,16 +93,20 @@ export default {
     // The tax rate for each line item is resolved here from the in-repo catalog's vatRate,
     // never accepted from the request body — the same trust boundary already used for
     // price itself, so a tampered request can't under-charge VAT.
-    const catalog = env.CATALOG_MODE === 'live' ? liveProducts : sandboxProducts
+    // The cart sends the shipping fee as an ordinary line item, so it's resolved the same way.
+    const catalog =
+      env.CATALOG_MODE === 'live'
+        ? [...liveProducts, liveShippingMethod]
+        : [...sandboxProducts, sandboxShippingMethod]
     const sessionLineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = []
     for (const item of lineItems) {
-      const product = catalog.find((entry) => entry.stripePriceId === item.stripePriceId)
-      if (!product) {
+      const entry = catalog.find((candidate) => candidate.stripePriceId === item.stripePriceId)
+      if (!entry) {
         return jsonResponse({ error: `Unknown price: ${item.stripePriceId}` }, 400, origin)
       }
-      const taxRateId = taxRateIdForVatRate(env, product.vatRate)
+      const taxRateId = taxRateIdForVatRate(env, entry.vatRate)
       if (!taxRateId) {
-        return jsonResponse({ error: `Product ${product.slug} has no recognized vatRate` }, 500, origin)
+        return jsonResponse({ error: `Price ${item.stripePriceId} has no recognized vatRate` }, 500, origin)
       }
       sessionLineItems.push({ price: item.stripePriceId, quantity: item.quantity, tax_rates: [taxRateId] })
     }
