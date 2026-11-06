@@ -22,7 +22,7 @@
     "category": "Wildlife Garden",
     "name": {
       "sv": "Flaskkork ekorre",
-      "en": "Bottle Cork Squirrel"
+      "en": "Bottle Stopper Squirrel"
     },
     "description": {
       "sv": "",
@@ -51,12 +51,12 @@
     "inStock": true,
     "category": "Wildlife Garden",
     "name": {
-      "sv": "Skrin skata",
-      "en": "TODO: write copy"
+      "sv": "Smyckesskrin skata",
+      "en": "Magpie jewelry box"
     },
     "description": {
-      "sv": "TODO: write copy",
-      "en": "TODO: write copy"
+      "sv": "",
+      "en": ""
     }
   },
   {
@@ -115,8 +115,8 @@
       "en": "Oyster Mushroom Spawn Plugs"
     },
     "description": {
-      "sv": "Ostronmussling 100 pluggar med 50g vax i presentask.\n\nPluggar för att ympa svamp i stock.\nUtförlig beskrivning följer med.\nGår bra att odla i de flesta lövträd så som al, alm, ask, asp, björk, bok, lönn, sälg och kastanj.\nJu hårdare trädslag desto mer svamp under längre tid då svampen har mer näring att konsumera.\n\nOstronskivlingen är en mycket lättodlad matsvamp.\nDen är mild i smaken håller formen mycket bra vid stekning.\nProva den i en omelett, wok, i svampsås eller till en god biff.",
-      "en": "490\nOyster mushroom: 100 spawn plugs with 50g of wax, in a gift box.\n\nPlugs for inoculating logs with mushroom spawn.\nDetailed instructions are included.\nSuitable for cultivation in most deciduous trees, such as alder, elm, ash, aspen, birch, beech, maple, goat willow, and chestnut.\nHarder wood species generally yield more mushrooms over a longer period, as the fungus has more nutrients to consume.\n\nThe oyster mushroom is a very easy-to-grow edible fungus.\nIt has a mild flavor and holds its shape exceptionally well when pan-fried.\nTry it in an omelet, a stir-fry, a mushroom sauce, or served alongside a good steak."
+      "sv": "Ostronmussling 100 pluggar med 50g vax i presentask.\n\nPluggar för att ympa svamp i stock. Utförlig beskrivning följer med. Går bra att odla i de flesta lövträd så som al, alm, ask, asp, björk, bok, lönn, sälg och kastanj. Ju hårdare trädslag desto mer svamp under längre tid då svampen har mer näring att konsumera.\n\nOstronskivlingen är en mycket lättodlad matsvamp. Den är mild i smaken och håller formen mycket bra vid stekning. Prova den i en omelett, wok, i svampsås eller till en god biff.",
+      "en": "Oyster mushroom: 100 spawn plugs with 50g of wax, in a gift box.\n\nPlugs for inoculating logs with mushroom spawn. Detailed instructions are included. Suitable for cultivation in most deciduous trees, such as alder, elm, ash, aspen, birch, beech, maple, goat willow, and chestnut. Harder wood species generally yield more mushrooms over a longer period, as the fungus has more nutrients to consume.\n\nThe oyster mushroom is a very easy-to-grow edible fungus. It has a mild flavor and holds its shape exceptionally well when pan-fried. Try it in an omelet, a stir-fry, a mushroom sauce, or served alongside a good steak."
     }
   },
   {
@@ -126,12 +126,12 @@
     "inStock": true,
     "category": "Odlingskit",
     "name": {
-      "sv": "Odlingskit rosa ostronskivling rund",
-      "en": "TODO: write copy"
+      "sv": "Odlingskit rosa ostronskivling \"blanda själv\"",
+      "en": "Pink Oyster Mushroom Growing Kit \"Mix It Yourself\""
     },
     "description": {
-      "sv": "TODO: write copy",
-      "en": "TODO: write copy"
+      "sv": "I detta kit blandar du själv mycelet med halmpellets och vatten, det tar sedan ca: 6-8 veckor innan du har svamp. Odlingen kan ge upp till 3 skördar med två veckors mellanrum. Levereras i en rund björk-kartong.\n\nRosa ostronskivling är en vackert rosa matsvamp från tropikerna och tål inte temperaturer under 10°C. Den är mild i smaken och håller formen mycket bra vid stekning. Prova den i en omelett, wok, i svampsås eller till pasta.",
+      "en": "With this kit you mix the mycelium yourself with straw pellets and water, and after about 6-8 weeks you have mushrooms. You can get up to 3 harvests, two weeks apart. Comes in a round birch box.\n\nThe pink oyster mushroom is a beautifully pink edible mushroom from the tropics, and it can't tolerate temperatures below 10°C. It has a mild flavor and holds its shape very well when pan-fried. Try it in an omelet, a stir-fry, a mushroom sauce, or with pasta."
     }
   },
   {
@@ -141,12 +141,12 @@
     "inStock": true,
     "category": "Odlingskit",
     "name": {
-      "sv": "Odlingskit citronmussling rund",
-      "en": "TODO: write copy"
+      "sv": "Odlingskit citronmussling \"blanda själv\"",
+      "en": "Golden Oyster Mushroom Growing Kit \"Mix It Yourself\""
     },
     "description": {
-      "sv": "TODO: write copy",
-      "en": "TODO: write copy"
+      "sv": "I detta kit blandar du själv mycelet med halmpellets och vatten, det tar sedan ca: 6-8 veckor innan du har svamp. Odlingen kan ge upp till 3 skördar med två veckors mellanrum. Levereras i en rund björk-kartong.\n\nCitronmusslingen är en vackert gul och mycket lättodlad matsvamp. Den är mild i smaken och håller formen mycket bra vid stekning. Prova den i en omelett, wok, i svampsås eller till en god biff.",
+      "en": "With this kit you mix the mycelium yourself with straw pellets and water, and after about 6-8 weeks you have mushrooms. You can get up to 3 harvests, two weeks apart. Comes in a round birch box.\n\nThe golden oyster mushroom is a beautifully yellow and very easy-to-grow edible mushroom. It has a mild flavor and holds its shape very well when pan-fried. Try it in an omelet, a stir-fry, a mushroom sauce, or with a good steak."
     }
   },
   {
@@ -156,12 +156,12 @@
     "inStock": true,
     "category": "Odlingskit",
     "name": {
-      "sv": "Odlingskit kungsmussling fyrkant",
-      "en": "TODO: write copy"
+      "sv": "Odlingskit kungsmussling",
+      "en": "King Oyster Mushroom Growing Kit"
     },
     "description": {
-      "sv": "TODO: write copy",
-      "en": "TODO: write copy"
+      "sv": "Detta kit är redo för fruktsättning och ger svamp på ca: 3 veckor. Svampen växer i svenskt träspån och odlas från grunden av Ecofungi. Odlingen kan ge upp till 2 skördar med två veckors mellanrum. Levereras i en fyrkantig björk-kartong.\n\nKungsmusslingen kallas även kejsarhatt eller king oyster och är släkt med ostronskivlingen, men har en tjockare fot. Den är mild i smaken och har en fast konsistens. Prova att skiva foten och steka den.",
+      "en": "This kit is ready to fruit and gives you mushrooms in about 3 weeks. The mushrooms grow in Swedish wood chips and are raised from scratch by Ecofungi. You can get up to 2 harvests, two weeks apart. Comes in a square birch box.\n\nThe king oyster mushroom is related to the oyster mushroom but has a thicker stem. It has a mild flavor and a firm texture. Try slicing the stem and pan-frying it."
     }
   },
   {
@@ -171,12 +171,12 @@
     "inStock": true,
     "category": "Odlingskit",
     "name": {
-      "sv": "Odlingskit rosa ostronskivling fyrkant",
-      "en": "TODO: write copy"
+      "sv": "Odlingskit rosa ostronskivling",
+      "en": "Pink Oyster Mushroom Growing Kit"
     },
     "description": {
-      "sv": "TODO: write copy",
-      "en": "TODO: write copy"
+      "sv": "Detta kit är redo för fruktsättning och ger svamp på ca: 2 veckor. Svampen växer i svenskt träspån och odlas från grunden av Ecofungi. Odlingen kan ge upp till 3 skördar med två veckors mellanrum. Levereras i en fyrkantig björk-kartong.\n\nRosa ostronskivling är en vackert rosa matsvamp från tropikerna och tål inte temperaturer under 10°C. Den är mild i smaken och håller formen mycket bra vid stekning. Prova den i en omelett, wok, i svampsås eller till pasta.",
+      "en": "This kit is ready to fruit and gives you mushrooms in about 2 weeks. The mushrooms grow in Swedish wood chips and are raised from scratch by Ecofungi. You can get up to 3 harvests, two weeks apart. Comes in a square birch box.\n\nThe pink oyster mushroom is a beautifully pink edible mushroom from the tropics, and it can't tolerate temperatures below 10°C. It has a mild flavor and holds its shape very well when pan-fried. Try it in an omelet, a stir-fry, a mushroom sauce, or with pasta."
     }
   },
   {
@@ -186,12 +186,12 @@
     "inStock": true,
     "category": "Odlingskit",
     "name": {
-      "sv": "Odlingskit igelkottstaggsvamp fyrkant",
-      "en": "TODO: write copy"
+      "sv": "Odlingskit igelkottstaggsvamp",
+      "en": "Lion’s Mane Growing Kit"
     },
     "description": {
-      "sv": "TODO: write copy",
-      "en": "TODO: write copy"
+      "sv": "Detta kit är redo för fruktsättning och ger svamp på ca: 2 veckor. Svampen växer i svenskt träspån och odlas från grunden av Ecofungi. Odlingen kan ge upp till 3 skördar med två veckors mellanrum. Levereras i en fyrkantig björk-kartong.\n\nIgelkottstaggsvampen kallas även Lion’s mane och är en fantastisk matsvamp med många användningsområden. Den lever naturligt på döda eller försvagade lövträd, är fridlyst i Sverige och får inte plockas men går som tur är väldigt bra att odla.",
+      "en": "This kit is ready to fruit and gives you mushrooms in about 2 weeks. The mushrooms grow in Swedish wood chips and are raised from scratch by Ecofungi. You can get up to 3 harvests, two weeks apart. Comes in a square birch box.\n\nLion’s mane is a fantastic edible mushroom with many uses. It lives naturally on dead or weakened deciduous trees. It is protected in Sweden and may not be picked in the wild, but luckily it is very easy to grow."
     }
   },
   {
@@ -200,11 +200,11 @@
     "vatRate": 0.25,
     "inStock": true,
     "name": {
-      "sv": "Plockpåse broderad",
-      "en": "TODO: write copy"
+      "sv": "Svampplockpåse broderad",
+      "en": "Foraging bag with embroidery"
     },
     "description": {
-      "sv": "TODO: write copy",
+      "sv": "Dessa plockpåsar är perfekta att ta med ut i skogen när du plockar svamp. Du fäster påsen i ditt bälte eller i en karbinhake och har händerna fria att plocka och rensa med kniv.\n\nPåsarna är gjorda i Sverige av Fabrikörerna i Göteborg och handbroderade av oss.",
       "en": "TODO: write copy"
     }
   },
@@ -214,11 +214,11 @@
     "vatRate": 0.25,
     "inStock": true,
     "name": {
-      "sv": "Plockpåse",
-      "en": "TODO: write copy"
+      "sv": "Svampplockpåse",
+      "en": "Foraging bag"
     },
     "description": {
-      "sv": "TODO: write copy",
+      "sv": "Dessa plockpåsar är perfekta att ta med ut i skogen när du plockar svamp. Du fäster påsen i ditt bälte eller i en karbinhake och har händerna fria att plocka och rensa med kniv.\n\nPåsarna är gjorda i Sverige av Fabrikörerna i Göteborg.",
       "en": "TODO: write copy"
     }
   }

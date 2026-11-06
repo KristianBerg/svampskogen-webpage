@@ -32,6 +32,14 @@ const placeholderPrices: Record<string, Price> = {
   price_1ULlkF09vQZGLxR7dSzAs50R: { amount: 24500, currency: 'sek' }, // svampkrok-kantarell
   price_1ULlkH09vQZGLxR7o2cVaoY1: { amount: 24500, currency: 'sek' }, // svampkrok-stensopp
   price_1ULlkJ09vQZGLxR73vY6ESHb: { amount: 24500, currency: 'sek' }, // svampkrok-flugsvamp
+  price_1UTL9E09vQZGLxR7wFnq03eq: { amount: 18000, currency: 'sek' }, // pluggar-ostronskivling
+  price_1UTL8V09vQZGLxR7daWlkehA: { amount: 19500, currency: 'sek' }, // odlingskit-rosa-ostronskivling-rund
+  price_1UTL7v09vQZGLxR7shWLXHD5: { amount: 19500, currency: 'sek' }, // odlingskit-citronmussling-rund
+  price_1UTL7E09vQZGLxR7EJ0N9tKU: { amount: 21000, currency: 'sek' }, // odlingskit-kungsmussling-fyrkant
+  price_1UTL6f09vQZGLxR7ZuxBFtzL: { amount: 21000, currency: 'sek' }, // odlingskit-rosa-ostronskivling-fyrkant
+  price_1UTL4k09vQZGLxR7WZv9pgRG: { amount: 21000, currency: 'sek' }, // odlingskit-igelkottstaggsvamp-fyrkant
+  price_1UTL3Y09vQZGLxR7DFSqWmXR: { amount: 40000, currency: 'sek' }, // plockpase-broderad
+  price_1UTL2D09vQZGLxR7CuiZ1V2P: { amount: 35000, currency: 'sek' }, // plockpase
 
   // Shipping method (shippingMethods.ts) — DHL only, sandbox then live.
   price_1UM4sb1HnhNtqQNv3Q8EJ6fz: { amount: 6000, currency: 'sek' }, // dhl
