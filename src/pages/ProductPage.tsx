@@ -107,7 +107,7 @@ const BackLink = styled(Link)`
 export default function ProductPage() {
   const { t, i18n } = useTranslation()
   const { slug } = useParams()
-  const lang = i18n.language === 'sv' ? 'sv' : 'en'
+  const lang = i18n.resolvedLanguage === 'sv' ? 'sv' : 'en'
   const product = products.find((candidate) => candidate.slug === slug)
   const { addItem } = useCart()
   const [quantity, setQuantity] = useState(1)

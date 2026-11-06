@@ -79,7 +79,7 @@ const AddToCartButton = styled.button`
 
 export default function StorePage() {
   const { t, i18n } = useTranslation()
-  const lang = i18n.language === 'sv' ? 'sv' : 'en'
+  const lang = i18n.resolvedLanguage === 'sv' ? 'sv' : 'en'
   const { addItem } = useCart()
   const inStockProducts = products.filter((product) => product.inStock)
 

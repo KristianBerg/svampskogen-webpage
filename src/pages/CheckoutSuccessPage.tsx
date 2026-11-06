@@ -69,7 +69,7 @@ interface OrderRow {
 
 export default function CheckoutSuccessPage() {
   const { t, i18n } = useTranslation()
-  const lang = i18n.language === 'sv' ? 'sv' : 'en'
+  const lang = i18n.resolvedLanguage === 'sv' ? 'sv' : 'en'
   const { items, clear } = useCart()
   const [orderSnapshot] = useState(items)
   const hasCleared = useRef(false)

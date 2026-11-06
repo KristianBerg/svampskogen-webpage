@@ -155,7 +155,7 @@ const TermsLink = styled(Link)`
 
 export default function CartPage() {
   const { t, i18n } = useTranslation()
-  const lang = i18n.language === 'sv' ? 'sv' : 'en'
+  const lang = i18n.resolvedLanguage === 'sv' ? 'sv' : 'en'
   const { items, setQuantity, removeItem } = useCart()
   const [isCheckingOut, setIsCheckingOut] = useState(false)
   const [checkoutError, setCheckoutError] = useState(false)

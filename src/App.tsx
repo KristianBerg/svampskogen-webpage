@@ -120,8 +120,8 @@ function AppContent() {
           </CartLink>
         )}
         <LangSwitcher>
-          <LangButton $active={i18n.language === 'sv'} onClick={() => void i18n.changeLanguage('sv')}>SV</LangButton>
-          <LangButton $active={i18n.language === 'en'} onClick={() => void i18n.changeLanguage('en')}>EN</LangButton>
+          <LangButton $active={i18n.resolvedLanguage === 'sv'} onClick={() => void i18n.changeLanguage('sv')}>SV</LangButton>
+          <LangButton $active={i18n.resolvedLanguage === 'en'} onClick={() => void i18n.changeLanguage('en')}>EN</LangButton>
         </LangSwitcher>
       </TopBar>
       <Routes>
