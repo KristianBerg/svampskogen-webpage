@@ -4,12 +4,14 @@
 // deleted, which renumbers both the raw files and their processed webp
 // outputs. Also lets you set each product's
 // category, VAT rate and Swedish/English name and description, which are
-// written back into products.live.json.
+// written back into products.live.json. Those changes can then be committed
+// to git from the same page (commit only, pushing stays a manual step).
 // Never deployed, never exposed off this machine — the server only binds to 127.0.0.1.
-import { spawn } from 'node:child_process'
+import { execFile, spawn } from 'node:child_process'
 import { mkdir, readdir, readFile, rename, rm, writeFile } from 'node:fs/promises'
 import { createServer } from 'node:http'
 import path from 'node:path'
+import { promisify } from 'node:util'
 import { SIZES } from '../lib/resizeProductImage.mjs'
 import { SOURCE_EXTENSIONS } from '../lib/sourceExtensions.mjs'
 
@@ -19,6 +21,13 @@ const publicProductsDir = path.join(repoRoot, 'public', 'products')
 const indexHtmlPath = path.join(import.meta.dirname, 'index.html')
 const liveProductsPath = path.join(repoRoot, 'src', 'data', 'products.live.json')
 const PORT = 4500
+
+// Everything the CMS writes that's tracked in git. Commits are limited to
+// these paths so unrelated work in the tree never gets swept in. assets/ is
+// gitignored, so raw photos aren't part of this.
+const CMS_PATHS = ['src/data/products.live.json', 'src/data/productImageCounts.generated.ts', 'public/products']
+const DEFAULT_COMMIT_MESSAGE = 'Update product catalog from the CMS'
+const execFileAsync = promisify(execFile)
 
 // Read per request (not cached) so hand edits to products.live.json show up
 // without restarting the server.
@@ -301,6 +310,42 @@ async function handleProcess(res) {
   })
 }
 
+async function git(...args) {
+  const { stdout } = await execFileAsync('git', args, { cwd: repoRoot })
+  return stdout
+}
+
+async function listCmsChanges() {
+  const output = await git('status', '--porcelain', '-z', '--no-renames', '--untracked-files=all', '--', ...CMS_PATHS)
+  return output.split('\0').filter(Boolean).map((entry) => entry.slice(3))
+}
+
+async function handleGetChanges(res) {
+  sendJson(res, 200, { files: await listCmsChanges() })
+}
+
+async function handleCommit(req, res) {
+  const { message: raw } = JSON.parse((await readBody(req)).toString('utf8') || '{}')
+  const message = (typeof raw === 'string' && raw.trim()) || DEFAULT_COMMIT_MESSAGE
+
+  const files = await listCmsChanges()
+  if (files.length === 0) {
+    sendJson(res, 409, { error: 'Nothing to commit.' })
+    return
+  }
+
+  try {
+    await git('add', '-A', '--', ...CMS_PATHS)
+    // The pathspec keeps anything else that happens to be staged out of this commit.
+    await git('commit', '-m', message, '--', ...CMS_PATHS)
+  } catch (error) {
+    sendJson(res, 500, { error: (error.stderr || error.stdout || error.message).trim() })
+    return
+  }
+  const hash = (await git('rev-parse', '--short', 'HEAD')).trim()
+  sendJson(res, 200, { hash, count: files.length })
+}
+
 async function handleIndex(res) {
   const html = await readFile(indexHtmlPath, 'utf8')
   res.writeHead(200, { 'Content-Type': 'text/html' })
@@ -314,6 +359,8 @@ const server = createServer((req, res) => {
     if (req.method === 'GET' && pathname === '/') return handleIndex(res)
     if (req.method === 'GET' && pathname === '/api/products') return handleGetProducts(res)
     if (req.method === 'POST' && pathname === '/api/process') return handleProcess(res)
+    if (req.method === 'GET' && pathname === '/api/changes') return handleGetChanges(res)
+    if (req.method === 'POST' && pathname === '/api/commit') return handleCommit(req, res)
 
     const uploadMatch = req.method === 'POST' && pathname.match(/^\/api\/products\/([^/]+)\/upload$/)
     if (uploadMatch) return handleUpload(req, res, decodeURIComponent(uploadMatch[1]))
