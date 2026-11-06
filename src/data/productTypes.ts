@@ -7,7 +7,10 @@ export interface ProductImage {
 
 export interface Product {
   slug: string
-  stripePriceId: string
+  // Whole kronor expressed in öre (24500 = 245 kr), the unit Stripe charges in.
+  // The single source of truth for this product's price: both the site and the
+  // Worker read it from here. See scripts/check-catalog.mjs for what's allowed.
+  priceOre: number
   vatRate: number
   inStock: boolean
   // Used only to group/sort products in the local image-upload tool's

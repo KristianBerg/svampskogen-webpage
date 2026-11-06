@@ -1,7 +1,7 @@
 [
   {
     "slug": "notknappare",
-    "stripePriceId": "price_1ULlXv09vQZGLxR7wyD2J7rh",
+    "priceOre": 39500,
     "vatRate": 0.25,
     "inStock": true,
     "category": "Wildlife Garden",
@@ -16,7 +16,7 @@
   },
   {
     "slug": "flaskkork-ekorre",
-    "stripePriceId": "price_1ULlkK09vQZGLxR7ajghaWk6",
+    "priceOre": 16500,
     "vatRate": 0.25,
     "inStock": true,
     "category": "Wildlife Garden",
@@ -31,7 +31,7 @@
   },
   {
     "slug": "flaskkork-groda",
-    "stripePriceId": "price_1ULlkM09vQZGLxR7fV715Xdj",
+    "priceOre": 16500,
     "vatRate": 0.25,
     "inStock": true,
     "category": "Wildlife Garden",
@@ -46,7 +46,7 @@
   },
   {
     "slug": "skrin-skata",
-    "stripePriceId": "price_1ULlXy09vQZGLxR7z8K5Gsxu",
+    "priceOre": 45000,
     "vatRate": 0.25,
     "inStock": true,
     "category": "Wildlife Garden",
@@ -61,7 +61,7 @@
   },
   {
     "slug": "svampkrok-kantarell",
-    "stripePriceId": "price_1ULlkF09vQZGLxR7dSzAs50R",
+    "priceOre": 24500,
     "vatRate": 0.25,
     "inStock": true,
     "category": "Wildlife Garden",
@@ -76,7 +76,7 @@
   },
   {
     "slug": "svampkrok-stensopp",
-    "stripePriceId": "price_1ULlkH09vQZGLxR7o2cVaoY1",
+    "priceOre": 24500,
     "vatRate": 0.25,
     "inStock": true,
     "category": "Wildlife Garden",
@@ -91,7 +91,7 @@
   },
   {
     "slug": "svampkrok-flugsvamp",
-    "stripePriceId": "price_1ULlkJ09vQZGLxR73vY6ESHb",
+    "priceOre": 24500,
     "vatRate": 0.25,
     "inStock": true,
     "category": "Wildlife Garden",
@@ -106,7 +106,7 @@
   },
   {
     "slug": "pluggar-ostronskivling",
-    "stripePriceId": "price_1UTL9E09vQZGLxR7wFnq03eq",
+    "priceOre": 18000,
     "vatRate": 0.25,
     "inStock": true,
     "category": "Odlingskit",
@@ -121,7 +121,7 @@
   },
   {
     "slug": "odlingskit-rosa-ostronskivling-rund",
-    "stripePriceId": "price_1UTL8V09vQZGLxR7daWlkehA",
+    "priceOre": 19500,
     "vatRate": 0.25,
     "inStock": true,
     "category": "Odlingskit",
@@ -136,7 +136,7 @@
   },
   {
     "slug": "odlingskit-citronmussling-rund",
-    "stripePriceId": "price_1UTL7v09vQZGLxR7shWLXHD5",
+    "priceOre": 19500,
     "vatRate": 0.25,
     "inStock": true,
     "category": "Odlingskit",
@@ -151,7 +151,7 @@
   },
   {
     "slug": "odlingskit-kungsmussling-fyrkant",
-    "stripePriceId": "price_1UTL7E09vQZGLxR7EJ0N9tKU",
+    "priceOre": 21000,
     "vatRate": 0.25,
     "inStock": true,
     "category": "Odlingskit",
@@ -166,7 +166,7 @@
   },
   {
     "slug": "odlingskit-rosa-ostronskivling-fyrkant",
-    "stripePriceId": "price_1UTL6f09vQZGLxR7ZuxBFtzL",
+    "priceOre": 21000,
     "vatRate": 0.25,
     "inStock": true,
     "category": "Odlingskit",
@@ -181,7 +181,7 @@
   },
   {
     "slug": "odlingskit-igelkottstaggsvamp-fyrkant",
-    "stripePriceId": "price_1UTL4k09vQZGLxR7WZv9pgRG",
+    "priceOre": 21000,
     "vatRate": 0.25,
     "inStock": true,
     "category": "Odlingskit",
@@ -196,7 +196,7 @@
   },
   {
     "slug": "plockpase-broderad",
-    "stripePriceId": "price_1UTL3Y09vQZGLxR7DFSqWmXR",
+    "priceOre": 40000,
     "vatRate": 0.25,
     "inStock": true,
     "name": {
@@ -210,7 +210,7 @@
   },
   {
     "slug": "plockpase",
-    "stripePriceId": "price_1UTL2D09vQZGLxR7CuiZ1V2P",
+    "priceOre": 35000,
     "vatRate": 0.25,
     "inStock": true,
     "name": {

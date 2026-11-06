@@ -5,7 +5,7 @@ on:
     branches: [main]
     paths:
       - 'worker/**'
-      # The Worker bundles the in-repo catalog for VAT rates, so catalog edits must redeploy it.
+      # The Worker bundles the in-repo catalog for prices, names and VAT rates, so catalog edits must redeploy it.
       - 'src/data/products.live.ts'
       - 'src/data/products.live.json'
       - 'src/data/products.sandbox.ts'
@@ -35,6 +35,7 @@ jobs:
           cache: npm
           cache-dependency-path: worker/package-lock.json
       - run: npm ci
+      - run: node ../scripts/check-catalog.mjs
       - name: Sync Stripe secret
         run: printf '%s' "$STRIPE_SECRET_KEY" | npx wrangler secret put STRIPE_SECRET_KEY --env production
         env:

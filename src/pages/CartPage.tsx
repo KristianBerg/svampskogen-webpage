@@ -6,7 +6,6 @@ import { Page } from '../components/Page'
 import { products, type Product } from '../data/products'
 import { shippingMethod } from '../data/shippingMethods'
 import { useCart } from '../hooks/useCart'
-import { useProductPrices } from '../hooks/useProductPrices'
 import { formatPrice } from '../lib/formatPrice'
 import { getProductImages } from '../lib/productImages'
 import { createCheckoutSession } from '../lib/stripe'
@@ -170,25 +169,15 @@ export default function CartPage() {
     .map((item) => ({ item, product: products.find((candidate) => candidate.slug === item.slug) }))
     .filter((row): row is CartRow => Boolean(row.product))
 
-  const prices = useProductPrices([...rows.map((row) => row.product.stripePriceId), shippingMethod.stripePriceId])
-
-  const subtotal = rows.reduce((sum, row) => {
-    const price = prices[row.product.stripePriceId]
-    return price ? sum + price.amount * row.item.quantity : sum
-  }, 0)
-
-  const shippingPrice = prices[shippingMethod.stripePriceId]
-  const total = subtotal + (shippingPrice?.amount ?? 0)
+  const subtotal = rows.reduce((sum, row) => sum + row.product.priceOre * row.item.quantity, 0)
+  const total = subtotal + shippingMethod.priceOre
 
   const handleCheckout = async () => {
     setIsCheckingOut(true)
     setCheckoutError(false)
     try {
       const session = await createCheckoutSession(
-        [
-          ...rows.map((row) => ({ stripePriceId: row.product.stripePriceId, quantity: row.item.quantity })),
-          { stripePriceId: shippingMethod.stripePriceId, quantity: 1 },
-        ],
+        rows.map((row) => ({ slug: row.product.slug, quantity: row.item.quantity })),
         lang,
       )
       redirectTo(session.url)
@@ -215,42 +204,39 @@ export default function CartPage() {
               </tr>
             </thead>
             <tbody>
-              {rows.map(({ item, product }) => {
-                const price = prices[product.stripePriceId]
-                return (
-                  <tr key={product.slug}>
-                    <td>
-                      <ProductCell>
-                        <ProductImage src={getProductImages(product)[0].thumb} alt="" loading="lazy" />
-                        <Link to={`/store/${product.slug}`}>{product.name[lang]}</Link>
-                      </ProductCell>
-                    </td>
-                    <td>
-                      <QuantityInput
-                        type="number"
-                        min={1}
-                        value={item.quantity}
-                        onChange={(event) => setQuantity(product.slug, Number(event.target.value))}
-                      />
-                    </td>
-                    <td>{price ? formatPrice({ amount: price.amount * item.quantity, currency: price.currency }) : '—'}</td>
-                    <td>
-                      <RemoveButton onClick={() => removeItem(product.slug)}>{t('cart_remove')}</RemoveButton>
-                    </td>
-                  </tr>
-                )
-              })}
+              {rows.map(({ item, product }) => (
+                <tr key={product.slug}>
+                  <td>
+                    <ProductCell>
+                      <ProductImage src={getProductImages(product)[0].thumb} alt="" loading="lazy" />
+                      <Link to={`/store/${product.slug}`}>{product.name[lang]}</Link>
+                    </ProductCell>
+                  </td>
+                  <td>
+                    <QuantityInput
+                      type="number"
+                      min={1}
+                      value={item.quantity}
+                      onChange={(event) => setQuantity(product.slug, Number(event.target.value))}
+                    />
+                  </td>
+                  <td>{formatPrice(product.priceOre * item.quantity)}</td>
+                  <td>
+                    <RemoveButton onClick={() => removeItem(product.slug)}>{t('cart_remove')}</RemoveButton>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </Table>
           <Subtotal>
-            {t('cart_subtotal')}: {formatPrice({ amount: subtotal, currency: 'sek' })}
+            {t('cart_subtotal')}: {formatPrice(subtotal)}
           </Subtotal>
           <Shipping>
             {t('cart_shipping_heading')} ({shippingMethod.name[lang]}):{' '}
-            {shippingPrice ? formatPrice({ amount: shippingPrice.amount, currency: shippingPrice.currency }) : '—'}
+            {formatPrice(shippingMethod.priceOre)}
           </Shipping>
           <Total>
-            {t('cart_total')}: {formatPrice({ amount: total, currency: 'sek' })}
+            {t('cart_total')}: {formatPrice(total)}
           </Total>
           <TermsNotice>
             {t('cart_terms_prefix')}

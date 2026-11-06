@@ -1,53 +1,10 @@
-export interface Price {
-  amount: number
-  currency: string
-}
-
 export interface CheckoutLineItem {
-  stripePriceId: string
+  slug: string
   quantity: number
 }
 
 export interface CheckoutSession {
   url: string
-}
-
-// Real Stripe test-mode Price objects (Phase 1 done), keyed by Price ID.
-// Amounts are duplicated here rather than fetched live because there's no
-// backend yet (Phase 2, the Cloudflare Worker) to call Stripe with the
-// secret key — swap this function's body for a real lookup once that exists.
-const placeholderPrices: Record<string, Price> = {
-  price_1U1QcP1HnhNtqQNvxC61NKYx: { amount: 24900, currency: 'sek' }, // opinel-svampkniv
-  price_1U1QcU1HnhNtqQNvKtmhEpdh: { amount: 34900, currency: 'sek' }, // flatad-svampkorg
-  price_1U1QcW1HnhNtqQNvIVGkrz0t: { amount: 9900, currency: 'sek' }, // torkad-kantarell
-  price_1U1QcX1HnhNtqQNvSGUknyg0: { amount: 29900, currency: 'sek' }, // odlingskit-ostronskivling
-  price_1U1QcZ1HnhNtqQNvNnw8BWxj: { amount: 19900, currency: 'sek' }, // svampboken-faltguide
-  price_1U1Qca1HnhNtqQNvsgh5RICZ: { amount: 14900, currency: 'sek' }, // tygkasse-med-tryck
-
-  // Live catalog (products.live.ts), amounts pulled from the live Stripe account.
-  price_1ULlXv09vQZGLxR7wyD2J7rh: { amount: 39500, currency: 'sek' }, // notknappare
-  price_1ULlkK09vQZGLxR7ajghaWk6: { amount: 16500, currency: 'sek' }, // flaskkork-ekorre
-  price_1ULlkM09vQZGLxR7fV715Xdj: { amount: 16500, currency: 'sek' }, // flaskkork-groda
-  price_1ULlXy09vQZGLxR7z8K5Gsxu: { amount: 45000, currency: 'sek' }, // skrin-skata
-  price_1ULlkF09vQZGLxR7dSzAs50R: { amount: 24500, currency: 'sek' }, // svampkrok-kantarell
-  price_1ULlkH09vQZGLxR7o2cVaoY1: { amount: 24500, currency: 'sek' }, // svampkrok-stensopp
-  price_1ULlkJ09vQZGLxR73vY6ESHb: { amount: 24500, currency: 'sek' }, // svampkrok-flugsvamp
-  price_1UTL9E09vQZGLxR7wFnq03eq: { amount: 18000, currency: 'sek' }, // pluggar-ostronskivling
-  price_1UTL8V09vQZGLxR7daWlkehA: { amount: 19500, currency: 'sek' }, // odlingskit-rosa-ostronskivling-rund
-  price_1UTL7v09vQZGLxR7shWLXHD5: { amount: 19500, currency: 'sek' }, // odlingskit-citronmussling-rund
-  price_1UTL7E09vQZGLxR7EJ0N9tKU: { amount: 21000, currency: 'sek' }, // odlingskit-kungsmussling-fyrkant
-  price_1UTL6f09vQZGLxR7ZuxBFtzL: { amount: 21000, currency: 'sek' }, // odlingskit-rosa-ostronskivling-fyrkant
-  price_1UTL4k09vQZGLxR7WZv9pgRG: { amount: 21000, currency: 'sek' }, // odlingskit-igelkottstaggsvamp-fyrkant
-  price_1UTL3Y09vQZGLxR7DFSqWmXR: { amount: 40000, currency: 'sek' }, // plockpase-broderad
-  price_1UTL2D09vQZGLxR7CuiZ1V2P: { amount: 35000, currency: 'sek' }, // plockpase
-
-  // Shipping method (shippingMethods.ts) — DHL only, sandbox then live.
-  price_1UM4sb1HnhNtqQNv3Q8EJ6fz: { amount: 6000, currency: 'sek' }, // dhl
-  price_1UM4sj09vQZGLxR7CQ9r1Xa5: { amount: 6000, currency: 'sek' }, // dhl
-}
-
-export async function getProductPrice(stripePriceId: string): Promise<Price> {
-  return placeholderPrices[stripePriceId] ?? { amount: 0, currency: 'sek' }
 }
 
 // Checkout's language; the Worker uses it for both Stripe's own UI and the

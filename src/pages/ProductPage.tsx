@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import { Page } from '../components/Page'
 import { products } from '../data/products'
 import { useCart } from '../hooks/useCart'
-import { useProductPrices } from '../hooks/useProductPrices'
 import { formatPrice } from '../lib/formatPrice'
 import { getProductImages } from '../lib/productImages'
 
@@ -113,7 +112,6 @@ export default function ProductPage() {
   const { addItem } = useCart()
   const [quantity, setQuantity] = useState(1)
   const [selectedImage, setSelectedImage] = useState(0)
-  const prices = useProductPrices(product ? [product.stripePriceId] : [])
 
   if (!product) {
     return (
@@ -124,7 +122,6 @@ export default function ProductPage() {
     )
   }
 
-  const price = prices[product.stripePriceId]
   const images = getProductImages(product)
 
   return (
@@ -143,7 +140,7 @@ export default function ProductPage() {
         </ThumbRow>
       )}
       <Heading>{product.name[lang]}</Heading>
-      {price && <Price>{formatPrice(price)}</Price>}
+      <Price>{formatPrice(product.priceOre)}</Price>
       <BodyText>{product.description[lang]}</BodyText>
       <AddToCartRow>
         <QuantityInput

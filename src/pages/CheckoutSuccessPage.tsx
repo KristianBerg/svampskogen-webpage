@@ -7,7 +7,6 @@ import { products, type Product } from '../data/products'
 import { shippingMethod } from '../data/shippingMethods'
 import { useCart } from '../hooks/useCart'
 import type { CartItem } from '../context/cartContext'
-import { useProductPrices } from '../hooks/useProductPrices'
 import { formatPrice } from '../lib/formatPrice'
 
 const Heading = styled.h1`
@@ -90,15 +89,8 @@ export default function CheckoutSuccessPage() {
     .map((item) => ({ item, product: products.find((candidate) => candidate.slug === item.slug) }))
     .filter((row): row is OrderRow => Boolean(row.product))
 
-  const prices = useProductPrices([...rows.map((row) => row.product.stripePriceId), shippingMethod.stripePriceId])
-
-  const subtotal = rows.reduce((sum, row) => {
-    const price = prices[row.product.stripePriceId]
-    return price ? sum + price.amount * row.item.quantity : sum
-  }, 0)
-
-  const shippingPrice = prices[shippingMethod.stripePriceId]
-  const total = subtotal + (shippingPrice?.amount ?? 0)
+  const subtotal = rows.reduce((sum, row) => sum + row.product.priceOre * row.item.quantity, 0)
+  const total = subtotal + shippingMethod.priceOre
 
   return (
     <Page style={{ minHeight: '60vh' }}>
@@ -113,30 +105,27 @@ export default function CheckoutSuccessPage() {
             </tr>
           </thead>
           <tbody>
-            {rows.map(({ item, product }) => {
-              const price = prices[product.stripePriceId]
-              return (
-                <tr key={product.slug}>
-                  <td>{product.name[lang]}</td>
-                  <td>{item.quantity}</td>
-                  <td>{price ? formatPrice({ amount: price.amount * item.quantity, currency: price.currency }) : '—'}</td>
-                </tr>
-              )
-            })}
+            {rows.map(({ item, product }) => (
+              <tr key={product.slug}>
+                <td>{product.name[lang]}</td>
+                <td>{item.quantity}</td>
+                <td>{formatPrice(product.priceOre * item.quantity)}</td>
+              </tr>
+            ))}
           </tbody>
         </Table>
       )}
       {rows.length > 0 && (
         <>
           <Subtotal>
-            {t('cart_subtotal')}: {formatPrice({ amount: subtotal, currency: 'sek' })}
+            {t('cart_subtotal')}: {formatPrice(subtotal)}
           </Subtotal>
           <Shipping>
             {t('cart_shipping_heading')} ({shippingMethod.name[lang]}):{' '}
-            {shippingPrice ? formatPrice({ amount: shippingPrice.amount, currency: shippingPrice.currency }) : '—'}
+            {formatPrice(shippingMethod.priceOre)}
           </Shipping>
           <Total>
-            {t('cart_total')}: {formatPrice({ amount: total, currency: 'sek' })}
+            {t('cart_total')}: {formatPrice(total)}
           </Total>
         </>
       )}

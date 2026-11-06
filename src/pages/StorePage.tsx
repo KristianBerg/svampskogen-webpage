@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { Page } from '../components/Page'
 import { products } from '../data/products'
 import { useCart } from '../hooks/useCart'
-import { useProductPrices } from '../hooks/useProductPrices'
 import { formatPrice } from '../lib/formatPrice'
 import { getProductImages } from '../lib/productImages'
 
@@ -83,7 +82,6 @@ export default function StorePage() {
   const lang = i18n.language === 'sv' ? 'sv' : 'en'
   const { addItem } = useCart()
   const inStockProducts = products.filter((product) => product.inStock)
-  const prices = useProductPrices(inStockProducts.map((product) => product.stripePriceId))
 
   return (
     <Page style={{ minHeight: '60vh' }}>
@@ -92,19 +90,16 @@ export default function StorePage() {
         <p>{t('store_coming_soon')}</p>
       ) : (
         <ProductGrid>
-          {inStockProducts.map((product) => {
-            const price = prices[product.stripePriceId]
-            return (
-              <ProductCard key={product.slug}>
-                <ProductImageLink to={`/store/${product.slug}`}>
-                  <ProductImage src={getProductImages(product)[0].thumb} alt={product.name[lang]} loading="lazy" />
-                </ProductImageLink>
-                <ProductName to={`/store/${product.slug}`}>{product.name[lang]}</ProductName>
-                {price && <ProductPrice>{formatPrice(price)}</ProductPrice>}
-                <AddToCartButton onClick={() => addItem(product.slug)}>{t('add_to_cart')}</AddToCartButton>
-              </ProductCard>
-            )
-          })}
+          {inStockProducts.map((product) => (
+            <ProductCard key={product.slug}>
+              <ProductImageLink to={`/store/${product.slug}`}>
+                <ProductImage src={getProductImages(product)[0].thumb} alt={product.name[lang]} loading="lazy" />
+              </ProductImageLink>
+              <ProductName to={`/store/${product.slug}`}>{product.name[lang]}</ProductName>
+              <ProductPrice>{formatPrice(product.priceOre)}</ProductPrice>
+              <AddToCartButton onClick={() => addItem(product.slug)}>{t('add_to_cart')}</AddToCartButton>
+            </ProductCard>
+          ))}
         </ProductGrid>
       )}
     </Page>

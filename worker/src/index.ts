@@ -16,40 +16,46 @@ export interface Env {
 }
 
 interface CheckoutLineItem {
-  stripePriceId: string
+  slug: string
   quantity: number
 }
 
 type Locale = 'sv' | 'en'
 
-// A line item resolved against the in-repo catalog: everything shown or charged
-// except the amount, which always comes from the Stripe Price itself.
+// A line item resolved against the in-repo catalog: everything shown or charged.
 interface ResolvedLineItem {
   name: string
+  amountOre: number
   vatRate: number
+  quantity: number
   metadata: Record<string, string>
 }
 
 const SHIPPING_LABEL: Record<Locale, string> = { sv: 'Frakt', en: 'Shipping' }
 
-function resolveLineItem(env: Env, stripePriceId: string, locale: Locale): ResolvedLineItem | null {
-  const live = env.CATALOG_MODE === 'live'
-  const products = live ? liveProducts : sandboxProducts
-  const shippingMethod = live ? liveShippingMethod : sandboxShippingMethod
+function resolveProduct(env: Env, item: CheckoutLineItem, locale: Locale): ResolvedLineItem | null {
+  const products = env.CATALOG_MODE === 'live' ? liveProducts : sandboxProducts
+  const product = products.find((entry) => entry.slug === item.slug)
+  if (!product) return null
+  return {
+    name: product.name[locale],
+    amountOre: product.priceOre,
+    vatRate: product.vatRate,
+    quantity: item.quantity,
+    metadata: { slug: product.slug },
+  }
+}
 
-  const product = products.find((entry) => entry.stripePriceId === stripePriceId)
-  if (product) {
-    return { name: product.name[locale], vatRate: product.vatRate, metadata: { slug: product.slug } }
+// Added here rather than sent by the cart, so a tampered request can't leave it out.
+function resolveShipping(env: Env, locale: Locale): ResolvedLineItem {
+  const shippingMethod = env.CATALOG_MODE === 'live' ? liveShippingMethod : sandboxShippingMethod
+  return {
+    name: `${SHIPPING_LABEL[locale]} – ${shippingMethod.name[locale]}`,
+    amountOre: shippingMethod.priceOre,
+    vatRate: shippingMethod.vatRate,
+    quantity: 1,
+    metadata: { shipping_method: shippingMethod.id },
   }
-  // The cart sends the shipping fee as an ordinary line item, so it's resolved here too.
-  if (shippingMethod.stripePriceId === stripePriceId) {
-    return {
-      name: `${SHIPPING_LABEL[locale]} – ${shippingMethod.name[locale]}`,
-      vatRate: shippingMethod.vatRate,
-      metadata: { shipping_method: shippingMethod.id },
-    }
-  }
-  return null
 }
 
 function corsHeaders(origin: string): Record<string, string> {
@@ -87,7 +93,7 @@ function parseLineItems(value: unknown): CheckoutLineItem[] | null {
     if (
       typeof entry !== 'object' ||
       entry === null ||
-      typeof (entry as Record<string, unknown>).stripePriceId !== 'string' ||
+      typeof (entry as Record<string, unknown>).slug !== 'string' ||
       !Number.isInteger((entry as Record<string, unknown>).quantity) ||
       ((entry as Record<string, unknown>).quantity as number) < 1
     ) {
@@ -126,18 +132,19 @@ export default {
       return jsonResponse({ error: 'Invalid request body' }, 400, origin)
     }
 
-    // Name and tax rate for each line item are resolved here from the in-repo catalog,
-    // never accepted from the request body — the request only carries Price IDs, so a
-    // tampered one can't change what's charged, what VAT applies, or what the receipt
-    // and packing list say.
+    // Amount, name and tax rate for each line item are resolved here from the in-repo
+    // catalog, never accepted from the request body. The request only carries slugs and
+    // quantities, so a tampered one can't change what's charged, what VAT applies, or
+    // what the receipt and packing list say.
     const resolved: ResolvedLineItem[] = []
     for (const item of lineItems) {
-      const entry = resolveLineItem(env, item.stripePriceId, locale)
+      const entry = resolveProduct(env, item, locale)
       if (!entry) {
-        return jsonResponse({ error: `Unknown price: ${item.stripePriceId}` }, 400, origin)
+        return jsonResponse({ error: `Unknown product: ${item.slug}` }, 400, origin)
       }
       resolved.push(entry)
     }
+    resolved.push(resolveShipping(env, locale))
 
     const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
       httpClient: Stripe.createFetchHttpClient(),
@@ -145,32 +152,22 @@ export default {
 
     let session: Stripe.Checkout.Session
     try {
-      // Line items are built with price_data rather than the Price ID because a Price ID
-      // always shows its Product's single (Swedish) name. The amount is still the
-      // Price's own, read here; the one-off product's metadata links back to the catalog.
-      const prices = await Promise.all(lineItems.map((item) => stripe.prices.retrieve(item.stripePriceId)))
-      const sessionLineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = lineItems.map((item, index) => {
-        const price = prices[index]!
-        const entry = resolved[index]!
+      // Each line item is a one-off product built with price_data, which lets its name
+      // follow the customer's language. Its metadata links back to the catalog.
+      const sessionLineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = resolved.map((entry) => {
         const taxRateId = taxRateIdForVatRate(env, entry.vatRate)
-        if (!price.active || price.unit_amount === null || !taxRateId) {
-          throw new Error(`Price ${item.stripePriceId} is inactive, has no fixed amount, or has no recognized vatRate`)
+        // Stripe would accept 0 and hand the item out for free, so it's stopped here.
+        if (!Number.isInteger(entry.amountOre) || entry.amountOre <= 0 || !taxRateId) {
+          throw new Error(`Line item "${entry.name}" has an invalid price or no recognized vatRate`)
         }
         return {
           price_data: {
-            currency: price.currency,
-            unit_amount: price.unit_amount,
+            currency: 'sek',
+            unit_amount: entry.amountOre,
             tax_behavior: 'inclusive',
-            product_data: {
-              name: entry.name,
-              metadata: {
-                ...entry.metadata,
-                stripe_price_id: price.id,
-                stripe_product_id: typeof price.product === 'string' ? price.product : price.product.id,
-              },
-            },
+            product_data: { name: entry.name, metadata: entry.metadata },
           },
-          quantity: item.quantity,
+          quantity: entry.quantity,
           tax_rates: [taxRateId],
         }
       })

@@ -2,7 +2,7 @@
 // photos for one through the browser's file picker, and writes them into
 // assets/<slug>/ in submission order. Existing photos can be reordered or
 // deleted, which renumbers both the raw files and their processed webp
-// outputs. Also lets you set each product's
+// outputs. Also lets you set each product's price,
 // category, VAT rate and Swedish/English name and description, which are
 // written back into products.live.json. Those changes can then be committed
 // to git from the same page (commit only, pushing stays a manual step).
@@ -38,7 +38,7 @@ async function loadLiveProducts() {
 // Matches the field order in productTypes.ts, so a field the uploader adds
 // (e.g. a first category) lands where a hand-written entry would put it
 // instead of at the end. Unknown fields keep their place after these.
-const FIELD_ORDER = ['slug', 'stripePriceId', 'vatRate', 'inStock', 'category', 'name', 'description']
+const FIELD_ORDER = ['slug', 'priceOre', 'vatRate', 'inStock', 'category', 'name', 'description']
 
 function orderFields(product) {
   const ordered = {}
@@ -96,6 +96,7 @@ async function handleGetProducts(res) {
     slug: product.slug,
     name: product.name.sv,
     category: product.category ?? null,
+    priceOre: product.priceOre,
     vatRate: product.vatRate,
     imageCount: counts[product.slug] ?? 0,
     copy: { name: product.name, description: product.description },
@@ -216,6 +217,28 @@ async function handleSetPhotos(req, res, slug) {
   }
 
   sendJson(res, 200, { count: order.length })
+}
+
+// Entered in whole kronor: the storefront doesn't show öre, so a price like
+// 49.50 would display as 50 kr and charge 49.50. An upper limit catches typos.
+const MAX_PRICE_KR = 99999
+
+async function handleSetPrice(req, res, slug) {
+  const products = await loadLiveProducts()
+  if (!products.some((product) => product.slug === slug)) {
+    sendJson(res, 404, { error: `Unknown product slug: ${slug}` })
+    return
+  }
+
+  const { priceKr } = JSON.parse((await readBody(req)).toString('utf8') || '{}')
+  if (!Number.isInteger(priceKr) || priceKr < 1 || priceKr > MAX_PRICE_KR) {
+    sendJson(res, 400, { error: `Price must be a whole number of kronor from 1 to ${MAX_PRICE_KR}.` })
+    return
+  }
+
+  const priceOre = priceKr * 100
+  await updateLiveProduct(slug, (product) => ({ ...product, priceOre }))
+  sendJson(res, 200, { priceOre })
 }
 
 async function handleSetCategory(req, res, slug) {
@@ -371,6 +394,9 @@ const server = createServer((req, res) => {
 
     const thumbMatch = req.method === 'GET' && pathname.match(/^\/api\/products\/([^/]+)\/photos\/(\d+)\/thumb$/)
     if (thumbMatch) return handleThumb(res, decodeURIComponent(thumbMatch[1]), Number(thumbMatch[2]))
+
+    const priceMatch = req.method === 'PUT' && pathname.match(/^\/api\/products\/([^/]+)\/price$/)
+    if (priceMatch) return handleSetPrice(req, res, decodeURIComponent(priceMatch[1]))
 
     const categoryMatch = req.method === 'PUT' && pathname.match(/^\/api\/products\/([^/]+)\/category$/)
     if (categoryMatch) return handleSetCategory(req, res, decodeURIComponent(categoryMatch[1]))

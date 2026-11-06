@@ -1,7 +1,7 @@
 [
   {
     "slug": "opinel-svampkniv",
-    "stripePriceId": "price_1U1QcP1HnhNtqQNvxC61NKYx",
+    "priceOre": 24900,
     "vatRate": 0.25,
     "inStock": true,
     "name": {
@@ -15,7 +15,7 @@
   },
   {
     "slug": "flatad-svampkorg",
-    "stripePriceId": "price_1U1QcU1HnhNtqQNvKtmhEpdh",
+    "priceOre": 34900,
     "vatRate": 0.25,
     "inStock": true,
     "name": {
@@ -29,7 +29,7 @@
   },
   {
     "slug": "torkad-kantarell",
-    "stripePriceId": "price_1U1QcW1HnhNtqQNvIVGkrz0t",
+    "priceOre": 9900,
     "vatRate": 0.06,
     "inStock": true,
     "name": {
@@ -43,7 +43,7 @@
   },
   {
     "slug": "odlingskit-ostronskivling",
-    "stripePriceId": "price_1U1QcX1HnhNtqQNvSGUknyg0",
+    "priceOre": 29900,
     "vatRate": 0.25,
     "inStock": true,
     "name": {
@@ -57,7 +57,7 @@
   },
   {
     "slug": "svampboken-faltguide",
-    "stripePriceId": "price_1U1QcZ1HnhNtqQNvNnw8BWxj",
+    "priceOre": 19900,
     "vatRate": 0.06,
     "inStock": true,
     "name": {
@@ -71,7 +71,7 @@
   },
   {
     "slug": "tygkasse-med-tryck",
-    "stripePriceId": "price_1U1Qca1HnhNtqQNvsgh5RICZ",
+    "priceOre": 14900,
     "vatRate": 0.25,
     "inStock": true,
     "name": {
