@@ -17,6 +17,7 @@ import { CartIcon } from './components/icons/CartIcon'
 import { SiteHeader } from './components/SiteHeader'
 import { SiteFooter } from './components/SiteFooter'
 import { StoreGate } from './components/StoreGate'
+import { SandboxBadge } from './components/SandboxBadge'
 
 const TopBar = styled.div`
   position: fixed;
@@ -111,6 +112,7 @@ function AppContent() {
   return (
     <>
       <SiteHeader />
+      <SandboxBadge />
       <TopBar>
         {storePreviewEnabled && (
           <CartLink to="/cart" $flash={isFlashing}>
