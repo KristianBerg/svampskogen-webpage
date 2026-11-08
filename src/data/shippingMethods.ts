@@ -1,7 +1,11 @@
-import { shippingMethod as liveShippingMethod } from './shippingMethods.live'
-import { shippingMethod as sandboxShippingMethod } from './shippingMethods.sandbox'
+import type { ShippingMethod } from './shippingMethodTypes'
 
 export type { DeliveryMethod, ShippingMethod } from './shippingMethodTypes'
 
-// DHL only — PostNord was ruled out (80 kr even for small packages).
-export const shippingMethod = import.meta.env.VITE_CATALOG_MODE === 'live' ? liveShippingMethod : sandboxShippingMethod
+// DHL only: PostNord was ruled out (80 kr even for small packages).
+export const shippingMethod: ShippingMethod = {
+  id: 'dhl',
+  priceOre: 6000,
+  vatRate: 0.25,
+  name: { sv: 'DHL', en: 'DHL' },
+}
