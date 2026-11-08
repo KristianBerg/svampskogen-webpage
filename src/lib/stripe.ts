@@ -1,3 +1,4 @@
+import type { DeliveryMethod } from '../data/shippingMethods'
 import type { VariantSelection } from './productVariants'
 
 export interface CheckoutLineItem {
@@ -17,11 +18,12 @@ export type CheckoutLocale = 'sv' | 'en'
 export async function createCheckoutSession(
   lineItems: CheckoutLineItem[],
   locale: CheckoutLocale,
+  deliveryMethod: DeliveryMethod,
 ): Promise<CheckoutSession> {
   const response = await fetch(`${import.meta.env.VITE_CHECKOUT_WORKER_URL}/create-checkout-session`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ lineItems, locale }),
+    body: JSON.stringify({ lineItems, locale, deliveryMethod }),
   })
   if (!response.ok) {
     throw new Error('Failed to create checkout session')

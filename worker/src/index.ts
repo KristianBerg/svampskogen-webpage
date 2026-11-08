@@ -3,6 +3,7 @@ import { products as liveProducts } from '../../src/data/products.live'
 import { products as sandboxProducts } from '../../src/data/products.sandbox'
 import { shippingMethod as liveShippingMethod } from '../../src/data/shippingMethods.live'
 import { shippingMethod as sandboxShippingMethod } from '../../src/data/shippingMethods.sandbox'
+import type { DeliveryMethod } from '../../src/data/shippingMethodTypes'
 import { lineItemName, resolveVariantSelection, type VariantSelection } from '../../src/lib/productVariants'
 
 export interface Env {
@@ -31,9 +32,12 @@ interface ResolvedLineItem {
   vatRate: number
   quantity: number
   metadata: Record<string, string>
+  // Only the pickup line may be 0 kr; anything else at 0 is a catalog mistake.
+  allowFree?: boolean
 }
 
 const SHIPPING_LABEL: Record<Locale, string> = { sv: 'Frakt', en: 'Shipping' }
+const PICKUP_LABEL: Record<Locale, string> = { sv: 'Hämtas i butiken', en: 'Pickup in store' }
 
 function resolveProduct(env: Env, item: CheckoutLineItem, locale: Locale): ResolvedLineItem | null {
   const products = env.CATALOG_MODE === 'live' ? liveProducts : sandboxProducts
@@ -64,6 +68,19 @@ function resolveShipping(env: Env, locale: Locale): ResolvedLineItem {
     vatRate: shippingMethod.vatRate,
     quantity: 1,
     metadata: { shipping_method: shippingMethod.id },
+  }
+}
+
+// A 0 kr line so the receipt and the Stripe order both say the customer picks it up.
+// No VAT is charged on 0 kr, but Stripe still needs a tax rate on the line.
+function resolvePickup(locale: Locale): ResolvedLineItem {
+  return {
+    name: PICKUP_LABEL[locale],
+    amountOre: 0,
+    vatRate: 0.25,
+    quantity: 1,
+    metadata: { shipping_method: 'pickup' },
+    allowFree: true,
   }
 }
 
@@ -141,10 +158,13 @@ export default {
     // Falls back to Swedish rather than rejecting, so a frontend from before
     // locale was sent still checks out.
     let locale: Locale = 'sv'
+    // Anything but an explicit pickup ships, for the same reason.
+    let deliveryMethod: DeliveryMethod = 'shipping'
     try {
-      const body = (await request.json()) as { lineItems?: unknown; locale?: unknown }
+      const body = (await request.json()) as { lineItems?: unknown; locale?: unknown; deliveryMethod?: unknown }
       lineItems = parseLineItems(body.lineItems)
       if (body.locale === 'en') locale = 'en'
+      if (body.deliveryMethod === 'pickup') deliveryMethod = 'pickup'
     } catch {
       lineItems = null
     }
@@ -164,7 +184,7 @@ export default {
       }
       resolved.push(entry)
     }
-    resolved.push(resolveShipping(env, locale))
+    resolved.push(deliveryMethod === 'pickup' ? resolvePickup(locale) : resolveShipping(env, locale))
 
     const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
       httpClient: Stripe.createFetchHttpClient(),
@@ -177,7 +197,8 @@ export default {
       const sessionLineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = resolved.map((entry) => {
         const taxRateId = taxRateIdForVatRate(env, entry.vatRate)
         // Stripe would accept 0 and hand the item out for free, so it's stopped here.
-        if (!Number.isInteger(entry.amountOre) || entry.amountOre <= 0 || !taxRateId) {
+        const minAmountOre = entry.allowFree ? 0 : 1
+        if (!Number.isInteger(entry.amountOre) || entry.amountOre < minAmountOre || !taxRateId) {
           throw new Error(`Line item "${entry.name}" has an invalid price or no recognized vatRate`)
         }
         return {
@@ -196,7 +217,12 @@ export default {
         mode: 'payment',
         locale,
         line_items: sessionLineItems,
-        shipping_address_collection: { allowed_countries: ['SE'] },
+        metadata: { delivery_method: deliveryMethod },
+        // Checkout always collects an email. Shipping orders get a name with the address;
+        // pickup orders ask for one directly so the order can be matched at the counter.
+        ...(deliveryMethod === 'shipping'
+          ? { shipping_address_collection: { allowed_countries: ['SE'] } }
+          : { name_collection: { individual: { enabled: true } } }),
         success_url: `${origin}/checkout/success`,
         cancel_url: `${origin}/checkout/cancel`,
       })

@@ -12,7 +12,7 @@ import CheckoutCancelPage from './pages/CheckoutCancelPage'
 import ReturnsPage from './pages/ReturnsPage'
 import NotFoundPage from './pages/NotFoundPage'
 import { useCart } from './hooks/useCart'
-import { useStorePreview } from './hooks/useStorePreview'
+import { usePreviewFlags } from './hooks/usePreviewFlags'
 import { CartIcon } from './components/icons/CartIcon'
 import { SiteHeader } from './components/SiteHeader'
 import { SiteFooter } from './components/SiteFooter'
@@ -94,7 +94,7 @@ const LangButton = styled.button<{ $active: boolean }>`
 function AppContent() {
   const { t, i18n } = useTranslation()
   const { itemCount } = useCart()
-  const storePreviewEnabled = useStorePreview()
+  const { store: storePreviewEnabled, pickup: pickupEnabled } = usePreviewFlags()
   const [isFlashing, setIsFlashing] = useState(false)
   const previousItemCount = useRef(itemCount)
 
@@ -130,8 +130,8 @@ function AppContent() {
         <Route path="/course" element={<CoursePage />} />
         <Route path="/store" element={<StoreGate enabled={storePreviewEnabled}><StorePage /></StoreGate>} />
         <Route path="/store/:slug" element={<StoreGate enabled={storePreviewEnabled}><ProductPage /></StoreGate>} />
-        <Route path="/cart" element={<StoreGate enabled={storePreviewEnabled}><CartPage /></StoreGate>} />
-        <Route path="/checkout/success" element={<StoreGate enabled={storePreviewEnabled}><CheckoutSuccessPage /></StoreGate>} />
+        <Route path="/cart" element={<StoreGate enabled={storePreviewEnabled}><CartPage pickupEnabled={pickupEnabled} /></StoreGate>} />
+        <Route path="/checkout/success" element={<StoreGate enabled={storePreviewEnabled}><CheckoutSuccessPage pickupEnabled={pickupEnabled} /></StoreGate>} />
         <Route path="/checkout/cancel" element={<StoreGate enabled={storePreviewEnabled}><CheckoutCancelPage /></StoreGate>} />
         <Route path="/returns" element={<ReturnsPage />} />
         <Route path="*" element={<NotFoundPage />} />

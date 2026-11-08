@@ -1,4 +1,5 @@
 import { createContext } from 'react'
+import type { DeliveryMethod } from '../data/shippingMethods'
 import type { VariantSelection } from '../lib/productVariants'
 
 export interface CartItem {
@@ -23,6 +24,8 @@ export interface CartContextValue {
   removeItem: (key: string) => void
   setQuantity: (key: string, quantity: number) => void
   clear: () => void
+  deliveryMethod: DeliveryMethod
+  setDeliveryMethod: (method: DeliveryMethod) => void
 }
 
 export const CartContext = createContext<CartContextValue | null>(null)

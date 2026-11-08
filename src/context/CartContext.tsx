@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import type { DeliveryMethod } from '../data/shippingMethods'
 import { products } from '../data/products'
 import { resolveVariantSelection, type VariantSelection } from '../lib/productVariants'
 import { CartContext, cartItemKey, type CartItem } from './cartContext'
 
 const STORAGE_KEY = 'svampskogen_cart'
+const DELIVERY_STORAGE_KEY = 'svampskogen_delivery_method'
 
 function loadCart(): CartItem[] {
   try {
@@ -20,12 +22,26 @@ function loadCart(): CartItem[] {
   }
 }
 
+function loadDeliveryMethod(): DeliveryMethod {
+  try {
+    return localStorage.getItem(DELIVERY_STORAGE_KEY) === 'pickup' ? 'pickup' : 'shipping'
+  } catch {
+    return 'shipping'
+  }
+}
+
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>(loadCart)
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
   }, [items])
+
+  const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>(loadDeliveryMethod)
+
+  useEffect(() => {
+    localStorage.setItem(DELIVERY_STORAGE_KEY, deliveryMethod)
+  }, [deliveryMethod])
 
   const addItem = (slug: string, quantity = 1, variants?: VariantSelection) => {
     const key = cartItemKey({ slug, variants })
@@ -56,8 +72,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0)
 
   const value = useMemo(
-    () => ({ items, itemCount, addItem, removeItem, setQuantity, clear }),
-    [items, itemCount],
+    () => ({ items, itemCount, addItem, removeItem, setQuantity, clear, deliveryMethod, setDeliveryMethod }),
+    [items, itemCount, deliveryMethod],
   )
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>

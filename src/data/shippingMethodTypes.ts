@@ -10,3 +10,6 @@ export interface ShippingMethod {
     en: string
   }
 }
+
+// Pickup has no ShippingMethod entry: it's free and the same in both catalogs.
+export type DeliveryMethod = 'shipping' | 'pickup'

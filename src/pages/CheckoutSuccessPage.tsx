@@ -68,10 +68,11 @@ interface OrderRow {
   product: Product
 }
 
-export default function CheckoutSuccessPage() {
+export default function CheckoutSuccessPage({ pickupEnabled }: { pickupEnabled: boolean }) {
   const { t, i18n } = useTranslation()
   const lang = i18n.resolvedLanguage === 'sv' ? 'sv' : 'en'
-  const { items, clear } = useCart()
+  const { items, clear, deliveryMethod: chosenDeliveryMethod } = useCart()
+  const deliveryMethod = pickupEnabled ? chosenDeliveryMethod : 'shipping'
   const [orderSnapshot] = useState(items)
   const hasCleared = useRef(false)
 
@@ -91,7 +92,8 @@ export default function CheckoutSuccessPage() {
     .filter((row): row is OrderRow => Boolean(row.product))
 
   const subtotal = rows.reduce((sum, row) => sum + row.product.priceOre * row.item.quantity, 0)
-  const total = subtotal + shippingMethod.priceOre
+  const deliveryPriceOre = deliveryMethod === 'pickup' ? 0 : shippingMethod.priceOre
+  const total = subtotal + deliveryPriceOre
 
   return (
     <Page style={{ minHeight: '60vh' }}>
@@ -122,8 +124,10 @@ export default function CheckoutSuccessPage() {
             {t('cart_subtotal')}: {formatPrice(subtotal)}
           </Subtotal>
           <Shipping>
-            {t('cart_shipping_heading')} ({shippingMethod.name[lang]}):{' '}
-            {formatPrice(shippingMethod.priceOre)}
+            {deliveryMethod === 'pickup'
+              ? t('cart_pickup_option')
+              : `${t('cart_shipping_heading')} (${shippingMethod.name[lang]})`}
+            : {formatPrice(deliveryPriceOre)}
           </Shipping>
           <Total>
             {t('cart_total')}: {formatPrice(total)}
@@ -131,6 +135,7 @@ export default function CheckoutSuccessPage() {
         </>
       )}
       <p>{t('checkout_success_body')}</p>
+      {rows.length > 0 && deliveryMethod === 'pickup' && <p>{t('checkout_success_pickup_body')}</p>}
       <BackLink to="/store">{t('back_to_store')}</BackLink>
     </Page>
   )

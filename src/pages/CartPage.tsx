@@ -102,6 +102,32 @@ const Shipping = styled.p`
   margin-bottom: 1.5rem;
 `
 
+const DeliveryFieldset = styled.fieldset`
+  border: none;
+  padding: 0;
+  margin: 0 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  legend {
+    font-size: 1rem;
+    padding: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+  }
+
+  input {
+    accent-color: var(--color-text-primary);
+  }
+`
+
 const CheckoutButton = styled.button`
   font-family: inherit;
   font-size: 0.9rem;
@@ -155,10 +181,12 @@ const TermsLink = styled(Link)`
   }
 `
 
-export default function CartPage() {
+export default function CartPage({ pickupEnabled }: { pickupEnabled: boolean }) {
   const { t, i18n } = useTranslation()
   const lang = i18n.resolvedLanguage === 'sv' ? 'sv' : 'en'
-  const { items, setQuantity, removeItem } = useCart()
+  const { items, setQuantity, removeItem, deliveryMethod: chosenDeliveryMethod, setDeliveryMethod } = useCart()
+  // A pickup choice saved while the flag was on falls back to DHL once it's off.
+  const deliveryMethod = pickupEnabled ? chosenDeliveryMethod : 'shipping'
   const [isCheckingOut, setIsCheckingOut] = useState(false)
   const [checkoutError, setCheckoutError] = useState(false)
 
@@ -172,7 +200,8 @@ export default function CartPage() {
     .filter((row): row is CartRow => Boolean(row.product))
 
   const subtotal = rows.reduce((sum, row) => sum + row.product.priceOre * row.item.quantity, 0)
-  const total = subtotal + shippingMethod.priceOre
+  const deliveryPriceOre = deliveryMethod === 'pickup' ? 0 : shippingMethod.priceOre
+  const total = subtotal + deliveryPriceOre
 
   const handleCheckout = async () => {
     setIsCheckingOut(true)
@@ -181,6 +210,7 @@ export default function CartPage() {
       const session = await createCheckoutSession(
         rows.map((row) => ({ slug: row.product.slug, quantity: row.item.quantity, variants: row.item.variants })),
         lang,
+        deliveryMethod,
       )
       redirectTo(session.url)
     } catch {
@@ -233,10 +263,34 @@ export default function CartPage() {
           <Subtotal>
             {t('cart_subtotal')}: {formatPrice(subtotal)}
           </Subtotal>
-          <Shipping>
-            {t('cart_shipping_heading')} ({shippingMethod.name[lang]}):{' '}
-            {formatPrice(shippingMethod.priceOre)}
-          </Shipping>
+          {pickupEnabled ? (
+            <DeliveryFieldset>
+              <legend>{t('cart_delivery_heading')}</legend>
+              <label>
+                <input
+                  type="radio"
+                  name="delivery"
+                  checked={deliveryMethod === 'shipping'}
+                  onChange={() => setDeliveryMethod('shipping')}
+                />
+                {shippingMethod.name[lang]}: {formatPrice(shippingMethod.priceOre)}
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="delivery"
+                  checked={deliveryMethod === 'pickup'}
+                  onChange={() => setDeliveryMethod('pickup')}
+                />
+                {t('cart_pickup_option')}: {formatPrice(0)}
+              </label>
+            </DeliveryFieldset>
+          ) : (
+            <Shipping>
+              {t('cart_shipping_heading')} ({shippingMethod.name[lang]}):{' '}
+              {formatPrice(shippingMethod.priceOre)}
+            </Shipping>
+          )}
           <Total>
             {t('cart_total')}: {formatPrice(total)}
           </Total>
