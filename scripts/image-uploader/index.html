@@ -44,10 +44,17 @@
   .commit-message { flex: 1; min-width: 0; font: inherit; font-size: 0.85rem; padding: 0.25rem 0.5rem; }
   .commit-status { font-size: 0.85rem; color: #666; overflow-wrap: anywhere; }
   .commit-status.error { color: #b00; }
+  .page-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  dialog select { display: block; width: 100%; margin-top: 0.25rem; font: inherit; padding: 0.35rem 0.5rem; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; }
+  .field-hint { display: block; font-size: 0.8rem; color: #888; margin-top: 0.2rem; }
 </style>
 </head>
 <body>
-<h1>Svampskogen CMS</h1>
+<div class="page-header">
+  <h1>Svampskogen CMS</h1>
+  <button type="button" id="new-product-button">New product</button>
+</div>
 <div class="commit-bar">
   <span class="commit-status" id="commit-status"></span>
   <input class="commit-message" id="commit-message" placeholder="Commit message (optional)" />
@@ -73,6 +80,31 @@
       <span class="dialog-status" id="copy-status"></span>
       <button type="button" id="copy-cancel">Cancel</button>
       <button type="submit" id="copy-save">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="new-product-dialog">
+  <form id="new-product-form" method="dialog">
+    <h3>New product</h3>
+    <fieldset>
+      <legend>Name</legend>
+      <label>Svenska <input name="name-sv" required maxlength="120" /></label>
+      <label>English <input name="name-en" required maxlength="120" /></label>
+      <label>Slug
+        <input name="slug" required maxlength="60" pattern="[a-z0-9]+(-[a-z0-9]+)*" />
+        <span class="field-hint">Used in the product URL and photo folders, can't be changed later in the CMS</span>
+      </label>
+    </fieldset>
+    <div class="field-row">
+      <label>Price (kr) <input name="price" type="number" required min="1" max="99999" step="1" /></label>
+      <label>VAT <select name="vat"></select></label>
+      <label>Category <input name="category" list="category-options" maxlength="60" /></label>
+    </div>
+    <div class="dialog-actions">
+      <span class="dialog-status" id="new-product-status"></span>
+      <button type="button" id="new-product-cancel">Cancel</button>
+      <button type="submit" id="new-product-save">Create unpublished</button>
     </div>
   </form>
 </dialog>
@@ -162,6 +194,84 @@ async function saveCopy(slug, copy) {
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
     throw new Error(body.error ?? `Saving copy failed (${res.status})`)
+  }
+}
+
+const VAT_RATES = [0.25, 0.12, 0.06]
+
+function appendVatOptions(select) {
+  for (const rate of VAT_RATES) {
+    const option = document.createElement('option')
+    option.value = String(rate)
+    option.textContent = `${Math.round(rate * 100)}% moms`
+    select.appendChild(option)
+  }
+}
+
+async function createProduct(product) {
+  const res = await fetch('/api/products', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(product),
+  })
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    throw new Error(body.error ?? `Creating product failed (${res.status})`)
+  }
+}
+
+// "Svampkniv Ek & Läder" -> "svampkniv-ek-lader". Diacritics are stripped
+// (å/ä -> a, ö -> o) since the slug ends up in URLs and folder names.
+function slugify(text) {
+  return text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 60)
+    .replace(/-+$/, '')
+}
+
+function setupNewProductDialog() {
+  const dialog = document.getElementById('new-product-dialog')
+  const form = document.getElementById('new-product-form')
+  const status = document.getElementById('new-product-status')
+  const save = document.getElementById('new-product-save')
+  const { slug, vat } = form.elements
+  appendVatOptions(vat)
+
+  // The slug follows the Swedish name until it's edited by hand.
+  let slugEdited = false
+  form.elements['name-sv'].oninput = () => {
+    if (!slugEdited) slug.value = slugify(form.elements['name-sv'].value)
+  }
+  slug.oninput = () => { slugEdited = slug.value !== '' }
+
+  document.getElementById('new-product-button').onclick = () => {
+    form.reset()
+    vat.value = '0.25'
+    slugEdited = false
+    status.textContent = ''
+    dialog.showModal()
+  }
+  document.getElementById('new-product-cancel').onclick = () => dialog.close()
+
+  form.onsubmit = (event) => {
+    event.preventDefault()
+    const product = {
+      slug: slug.value,
+      priceKr: Number(form.elements.price.value),
+      vatRate: Number(vat.value),
+      category: form.elements.category.value,
+      name: { sv: form.elements['name-sv'].value, en: form.elements['name-en'].value },
+    }
+    save.disabled = true
+    status.textContent = ''
+    createProduct(product)
+      .then(() => { dialog.close(); return render() })
+      .catch((error) => { status.textContent = `Error: ${error.message}` })
+      .finally(() => { save.disabled = false })
   }
 }
 
@@ -443,12 +553,7 @@ function renderProductRow(product) {
   const vat = document.createElement('select')
   vat.className = 'product-vat'
   vat.title = 'VAT rate'
-  for (const rate of [0.25, 0.12, 0.06]) {
-    const option = document.createElement('option')
-    option.value = String(rate)
-    option.textContent = `${Math.round(rate * 100)}% moms`
-    vat.appendChild(option)
-  }
+  appendVatOptions(vat)
   vat.value = String(product.vatRate)
   vat.onchange = () => {
     vat.disabled = true
@@ -578,6 +683,7 @@ async function render() {
   }
 }
 
+setupNewProductDialog()
 setupCopyDialog()
 setupPhotosDialog()
 setupCommitBar()

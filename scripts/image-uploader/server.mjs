@@ -2,7 +2,8 @@
 // photos for one through the browser's file picker, and writes them into
 // assets/<slug>/ in submission order. Existing photos can be reordered or
 // deleted, which renumbers both the raw files and their processed webp
-// outputs. Also lets you publish or unpublish a product and set its price,
+// outputs. Also lets you add a product (created unpublished), publish or
+// unpublish one, and set its price,
 // category, VAT rate and Swedish/English name and description, which are
 // written back into products.live.json. Those changes can then be committed
 // to git from the same page (commit only, pushing stays a manual step).
@@ -240,6 +241,11 @@ async function handleSetPublished(req, res, slug) {
 // Entered in whole kronor: the storefront doesn't show öre, so a price like
 // 49.50 would display as 50 kr and charge 49.50. An upper limit catches typos.
 const MAX_PRICE_KR = 99999
+const PRICE_ERROR = `Price must be a whole number of kronor from 1 to ${MAX_PRICE_KR}.`
+
+function isValidPriceKr(priceKr) {
+  return Number.isInteger(priceKr) && priceKr >= 1 && priceKr <= MAX_PRICE_KR
+}
 
 async function handleSetPrice(req, res, slug) {
   const products = await loadLiveProducts()
@@ -249,14 +255,24 @@ async function handleSetPrice(req, res, slug) {
   }
 
   const { priceKr } = JSON.parse((await readBody(req)).toString('utf8') || '{}')
-  if (!Number.isInteger(priceKr) || priceKr < 1 || priceKr > MAX_PRICE_KR) {
-    sendJson(res, 400, { error: `Price must be a whole number of kronor from 1 to ${MAX_PRICE_KR}.` })
+  if (!isValidPriceKr(priceKr)) {
+    sendJson(res, 400, { error: PRICE_ERROR })
     return
   }
 
   const priceOre = priceKr * 100
   await updateLiveProduct(slug, (product) => ({ ...product, priceOre }))
   sendJson(res, 200, { priceOre })
+}
+
+const CATEGORY_ERROR = 'Category must be a single line of at most 60 characters.'
+
+function normalizeCategory(raw) {
+  return typeof raw === 'string' ? raw.trim() : ''
+}
+
+function isValidCategory(category) {
+  return !/[\r\n]/.test(category) && category.length <= 60
 }
 
 async function handleSetCategory(req, res, slug) {
@@ -267,9 +283,9 @@ async function handleSetCategory(req, res, slug) {
   }
 
   const { category: raw } = JSON.parse((await readBody(req)).toString('utf8') || '{}')
-  const category = typeof raw === 'string' ? raw.trim() : ''
-  if (/[\r\n]/.test(category) || category.length > 60) {
-    sendJson(res, 400, { error: 'Category must be a single line of at most 60 characters.' })
+  const category = normalizeCategory(raw)
+  if (!isValidCategory(category)) {
+    sendJson(res, 400, { error: CATEGORY_ERROR })
     return
   }
 
@@ -341,6 +357,61 @@ async function handleSetCopy(req, res, slug) {
   sendJson(res, 200, copy)
 }
 
+// The slug becomes the product's URL (/store/<slug>) and its photo folder
+// names, so it's kept to lowercase ASCII words joined by single hyphens.
+const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
+const MAX_SLUG_LENGTH = 60
+
+// New products start unpublished with empty descriptions, so they can get
+// photos and copy in the CMS before going on the store.
+async function handleCreateProduct(req, res) {
+  const { slug, priceKr, vatRate, category: rawCategory, name } = JSON.parse((await readBody(req)).toString('utf8') || '{}')
+
+  if (typeof slug !== 'string' || !SLUG_PATTERN.test(slug) || slug.length > MAX_SLUG_LENGTH) {
+    sendJson(res, 400, { error: `Slug must be lowercase letters, digits and single hyphens, at most ${MAX_SLUG_LENGTH} characters.` })
+    return
+  }
+  if (!isValidPriceKr(priceKr)) {
+    sendJson(res, 400, { error: PRICE_ERROR })
+    return
+  }
+  if (!VAT_RATES.includes(vatRate)) {
+    sendJson(res, 400, { error: `VAT rate must be one of ${VAT_RATES.join(', ')}.` })
+    return
+  }
+  const category = normalizeCategory(rawCategory)
+  if (!isValidCategory(category)) {
+    sendJson(res, 400, { error: CATEGORY_ERROR })
+    return
+  }
+  const description = { sv: '', en: '' }
+  const copyError = validateCopy(name, description)
+  if (copyError) {
+    sendJson(res, 400, { error: copyError })
+    return
+  }
+
+  const products = await loadLiveProducts()
+  if (products.some((product) => product.slug === slug)) {
+    sendJson(res, 409, { error: `A product with slug ${slug} already exists.` })
+    return
+  }
+
+  const product = orderFields({
+    slug,
+    priceOre: priceKr * 100,
+    vatRate,
+    published: false,
+    inStock: true,
+    ...(category ? { category } : {}),
+    name: { sv: name.sv.trim(), en: name.en.trim() },
+    description,
+  })
+  products.push(product)
+  await writeFile(liveProductsPath, `${JSON.stringify(products, null, 2)}\n`)
+  sendJson(res, 201, product)
+}
+
 async function handleProcess(res) {
   const child = spawn('node', [path.join(repoRoot, 'scripts', 'process-images.mjs')], { cwd: repoRoot })
   let output = ''
@@ -399,6 +470,7 @@ const server = createServer((req, res) => {
   const run = async () => {
     if (req.method === 'GET' && pathname === '/') return handleIndex(res)
     if (req.method === 'GET' && pathname === '/api/products') return handleGetProducts(res)
+    if (req.method === 'POST' && pathname === '/api/products') return handleCreateProduct(req, res)
     if (req.method === 'POST' && pathname === '/api/process') return handleProcess(res)
     if (req.method === 'GET' && pathname === '/api/changes') return handleGetChanges(res)
     if (req.method === 'POST' && pathname === '/api/commit') return handleCommit(req, res)
