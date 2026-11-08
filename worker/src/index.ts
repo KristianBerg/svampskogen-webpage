@@ -82,6 +82,16 @@ function resolvePickup(locale: Locale): ResolvedLineItem {
   }
 }
 
+const LOCAL_ORIGIN = /^http:\/\/(localhost|127\.0\.0\.1):\d+$/
+
+// Each Claude session can run its own frontend on its own port, so sandbox mode
+// accepts any local origin. Production only ever answers to SITE_ORIGIN.
+function allowedOrigin(request: Request, env: Env): string {
+  const requestOrigin = request.headers.get('Origin')
+  if (env.CATALOG_MODE !== 'live' && requestOrigin && LOCAL_ORIGIN.test(requestOrigin)) return requestOrigin
+  return env.SITE_ORIGIN
+}
+
 function corsHeaders(origin: string): Record<string, string> {
   return {
     'Access-Control-Allow-Origin': origin,
@@ -141,7 +151,7 @@ function parseLineItems(value: unknown): CheckoutLineItem[] | null {
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
-    const origin = env.SITE_ORIGIN
+    const origin = allowedOrigin(request, env)
 
     if (request.method === 'OPTIONS') {
       return new Response(null, { headers: corsHeaders(origin) })

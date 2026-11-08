@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 .dev.vars
+.dev-session
 
 # Editor directories and files
 .vscode/*

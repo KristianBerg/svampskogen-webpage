@@ -21,7 +21,7 @@ const rawDir = path.join(repoRoot, 'assets')
 const publicProductsDir = path.join(repoRoot, 'public', 'products')
 const indexHtmlPath = path.join(import.meta.dirname, 'index.html')
 const productsPath = path.join(repoRoot, 'src', 'data', 'products.json')
-const PORT = 4500
+const PORT = Number(process.env.CMS_PORT) || 4500
 
 // Everything the CMS writes that's tracked in git. Commits are limited to
 // these paths so unrelated work in the tree never gets swept in. assets/ is
