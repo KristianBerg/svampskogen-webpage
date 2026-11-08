@@ -1,0 +1,327 @@
+[
+  {
+    "slug": "notknappare",
+    "priceOre": 39500,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "category": "Wildlife Garden",
+    "name": {
+      "sv": "Nötknäppare ekorre",
+      "en": "Squirrel nutcracker"
+    },
+    "description": {
+      "sv": "",
+      "en": ""
+    }
+  },
+  {
+    "slug": "flaskkork-ekorre",
+    "priceOre": 16500,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "category": "Wildlife Garden",
+    "name": {
+      "sv": "Flaskkork ekorre",
+      "en": "Bottle Stopper Squirrel"
+    },
+    "description": {
+      "sv": "",
+      "en": ""
+    }
+  },
+  {
+    "slug": "flaskkork-groda",
+    "priceOre": 16500,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "category": "Wildlife Garden",
+    "name": {
+      "sv": "Flaskkork groda",
+      "en": "Bottle Stopper Frog"
+    },
+    "description": {
+      "sv": "",
+      "en": ""
+    }
+  },
+  {
+    "slug": "skrin-skata",
+    "priceOre": 45000,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "category": "Wildlife Garden",
+    "name": {
+      "sv": "Smyckesskrin skata",
+      "en": "Magpie jewelry box"
+    },
+    "description": {
+      "sv": "",
+      "en": ""
+    }
+  },
+  {
+    "slug": "svampkrok-kantarell",
+    "priceOre": 24500,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "category": "Wildlife Garden",
+    "name": {
+      "sv": "Svampkrok kantarell",
+      "en": "Chanterelle Hook"
+    },
+    "description": {
+      "sv": "",
+      "en": ""
+    }
+  },
+  {
+    "slug": "svampkrok-stensopp",
+    "priceOre": 24500,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "category": "Wildlife Garden",
+    "name": {
+      "sv": "Svampkrok stensopp",
+      "en": "Penny Bun Hook"
+    },
+    "description": {
+      "sv": "",
+      "en": ""
+    }
+  },
+  {
+    "slug": "svampkrok-flugsvamp",
+    "priceOre": 24500,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "category": "Wildlife Garden",
+    "name": {
+      "sv": "Svampkrok flugsvamp",
+      "en": "Fly Agaric Hook"
+    },
+    "description": {
+      "sv": "",
+      "en": ""
+    }
+  },
+  {
+    "slug": "pluggar-ostronskivling",
+    "priceOre": 18000,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "category": "Odlingskit",
+    "name": {
+      "sv": "Pluggar ostronskivling",
+      "en": "Oyster Mushroom Spawn Plugs"
+    },
+    "description": {
+      "sv": "Ostronmussling 100 pluggar med 50g vax i presentask.\n\nPluggar för att ympa svamp i stock. Utförlig beskrivning följer med. Går bra att odla i de flesta lövträd så som al, alm, ask, asp, björk, bok, lönn, sälg och kastanj. Ju hårdare trädslag desto mer svamp under längre tid då svampen har mer näring att konsumera.\n\nOstronskivlingen är en mycket lättodlad matsvamp. Den är mild i smaken och håller formen mycket bra vid stekning. Prova den i en omelett, wok, i svampsås eller till en god biff.",
+      "en": "Oyster mushroom: 100 spawn plugs with 50g of wax, in a gift box.\n\nPlugs for inoculating logs with mushroom spawn. Detailed instructions are included. Suitable for cultivation in most deciduous trees, such as alder, elm, ash, aspen, birch, beech, maple, goat willow, and chestnut. Harder wood species generally yield more mushrooms over a longer period, as the fungus has more nutrients to consume.\n\nThe oyster mushroom is a very easy-to-grow edible fungus. It has a mild flavor and holds its shape exceptionally well when pan-fried. Try it in an omelet, a stir-fry, a mushroom sauce, or served alongside a good steak."
+    }
+  },
+  {
+    "slug": "odlingskit-rosa-ostronskivling-rund",
+    "priceOre": 19500,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "category": "Odlingskit",
+    "name": {
+      "sv": "Odlingskit rosa ostronskivling \"blanda själv\"",
+      "en": "Pink Oyster Mushroom Growing Kit \"Mix It Yourself\""
+    },
+    "description": {
+      "sv": "I detta kit blandar du själv mycelet med halmpellets och vatten, det tar sedan ca: 6-8 veckor innan du har svamp. Odlingen kan ge upp till 3 skördar med två veckors mellanrum. Levereras i en rund björk-kartong.\n\nRosa ostronskivling är en vackert rosa matsvamp från tropikerna och tål inte temperaturer under 10°C. Den är mild i smaken och håller formen mycket bra vid stekning. Prova den i en omelett, wok, i svampsås eller till pasta.",
+      "en": "With this kit you mix the mycelium yourself with straw pellets and water, and after about 6-8 weeks you have mushrooms. You can get up to 3 harvests, two weeks apart. Comes in a round birch box.\n\nThe pink oyster mushroom is a beautifully pink edible mushroom from the tropics, and it can't tolerate temperatures below 10°C. It has a mild flavor and holds its shape very well when pan-fried. Try it in an omelet, a stir-fry, a mushroom sauce, or with pasta."
+    }
+  },
+  {
+    "slug": "odlingskit-citronmussling-rund",
+    "priceOre": 19500,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "category": "Odlingskit",
+    "name": {
+      "sv": "Odlingskit citronmussling \"blanda själv\"",
+      "en": "Golden Oyster Mushroom Growing Kit \"Mix It Yourself\""
+    },
+    "description": {
+      "sv": "I detta kit blandar du själv mycelet med halmpellets och vatten, det tar sedan ca: 6-8 veckor innan du har svamp. Odlingen kan ge upp till 3 skördar med två veckors mellanrum. Levereras i en rund björk-kartong.\n\nCitronmusslingen är en vackert gul och mycket lättodlad matsvamp. Den är mild i smaken och håller formen mycket bra vid stekning. Prova den i en omelett, wok, i svampsås eller till en god biff.",
+      "en": "With this kit you mix the mycelium yourself with straw pellets and water, and after about 6-8 weeks you have mushrooms. You can get up to 3 harvests, two weeks apart. Comes in a round birch box.\n\nThe golden oyster mushroom is a beautifully yellow and very easy-to-grow edible mushroom. It has a mild flavor and holds its shape very well when pan-fried. Try it in an omelet, a stir-fry, a mushroom sauce, or with a good steak."
+    }
+  },
+  {
+    "slug": "odlingskit-kungsmussling-fyrkant",
+    "priceOre": 21000,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "category": "Odlingskit",
+    "name": {
+      "sv": "Odlingskit kungsmussling",
+      "en": "King Oyster Mushroom Growing Kit"
+    },
+    "description": {
+      "sv": "Detta kit är redo för fruktsättning och ger svamp på ca: 3 veckor. Svampen växer i svenskt träspån och odlas från grunden av Ecofungi. Odlingen kan ge upp till 2 skördar med två veckors mellanrum. Levereras i en fyrkantig björk-kartong.\n\nKungsmusslingen kallas även kejsarhatt eller king oyster och är släkt med ostronskivlingen, men har en tjockare fot. Den är mild i smaken och har en fast konsistens. Prova att skiva foten och steka den.",
+      "en": "This kit is ready to fruit and gives you mushrooms in about 3 weeks. The mushrooms grow in Swedish wood chips and are raised from scratch by Ecofungi. You can get up to 2 harvests, two weeks apart. Comes in a square birch box.\n\nThe king oyster mushroom is related to the oyster mushroom but has a thicker stem. It has a mild flavor and a firm texture. Try slicing the stem and pan-frying it."
+    }
+  },
+  {
+    "slug": "odlingskit-rosa-ostronskivling-fyrkant",
+    "priceOre": 21000,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "category": "Odlingskit",
+    "name": {
+      "sv": "Odlingskit rosa ostronskivling",
+      "en": "Pink Oyster Mushroom Growing Kit"
+    },
+    "description": {
+      "sv": "Detta kit är redo för fruktsättning och ger svamp på ca: 2 veckor. Svampen växer i svenskt träspån och odlas från grunden av Ecofungi. Odlingen kan ge upp till 3 skördar med två veckors mellanrum. Levereras i en fyrkantig björk-kartong.\n\nRosa ostronskivling är en vackert rosa matsvamp från tropikerna och tål inte temperaturer under 10°C. Den är mild i smaken och håller formen mycket bra vid stekning. Prova den i en omelett, wok, i svampsås eller till pasta.",
+      "en": "This kit is ready to fruit and gives you mushrooms in about 2 weeks. The mushrooms grow in Swedish wood chips and are raised from scratch by Ecofungi. You can get up to 3 harvests, two weeks apart. Comes in a square birch box.\n\nThe pink oyster mushroom is a beautifully pink edible mushroom from the tropics, and it can't tolerate temperatures below 10°C. It has a mild flavor and holds its shape very well when pan-fried. Try it in an omelet, a stir-fry, a mushroom sauce, or with pasta."
+    }
+  },
+  {
+    "slug": "odlingskit-igelkottstaggsvamp-fyrkant",
+    "priceOre": 21000,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "category": "Odlingskit",
+    "name": {
+      "sv": "Odlingskit igelkottstaggsvamp",
+      "en": "Lion’s Mane Growing Kit"
+    },
+    "description": {
+      "sv": "Detta kit är redo för fruktsättning och ger svamp på ca: 2 veckor. Svampen växer i svenskt träspån och odlas från grunden av Ecofungi. Odlingen kan ge upp till 3 skördar med två veckors mellanrum. Levereras i en fyrkantig björk-kartong.\n\nIgelkottstaggsvampen kallas även Lion’s mane och är en fantastisk matsvamp med många användningsområden. Den lever naturligt på döda eller försvagade lövträd, är fridlyst i Sverige och får inte plockas men går som tur är väldigt bra att odla.",
+      "en": "This kit is ready to fruit and gives you mushrooms in about 2 weeks. The mushrooms grow in Swedish wood chips and are raised from scratch by Ecofungi. You can get up to 3 harvests, two weeks apart. Comes in a square birch box.\n\nLion’s mane is a fantastic edible mushroom with many uses. It lives naturally on dead or weakened deciduous trees. It is protected in Sweden and may not be picked in the wild, but luckily it is very easy to grow."
+    }
+  },
+  {
+    "slug": "plockpase-broderad",
+    "priceOre": 40000,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "name": {
+      "sv": "Svampplockpåse broderad",
+      "en": "Foraging bag with embroidery"
+    },
+    "description": {
+      "sv": "Dessa plockpåsar är perfekta att ta med ut i skogen när du plockar svamp. Du fäster påsen i ditt bälte eller i en karbinhake och har händerna fria att plocka och rensa med kniv.\n\nPåsarna är gjorda i Sverige av Fabrikörerna i Göteborg och handbroderade av oss.",
+      "en": "TODO: write copy"
+    },
+    "variants": [
+      {
+        "id": "farg",
+        "name": {
+          "sv": "Färg",
+          "en": "Color"
+        },
+        "options": [
+          {
+            "id": "beige",
+            "name": {
+              "sv": "Beige",
+              "en": "Beige"
+            }
+          },
+          {
+            "id": "gron",
+            "name": {
+              "sv": "Grön",
+              "en": "Green"
+            }
+          },
+          {
+            "id": "rod",
+            "name": {
+              "sv": "Röd",
+              "en": "Red"
+            }
+          }
+        ]
+      },
+      {
+        "id": "broderi",
+        "name": {
+          "sv": "Broderi",
+          "en": "Embroidery"
+        },
+        "options": [
+          {
+            "id": "flugsvamp",
+            "name": {
+              "sv": "Flugsvamp",
+              "en": "Fly agaric mushroom"
+            }
+          },
+          {
+            "id": "gren-med-kotte",
+            "name": {
+              "sv": "Gren med kotte",
+              "en": "Branch with pine cone"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "plockpase",
+    "priceOre": 35000,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "name": {
+      "sv": "Svampplockpåse",
+      "en": "Foraging bag"
+    },
+    "description": {
+      "sv": "Dessa plockpåsar är perfekta att ta med ut i skogen när du plockar svamp. Du fäster påsen i ditt bälte eller i en karbinhake och har händerna fria att plocka och rensa med kniv.\n\nPåsarna är gjorda i Sverige av Fabrikörerna i Göteborg.",
+      "en": "TODO: write copy"
+    },
+    "variants": [
+      {
+        "id": "farg",
+        "name": {
+          "sv": "Färg",
+          "en": "Color"
+        },
+        "options": [
+          {
+            "id": "beige",
+            "name": {
+              "sv": "Beige",
+              "en": "Beige"
+            }
+          },
+          {
+            "id": "gron",
+            "name": {
+              "sv": "Grön",
+              "en": "Green"
+            }
+          },
+          {
+            "id": "rod",
+            "name": {
+              "sv": "Röd",
+              "en": "Red"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -9,6 +9,8 @@ export const productImageCounts: Record<string, number> = {
   "odlingskit-kungsmussling-fyrkant": 3,
   "odlingskit-rosa-ostronskivling-fyrkant": 3,
   "odlingskit-rosa-ostronskivling-rund": 1,
+  plockpase: 3,
+  "plockpase-broderad": 2,
   "pluggar-ostronskivling": 3,
   "skrin-skata": 3,
   "svampkrok-flugsvamp": 3,
