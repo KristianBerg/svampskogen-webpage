@@ -5,9 +5,11 @@ import styled from 'styled-components'
 import { Page } from '../components/Page'
 import { products, type Product } from '../data/products'
 import { shippingMethod } from '../data/shippingMethods'
+import { cartItemKey } from '../context/cartContext'
 import { useCart } from '../hooks/useCart'
 import { formatPrice } from '../lib/formatPrice'
 import { getProductImages } from '../lib/productImages'
+import { lineItemName } from '../lib/productVariants'
 import { createCheckoutSession } from '../lib/stripe'
 
 // Pulled out of the component so the redirect (a plain function, not a
@@ -177,7 +179,7 @@ export default function CartPage() {
     setCheckoutError(false)
     try {
       const session = await createCheckoutSession(
-        rows.map((row) => ({ slug: row.product.slug, quantity: row.item.quantity })),
+        rows.map((row) => ({ slug: row.product.slug, quantity: row.item.quantity, variants: row.item.variants })),
         lang,
       )
       redirectTo(session.url)
@@ -205,11 +207,11 @@ export default function CartPage() {
             </thead>
             <tbody>
               {rows.map(({ item, product }) => (
-                <tr key={product.slug}>
+                <tr key={cartItemKey(item)}>
                   <td>
                     <ProductCell>
                       <ProductImage src={getProductImages(product)[0].thumb} alt="" loading="lazy" />
-                      <Link to={`/store/${product.slug}`}>{product.name[lang]}</Link>
+                      <Link to={`/store/${product.slug}`}>{lineItemName(product, item.variants, lang)}</Link>
                     </ProductCell>
                   </td>
                   <td>
@@ -217,12 +219,12 @@ export default function CartPage() {
                       type="number"
                       min={1}
                       value={item.quantity}
-                      onChange={(event) => setQuantity(product.slug, Number(event.target.value))}
+                      onChange={(event) => setQuantity(cartItemKey(item), Number(event.target.value))}
                     />
                   </td>
                   <td>{formatPrice(product.priceOre * item.quantity)}</td>
                   <td>
-                    <RemoveButton onClick={() => removeItem(product.slug)}>{t('cart_remove')}</RemoveButton>
+                    <RemoveButton onClick={() => removeItem(cartItemKey(item))}>{t('cart_remove')}</RemoveButton>
                   </td>
                 </tr>
               ))}

@@ -6,8 +6,9 @@ import { Page } from '../components/Page'
 import { products, type Product } from '../data/products'
 import { shippingMethod } from '../data/shippingMethods'
 import { useCart } from '../hooks/useCart'
-import type { CartItem } from '../context/cartContext'
+import { cartItemKey, type CartItem } from '../context/cartContext'
 import { formatPrice } from '../lib/formatPrice'
+import { lineItemName } from '../lib/productVariants'
 
 const Heading = styled.h1`
   font-size: 1.4rem;
@@ -106,8 +107,8 @@ export default function CheckoutSuccessPage() {
           </thead>
           <tbody>
             {rows.map(({ item, product }) => (
-              <tr key={product.slug}>
-                <td>{product.name[lang]}</td>
+              <tr key={cartItemKey(item)}>
+                <td>{lineItemName(product, item.variants, lang)}</td>
                 <td>{item.quantity}</td>
                 <td>{formatPrice(product.priceOre * item.quantity)}</td>
               </tr>

@@ -4,12 +4,12 @@
 <meta charset="utf-8" />
 <title>Svampskogen CMS</title>
 <style>
-  body { font-family: system-ui, sans-serif; max-width: 1240px; margin: 2rem auto; padding: 0 1rem; color: #222; }
+  body { font-family: system-ui, sans-serif; max-width: 1440px; margin: 2rem auto; padding: 0 1rem; color: #222; }
   h1 { font-size: 1.3rem; }
   h2 { font-size: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: #666; margin-top: 2rem; }
   /* Fixed columns so the controls line up across rows whatever the name or
      status length; long text wraps inside its own column. */
-  .product { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr) 6.5rem 9rem 7.5rem 5rem 10rem auto auto auto; align-items: center; gap: 0.75rem; padding: 0.5rem 0; border-bottom: 1px solid #eee; }
+  .product { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr) 6.5rem 9rem 7.5rem 5rem 5.5rem 8rem auto auto auto auto; align-items: center; gap: 0.75rem; padding: 0.5rem 0; border-bottom: 1px solid #eee; }
   .product-name { overflow-wrap: anywhere; }
   .product-published { display: flex; align-items: center; gap: 0.3rem; font-size: 0.8rem; color: #666; cursor: pointer; }
   .product.unpublished .product-name { color: #999; font-style: italic; }
@@ -49,6 +49,14 @@
   dialog select { display: block; width: 100%; margin-top: 0.25rem; font: inherit; padding: 0.35rem 0.5rem; }
   .field-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; }
   .field-hint { display: block; font-size: 0.8rem; color: #888; margin-top: 0.2rem; }
+  .variant-names { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .variant-options-heading { font-size: 0.85rem; color: #555; margin: 0 0 0.25rem; }
+  .variant-row { display: grid; grid-template-columns: 1fr 1fr auto auto auto; align-items: center; gap: 0.35rem; margin-bottom: 0.35rem; }
+  .variant-row input { margin-top: 0; }
+  .variant-row button, .variant-category-actions button { padding: 0.15rem 0.4rem; font-size: 0.8rem; }
+  .variant-category-actions { display: flex; gap: 0.25rem; justify-content: flex-end; margin-top: 0.5rem; }
+  .variant-delete { color: #b00; }
+  .variant-add-category { margin-bottom: 1rem; }
 </style>
 </head>
 <body>
@@ -81,6 +89,19 @@
       <span class="dialog-status" id="copy-status"></span>
       <button type="button" id="copy-cancel">Cancel</button>
       <button type="submit" id="copy-save">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="variants-dialog">
+  <form id="variants-form" method="dialog">
+    <h3 id="variants-title">Variants</h3>
+    <div id="variant-categories"></div>
+    <button type="button" class="variant-add-category" id="variant-add-category">Add category</button>
+    <div class="dialog-actions">
+      <span class="dialog-status" id="variants-status"></span>
+      <button type="button" id="variants-cancel">Cancel</button>
+      <button type="submit" id="variants-save">Save</button>
     </div>
   </form>
 </dialog>
@@ -209,6 +230,18 @@ async function saveCopy(slug, copy) {
   }
 }
 
+async function saveVariants(slug, variants) {
+  const res = await fetch(`/api/products/${encodeURIComponent(slug)}/variants`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ variants }),
+  })
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    throw new Error(body.error ?? `Saving variants failed (${res.status})`)
+  }
+}
+
 const VAT_RATES = [0.25, 0.12, 0.06]
 
 function appendVatOptions(select) {
@@ -321,6 +354,175 @@ function setupCopyDialog() {
     save.disabled = true
     status.textContent = ''
     saveCopy(copyDialogSlug, copy)
+      .then(() => { dialog.close(); return render() })
+      .catch((error) => { status.textContent = `Error: ${error.message}` })
+      .finally(() => { save.disabled = false })
+  }
+}
+
+// Like the copy dialog, one shared dialog. variantsDialogCategories is a
+// working copy that's only sent to the server on Save.
+let variantsDialogSlug = null
+let variantsDialogCategories = []
+
+function openVariantsDialog(product) {
+  variantsDialogSlug = product.slug
+  variantsDialogCategories = structuredClone(product.variants)
+  document.getElementById('variants-title').textContent = `Variants: ${product.name}`
+  document.getElementById('variants-status').textContent = ''
+  renderVariantCategories()
+  document.getElementById('variants-dialog').showModal()
+}
+
+function moveVariantEntry(list, from, to) {
+  if (to < 0 || to >= list.length) return
+  list.splice(to, 0, list.splice(from, 1)[0])
+  renderVariantCategories()
+}
+
+function emptyVariantOption() {
+  return { name: { sv: '', en: '' } }
+}
+
+function variantButton(text, title, onclick, disabled = false) {
+  const button = document.createElement('button')
+  button.type = 'button'
+  button.textContent = text
+  button.title = title
+  button.disabled = disabled
+  button.onclick = onclick
+  return button
+}
+
+// Typing goes straight into the working copy, so re-rendering after adding,
+// moving or removing a row never loses anything.
+function variantNameInput(entry, lang, placeholder, focusEntry) {
+  const input = document.createElement('input')
+  input.required = true
+  input.maxLength = 60
+  input.placeholder = placeholder
+  input.value = entry.name[lang]
+  input.oninput = () => { entry.name[lang] = input.value }
+  if (entry === focusEntry && lang === 'sv') queueMicrotask(() => input.focus())
+  return input
+}
+
+function renderVariantOption(category, option, position, focusEntry) {
+  const row = document.createElement('div')
+  row.className = 'variant-row'
+  const remove = variantButton('Remove', 'Remove this option', () => {
+    category.options.splice(position, 1)
+    renderVariantCategories()
+  }, category.options.length === 1)
+  remove.classList.add('variant-delete')
+  row.append(
+    variantNameInput(option, 'sv', 'Svenska', focusEntry),
+    variantNameInput(option, 'en', 'English', focusEntry),
+    variantButton('↑', 'Move up', () => moveVariantEntry(category.options, position, position - 1), position === 0),
+    variantButton('↓', 'Move down', () => moveVariantEntry(category.options, position, position + 1), position === category.options.length - 1),
+    remove,
+  )
+  return row
+}
+
+function renderVariantCategory(category, position, focusEntry) {
+  const categories = variantsDialogCategories
+  const fieldset = document.createElement('fieldset')
+  const legend = document.createElement('legend')
+  legend.textContent = `Category ${position + 1}`
+
+  const names = document.createElement('div')
+  names.className = 'variant-names'
+  for (const [lang, text] of [['sv', 'Name, svenska'], ['en', 'Name, English']]) {
+    const label = document.createElement('label')
+    label.append(text, variantNameInput(category, lang, lang === 'sv' ? 'Färg' : 'Color', focusEntry))
+    names.appendChild(label)
+  }
+
+  const heading = document.createElement('p')
+  heading.className = 'variant-options-heading'
+  heading.textContent = 'Options'
+
+  const addOption = variantButton('Add option', 'Add an option to this category', () => {
+    const option = emptyVariantOption()
+    category.options.push(option)
+    renderVariantCategories(option)
+  })
+
+  const remove = variantButton('Remove category', 'Remove this category and its options', () => {
+    categories.splice(position, 1)
+    renderVariantCategories()
+  })
+  remove.classList.add('variant-delete')
+
+  const actions = document.createElement('div')
+  actions.className = 'variant-category-actions'
+  actions.append(
+    addOption,
+    variantButton('↑', 'Move category up (sets the order in the line item title)', () => moveVariantEntry(categories, position, position - 1), position === 0),
+    variantButton('↓', 'Move category down (sets the order in the line item title)', () => moveVariantEntry(categories, position, position + 1), position === categories.length - 1),
+    remove,
+  )
+
+  fieldset.append(
+    legend,
+    names,
+    heading,
+    ...category.options.map((option, index) => renderVariantOption(category, option, index, focusEntry)),
+    actions,
+  )
+  return fieldset
+}
+
+function renderVariantCategories(focusEntry = null) {
+  const container = document.getElementById('variant-categories')
+  container.innerHTML = ''
+  if (variantsDialogCategories.length === 0) {
+    const empty = document.createElement('p')
+    empty.className = 'photo-empty'
+    empty.textContent = 'No variant categories. The product is sold as it is.'
+    container.appendChild(empty)
+    return
+  }
+  variantsDialogCategories.forEach((category, position) => {
+    container.appendChild(renderVariantCategory(category, position, focusEntry))
+  })
+}
+
+// New entries get an id from their Swedish name. Existing ones keep theirs,
+// so renaming an option doesn't invalidate carts or past orders that use it.
+function assignVariantIds(entries, fallback) {
+  const taken = new Set(entries.map((entry) => entry.id).filter(Boolean))
+  for (const entry of entries) {
+    if (entry.id) continue
+    const base = slugify(entry.name.sv) || fallback
+    let id = base
+    for (let n = 2; taken.has(id); n++) id = `${base}-${n}`
+    taken.add(id)
+    entry.id = id
+  }
+}
+
+function setupVariantsDialog() {
+  const dialog = document.getElementById('variants-dialog')
+  const form = document.getElementById('variants-form')
+  const status = document.getElementById('variants-status')
+  const save = document.getElementById('variants-save')
+
+  document.getElementById('variants-cancel').onclick = () => dialog.close()
+  document.getElementById('variant-add-category').onclick = () => {
+    const category = { name: { sv: '', en: '' }, options: [emptyVariantOption()] }
+    variantsDialogCategories.push(category)
+    renderVariantCategories(category)
+  }
+
+  form.onsubmit = (event) => {
+    event.preventDefault()
+    assignVariantIds(variantsDialogCategories, 'kategori')
+    for (const category of variantsDialogCategories) assignVariantIds(category.options, 'alternativ')
+    save.disabled = true
+    status.textContent = ''
+    saveVariants(variantsDialogSlug, variantsDialogCategories)
       .then(() => { dialog.close(); return render() })
       .catch((error) => { status.textContent = `Error: ${error.message}` })
       .finally(() => { save.disabled = false })
@@ -502,6 +704,10 @@ function renderProductRow(product) {
   count.className = 'product-count'
   count.textContent = `${product.imageCount} photo${product.imageCount === 1 ? '' : 's'}`
 
+  const variantCount = document.createElement('span')
+  variantCount.className = 'product-count'
+  variantCount.textContent = `${product.variants.length} variant categor${product.variants.length === 1 ? 'y' : 'ies'}`
+
   const status = document.createElement('span')
   status.className = 'product-status'
 
@@ -587,6 +793,10 @@ function renderProductRow(product) {
   editCopy.textContent = 'Edit copy'
   editCopy.onclick = () => openCopyDialog(product)
 
+  const variants = document.createElement('button')
+  variants.textContent = 'Variants'
+  variants.onclick = () => openVariantsDialog(product)
+
   const photos = document.createElement('button')
   photos.textContent = 'Photos'
   photos.disabled = product.imageCount === 0
@@ -610,7 +820,7 @@ function renderProductRow(product) {
       .finally(() => { button.disabled = false; input.value = '' })
   }
 
-  row.append(publishedWrap, name, priceWrap, category, vat, count, status, editCopy, photos, button, input)
+  row.append(publishedWrap, name, priceWrap, category, vat, count, variantCount, status, editCopy, variants, photos, button, input)
   return row
 }
 
@@ -729,6 +939,7 @@ async function render() {
 
 setupNewProductDialog()
 setupCopyDialog()
+setupVariantsDialog()
 setupPhotosDialog()
 setupCommitBar()
 render().catch((error) => {

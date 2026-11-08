@@ -68,6 +68,7 @@ const AddToCartButton = styled.button`
   border: 1px solid var(--color-text-primary);
   background: none;
   color: var(--color-text-primary);
+  text-decoration: none;
   cursor: pointer;
   transition: color 0.2s, border-color 0.2s;
 
@@ -97,7 +98,13 @@ export default function StorePage() {
               </ProductImageLink>
               <ProductName to={`/store/${product.slug}`}>{product.name[lang]}</ProductName>
               <ProductPrice>{formatPrice(product.priceOre)}</ProductPrice>
-              <AddToCartButton onClick={() => addItem(product.slug)}>{t('add_to_cart')}</AddToCartButton>
+              {product.variants?.length ? (
+                <AddToCartButton as={Link} to={`/store/${product.slug}`}>
+                  {t('choose_options')}
+                </AddToCartButton>
+              ) : (
+                <AddToCartButton onClick={() => addItem(product.slug)}>{t('add_to_cart')}</AddToCartButton>
+              )}
             </ProductCard>
           ))}
         </ProductGrid>

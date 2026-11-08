@@ -5,6 +5,25 @@ export interface ProductImage {
   full: string
 }
 
+// The ids are what carts and orders refer to, so names can be edited freely.
+export interface ProductVariantOption {
+  id: string
+  name: {
+    sv: string
+    en: string
+  }
+}
+
+// One choice the customer makes, e.g. color or embroidery. Doesn't affect price.
+export interface ProductVariantCategory {
+  id: string
+  name: {
+    sv: string
+    en: string
+  }
+  options: ProductVariantOption[]
+}
+
 export interface Product {
   slug: string
   // Whole kronor expressed in öre (24500 = 245 kr), the unit Stripe charges in.
@@ -29,4 +48,6 @@ export interface Product {
     sv: string
     en: string
   }
+  // The customer picks one option in every category before buying.
+  variants?: ProductVariantCategory[]
 }

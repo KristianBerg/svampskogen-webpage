@@ -1,6 +1,9 @@
+import type { VariantSelection } from './productVariants'
+
 export interface CheckoutLineItem {
   slug: string
   quantity: number
+  variants?: VariantSelection
 }
 
 export interface CheckoutSession {

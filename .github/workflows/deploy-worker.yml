@@ -14,6 +14,7 @@ on:
       - 'src/data/shippingMethods.live.ts'
       - 'src/data/shippingMethods.sandbox.ts'
       - 'src/data/shippingMethodTypes.ts'
+      - 'src/lib/productVariants.ts'
       - '.github/workflows/deploy-worker.yml'
   workflow_dispatch:
 

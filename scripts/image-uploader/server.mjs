@@ -4,7 +4,7 @@
 // deleted, which renumbers both the raw files and their processed webp
 // outputs. Also lets you add a product (created unpublished), publish or
 // unpublish one, and set its price,
-// category, VAT rate and Swedish/English name and description, which are
+// category, VAT rate, variants and Swedish/English name and description, which are
 // written back into products.live.json. Those changes can then be committed
 // to git from the same page (commit only, pushing stays a manual step).
 // Never deployed, never exposed off this machine — the server only binds to 127.0.0.1.
@@ -39,7 +39,7 @@ async function loadLiveProducts() {
 // Matches the field order in productTypes.ts, so a field the uploader adds
 // (e.g. a first category) lands where a hand-written entry would put it
 // instead of at the end. Unknown fields keep their place after these.
-const FIELD_ORDER = ['slug', 'priceOre', 'vatRate', 'published', 'inStock', 'category', 'name', 'description']
+const FIELD_ORDER = ['slug', 'priceOre', 'vatRate', 'published', 'inStock', 'category', 'name', 'description', 'variants']
 
 function orderFields(product) {
   const ordered = {}
@@ -102,6 +102,7 @@ async function handleGetProducts(res) {
     vatRate: product.vatRate,
     imageCount: counts[product.slug] ?? 0,
     copy: { name: product.name, description: product.description },
+    variants: product.variants ?? [],
   }))
   sendJson(res, 200, list)
 }
@@ -362,6 +363,74 @@ async function handleSetCopy(req, res, slug) {
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 const MAX_SLUG_LENGTH = 60
 
+const MAX_VARIANT_NAME_LENGTH = 60
+
+function isValidVariantName(name) {
+  return LANGS.every(
+    (lang) =>
+      typeof name?.[lang] === 'string' &&
+      name[lang].trim() !== '' &&
+      !/[\r\n]/.test(name[lang]) &&
+      name[lang].length <= MAX_VARIANT_NAME_LENGTH,
+  )
+}
+
+// Ids are what saved carts and Stripe orders refer to, so each must be unique
+// among its siblings. The browser keeps them stable when a name is edited.
+function validateVariantEntries(entries, label) {
+  if (!Array.isArray(entries)) return `${label}s must be a list.`
+  for (const entry of entries) {
+    if (typeof entry?.id !== 'string' || !SLUG_PATTERN.test(entry.id)) return `${label} has an invalid id.`
+    if (!isValidVariantName(entry.name)) {
+      return `Each ${label.toLowerCase()} needs a Swedish and English name, single line, at most ${MAX_VARIANT_NAME_LENGTH} characters.`
+    }
+  }
+  if (new Set(entries.map((entry) => entry.id)).size !== entries.length) return `Two ${label.toLowerCase()}s share an id.`
+  return null
+}
+
+function validateVariants(variants) {
+  const categoryError = validateVariantEntries(variants, 'Category')
+  if (categoryError) return categoryError
+  for (const category of variants) {
+    const optionError = validateVariantEntries(category.options, 'Option')
+    if (optionError) return optionError
+    // A category with nothing to pick would make the product impossible to buy.
+    if (category.options.length === 0) return `${category.name.en} needs at least one option.`
+  }
+  return null
+}
+
+function normalizeVariantEntry({ id, name }) {
+  return { id, name: { sv: name.sv.trim(), en: name.en.trim() } }
+}
+
+async function handleSetVariants(req, res, slug) {
+  const products = await loadLiveProducts()
+  if (!products.some((product) => product.slug === slug)) {
+    sendJson(res, 404, { error: `Unknown product slug: ${slug}` })
+    return
+  }
+
+  const { variants } = JSON.parse((await readBody(req)).toString('utf8') || '{}')
+  const error = validateVariants(variants)
+  if (error) {
+    sendJson(res, 400, { error })
+    return
+  }
+
+  const normalized = variants.map((category) => ({
+    ...normalizeVariantEntry(category),
+    options: category.options.map(normalizeVariantEntry),
+  }))
+  await updateLiveProduct(slug, (product) => {
+    if (normalized.length > 0) product.variants = normalized
+    else delete product.variants
+    return product
+  })
+  sendJson(res, 200, { variants: normalized })
+}
+
 // New products start unpublished with empty descriptions, so they can get
 // photos and copy in the CMS before going on the store.
 async function handleCreateProduct(req, res) {
@@ -499,6 +568,9 @@ const server = createServer((req, res) => {
 
     const copyMatch = req.method === 'PUT' && pathname.match(/^\/api\/products\/([^/]+)\/copy$/)
     if (copyMatch) return handleSetCopy(req, res, decodeURIComponent(copyMatch[1]))
+
+    const variantsMatch = req.method === 'PUT' && pathname.match(/^\/api\/products\/([^/]+)\/variants$/)
+    if (variantsMatch) return handleSetVariants(req, res, decodeURIComponent(variantsMatch[1]))
 
     sendJson(res, 404, { error: 'Not found' })
   }

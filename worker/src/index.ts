@@ -3,6 +3,7 @@ import { products as liveProducts } from '../../src/data/products.live'
 import { products as sandboxProducts } from '../../src/data/products.sandbox'
 import { shippingMethod as liveShippingMethod } from '../../src/data/shippingMethods.live'
 import { shippingMethod as sandboxShippingMethod } from '../../src/data/shippingMethods.sandbox'
+import { lineItemName, resolveVariantSelection, type VariantSelection } from '../../src/lib/productVariants'
 
 export interface Env {
   STRIPE_SECRET_KEY: string
@@ -18,6 +19,7 @@ export interface Env {
 interface CheckoutLineItem {
   slug: string
   quantity: number
+  variants?: VariantSelection
 }
 
 type Locale = 'sv' | 'en'
@@ -37,12 +39,19 @@ function resolveProduct(env: Env, item: CheckoutLineItem, locale: Locale): Resol
   const products = env.CATALOG_MODE === 'live' ? liveProducts : sandboxProducts
   const product = products.find((entry) => entry.slug === item.slug && entry.published)
   if (!product) return null
+  const chosen = resolveVariantSelection(product, item.variants)
+  if (!chosen) return null
   return {
-    name: product.name[locale],
+    name: lineItemName(product, item.variants, locale),
     amountOre: product.priceOre,
     vatRate: product.vatRate,
     quantity: item.quantity,
-    metadata: { slug: product.slug },
+    metadata: {
+      slug: product.slug,
+      ...(chosen.length > 0 && {
+        variants: chosen.map(({ category, option }) => `${category.id}=${option.id}`).join(','),
+      }),
+    },
   }
 }
 
@@ -86,6 +95,15 @@ function taxRateIdForVatRate(env: Env, vatRate: number): string | null {
   }
 }
 
+function isVariantSelection(value: unknown): value is VariantSelection {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    !Array.isArray(value) &&
+    Object.values(value).every((optionId) => typeof optionId === 'string')
+  )
+}
+
 function parseLineItems(value: unknown): CheckoutLineItem[] | null {
   if (!Array.isArray(value) || value.length === 0) return null
   const lineItems: CheckoutLineItem[] = []
@@ -95,7 +113,9 @@ function parseLineItems(value: unknown): CheckoutLineItem[] | null {
       entry === null ||
       typeof (entry as Record<string, unknown>).slug !== 'string' ||
       !Number.isInteger((entry as Record<string, unknown>).quantity) ||
-      ((entry as Record<string, unknown>).quantity as number) < 1
+      ((entry as Record<string, unknown>).quantity as number) < 1 ||
+      ((entry as Record<string, unknown>).variants !== undefined &&
+        !isVariantSelection((entry as Record<string, unknown>).variants))
     ) {
       return null
     }
@@ -133,14 +153,14 @@ export default {
     }
 
     // Amount, name and tax rate for each line item are resolved here from the in-repo
-    // catalog, never accepted from the request body. The request only carries slugs and
-    // quantities, so a tampered one can't change what's charged, what VAT applies, or
+    // catalog, never accepted from the request body. The request only carries slugs,
+    // quantities and catalog variant ids, so a tampered one can't change what's charged, what VAT applies, or
     // what the receipt and packing list say.
     const resolved: ResolvedLineItem[] = []
     for (const item of lineItems) {
       const entry = resolveProduct(env, item, locale)
       if (!entry) {
-        return jsonResponse({ error: `Unknown product: ${item.slug}` }, 400, origin)
+        return jsonResponse({ error: `Unknown product or variant: ${item.slug}` }, 400, origin)
       }
       resolved.push(entry)
     }

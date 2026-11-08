@@ -7,6 +7,7 @@ import { products } from '../data/products'
 import { useCart } from '../hooks/useCart'
 import { formatPrice } from '../lib/formatPrice'
 import { getProductImages } from '../lib/productImages'
+import type { VariantSelection } from '../lib/productVariants'
 
 const Heading = styled.h1`
   font-size: 1.4rem;
@@ -62,6 +63,30 @@ const BodyText = styled.p`
   margin-bottom: 1.5rem;
 `
 
+const VariantField = styled.label`
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+
+  select {
+    display: block;
+    width: min(320px, 90vw);
+    margin-top: 0.35rem;
+    font-family: inherit;
+    font-size: 0.9rem;
+    padding: 0.5rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    color: var(--color-text-primary);
+  }
+`
+
+const MissingVariantNotice = styled.p`
+  font-size: 0.85rem;
+  color: var(--color-accent);
+  margin-bottom: 1rem;
+`
+
 const AddToCartRow = styled.div`
   display: flex;
   align-items: center;
@@ -112,6 +137,8 @@ export default function ProductPage() {
   const { addItem } = useCart()
   const [quantity, setQuantity] = useState(1)
   const [selectedImage, setSelectedImage] = useState(0)
+  const [selection, setSelection] = useState<VariantSelection>({})
+  const [showMissingVariants, setShowMissingVariants] = useState(false)
 
   if (!product) {
     return (
@@ -123,6 +150,16 @@ export default function ProductPage() {
   }
 
   const images = getProductImages(product)
+  const variantCategories = product.variants ?? []
+  const missingVariants = variantCategories.filter((category) => !selection[category.id])
+
+  const handleAddToCart = () => {
+    if (missingVariants.length > 0) {
+      setShowMissingVariants(true)
+      return
+    }
+    addItem(product.slug, quantity, selection)
+  }
 
   return (
     <Page style={{ minHeight: '60vh' }}>
@@ -142,6 +179,31 @@ export default function ProductPage() {
       <Heading>{product.name[lang]}</Heading>
       <Price>{formatPrice(product.priceOre)}</Price>
       <BodyText>{product.description[lang]}</BodyText>
+      {variantCategories.map((category) => (
+        <VariantField key={category.id}>
+          {category.name[lang]}
+          <select
+            value={selection[category.id] ?? ''}
+            onChange={(event) => setSelection({ ...selection, [category.id]: event.target.value })}
+          >
+            <option value="" disabled>
+              {t('variant_placeholder')}
+            </option>
+            {category.options.map((option) => (
+              <option key={option.id} value={option.id}>
+                {option.name[lang]}
+              </option>
+            ))}
+          </select>
+        </VariantField>
+      ))}
+      {showMissingVariants && missingVariants.length > 0 && (
+        <MissingVariantNotice role="alert">
+          {t('variant_missing', {
+            categories: missingVariants.map((category) => category.name[lang]).join(', '),
+          })}
+        </MissingVariantNotice>
+      )}
       <AddToCartRow>
         <QuantityInput
           type="number"
@@ -149,7 +211,7 @@ export default function ProductPage() {
           value={quantity}
           onChange={(event) => setQuantity(Math.max(1, Number(event.target.value)))}
         />
-        <AddToCartButton onClick={() => addItem(product.slug, quantity)}>{t('add_to_cart')}</AddToCartButton>
+        <AddToCartButton onClick={handleAddToCart}>{t('add_to_cart')}</AddToCartButton>
       </AddToCartRow>
       <BackLink to="/store">{t('back_to_store')}</BackLink>
     </Page>
