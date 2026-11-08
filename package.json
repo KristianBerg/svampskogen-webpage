@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently --kill-others-on-fail --names web,worker,cms --prefix-colors green,yellow,cyan \"vite --strictPort\" \"npm --prefix worker run dev\" \"npm run upload-images\"",
     "dev:live": "VITE_CATALOG_MODE=live vite",
     "build": "node scripts/check-catalog.mjs && tsc -b && vite build",
     "postbuild": "cp dist/index.html dist/404.html && node scripts/generate-og-pages.mjs",
@@ -29,6 +29,7 @@
     "@types/react-dom": "^19.2.3",
     "@types/styled-components": "^5.1.36",
     "@vitejs/plugin-react": "^5.1.1",
+    "concurrently": "^10.0.7",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
