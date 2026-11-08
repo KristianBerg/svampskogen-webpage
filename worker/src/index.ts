@@ -1,16 +1,12 @@
 import Stripe from 'stripe'
 import { products } from '../../src/data/products'
-import { shippingMethod as liveShippingMethod } from '../../src/data/shippingMethods.live'
-import { shippingMethod as sandboxShippingMethod } from '../../src/data/shippingMethods.sandbox'
+import { shippingMethod } from '../../src/data/shippingMethods'
 import type { DeliveryMethod } from '../../src/data/shippingMethodTypes'
 import { lineItemName, resolveVariantSelection, type VariantSelection } from '../../src/lib/productVariants'
 
 export interface Env {
   STRIPE_SECRET_KEY: string
   SITE_ORIGIN: string
-  // Which shipping method to charge. Must match the Stripe mode of STRIPE_SECRET_KEY,
-  // the same way the frontend's VITE_CATALOG_MODE does.
-  CATALOG_MODE: 'sandbox' | 'live'
   TAX_RATE_6: string
   TAX_RATE_12: string
   TAX_RATE_25: string
@@ -58,8 +54,7 @@ function resolveProduct(item: CheckoutLineItem, locale: Locale): ResolvedLineIte
 }
 
 // Added here rather than sent by the cart, so a tampered request can't leave it out.
-function resolveShipping(env: Env, locale: Locale): ResolvedLineItem {
-  const shippingMethod = env.CATALOG_MODE === 'live' ? liveShippingMethod : sandboxShippingMethod
+function resolveShipping(locale: Locale): ResolvedLineItem {
   return {
     name: `${SHIPPING_LABEL[locale]} – ${shippingMethod.name[locale]}`,
     amountOre: shippingMethod.priceOre,
@@ -182,7 +177,7 @@ export default {
       }
       resolved.push(entry)
     }
-    resolved.push(deliveryMethod === 'pickup' ? resolvePickup(locale) : resolveShipping(env, locale))
+    resolved.push(deliveryMethod === 'pickup' ? resolvePickup(locale) : resolveShipping(locale))
 
     const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
       httpClient: Stripe.createFetchHttpClient(),
