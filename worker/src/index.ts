@@ -35,7 +35,7 @@ const SHIPPING_LABEL: Record<Locale, string> = { sv: 'Frakt', en: 'Shipping' }
 
 function resolveProduct(env: Env, item: CheckoutLineItem, locale: Locale): ResolvedLineItem | null {
   const products = env.CATALOG_MODE === 'live' ? liveProducts : sandboxProducts
-  const product = products.find((entry) => entry.slug === item.slug)
+  const product = products.find((entry) => entry.slug === item.slug && entry.published)
   if (!product) return null
   return {
     name: product.name[locale],

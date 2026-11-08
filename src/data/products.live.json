@@ -3,6 +3,7 @@
     "slug": "notknappare",
     "priceOre": 39500,
     "vatRate": 0.25,
+    "published": true,
     "inStock": true,
     "category": "Wildlife Garden",
     "name": {
@@ -18,6 +19,7 @@
     "slug": "flaskkork-ekorre",
     "priceOre": 16500,
     "vatRate": 0.25,
+    "published": true,
     "inStock": true,
     "category": "Wildlife Garden",
     "name": {
@@ -33,6 +35,7 @@
     "slug": "flaskkork-groda",
     "priceOre": 16500,
     "vatRate": 0.25,
+    "published": true,
     "inStock": true,
     "category": "Wildlife Garden",
     "name": {
@@ -48,6 +51,7 @@
     "slug": "skrin-skata",
     "priceOre": 45000,
     "vatRate": 0.25,
+    "published": true,
     "inStock": true,
     "category": "Wildlife Garden",
     "name": {
@@ -63,6 +67,7 @@
     "slug": "svampkrok-kantarell",
     "priceOre": 24500,
     "vatRate": 0.25,
+    "published": true,
     "inStock": true,
     "category": "Wildlife Garden",
     "name": {
@@ -78,6 +83,7 @@
     "slug": "svampkrok-stensopp",
     "priceOre": 24500,
     "vatRate": 0.25,
+    "published": true,
     "inStock": true,
     "category": "Wildlife Garden",
     "name": {
@@ -93,6 +99,7 @@
     "slug": "svampkrok-flugsvamp",
     "priceOre": 24500,
     "vatRate": 0.25,
+    "published": true,
     "inStock": true,
     "category": "Wildlife Garden",
     "name": {
@@ -108,6 +115,7 @@
     "slug": "pluggar-ostronskivling",
     "priceOre": 18000,
     "vatRate": 0.25,
+    "published": true,
     "inStock": true,
     "category": "Odlingskit",
     "name": {
@@ -123,6 +131,7 @@
     "slug": "odlingskit-rosa-ostronskivling-rund",
     "priceOre": 19500,
     "vatRate": 0.25,
+    "published": true,
     "inStock": true,
     "category": "Odlingskit",
     "name": {
@@ -138,6 +147,7 @@
     "slug": "odlingskit-citronmussling-rund",
     "priceOre": 19500,
     "vatRate": 0.25,
+    "published": true,
     "inStock": true,
     "category": "Odlingskit",
     "name": {
@@ -153,6 +163,7 @@
     "slug": "odlingskit-kungsmussling-fyrkant",
     "priceOre": 21000,
     "vatRate": 0.25,
+    "published": true,
     "inStock": true,
     "category": "Odlingskit",
     "name": {
@@ -168,6 +179,7 @@
     "slug": "odlingskit-rosa-ostronskivling-fyrkant",
     "priceOre": 21000,
     "vatRate": 0.25,
+    "published": true,
     "inStock": true,
     "category": "Odlingskit",
     "name": {
@@ -183,6 +195,7 @@
     "slug": "odlingskit-igelkottstaggsvamp-fyrkant",
     "priceOre": 21000,
     "vatRate": 0.25,
+    "published": true,
     "inStock": true,
     "category": "Odlingskit",
     "name": {
@@ -198,6 +211,7 @@
     "slug": "plockpase-broderad",
     "priceOre": 40000,
     "vatRate": 0.25,
+    "published": false,
     "inStock": true,
     "name": {
       "sv": "Svampplockpåse broderad",
@@ -212,6 +226,7 @@
     "slug": "plockpase",
     "priceOre": 35000,
     "vatRate": 0.25,
+    "published": false,
     "inStock": true,
     "name": {
       "sv": "Svampplockpåse",

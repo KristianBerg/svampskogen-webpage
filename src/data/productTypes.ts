@@ -12,6 +12,10 @@ export interface Product {
   // Worker read it from here. See scripts/check-catalog.mjs for what's allowed.
   priceOre: number
   vatRate: number
+  // false keeps the product in the CMS but off the storefront: no store listing,
+  // no product page, and the Worker won't sell it. Not a secret though, since
+  // the whole catalog and its photos are still public files on the static site.
+  published: boolean
   inStock: boolean
   // Used only to group/sort products in the local image-upload tool's
   // navigation — not read by the image pipeline (paths are keyed by slug

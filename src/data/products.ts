@@ -7,4 +7,8 @@ export type { Product } from './productTypes'
 // on a test-mode Stripe key never accidentally serve the live catalog.
 // Flip VITE_CATALOG_MODE=live only once the Worker's STRIPE_SECRET_KEY is
 // also live (Phase 7) — the two must change together.
-export const products = import.meta.env.VITE_CATALOG_MODE === 'live' ? liveProducts : sandboxProducts
+const catalog = import.meta.env.VITE_CATALOG_MODE === 'live' ? liveProducts : sandboxProducts
+
+// Everything on the storefront goes through this list, so an unpublished product
+// has no listing or page, and any saved cart entry for it is dropped.
+export const products = catalog.filter((product) => product.published)

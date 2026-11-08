@@ -3,6 +3,7 @@
     "slug": "opinel-svampkniv",
     "priceOre": 24900,
     "vatRate": 0.25,
+    "published": true,
     "inStock": true,
     "name": {
       "sv": "Opinel svampkniv",
@@ -17,6 +18,7 @@
     "slug": "flatad-svampkorg",
     "priceOre": 34900,
     "vatRate": 0.25,
+    "published": true,
     "inStock": true,
     "name": {
       "sv": "Flätad svampkorg",
@@ -31,6 +33,7 @@
     "slug": "torkad-kantarell",
     "priceOre": 9900,
     "vatRate": 0.06,
+    "published": true,
     "inStock": true,
     "name": {
       "sv": "Torkad kantarell",
@@ -45,6 +48,7 @@
     "slug": "odlingskit-ostronskivling",
     "priceOre": 29900,
     "vatRate": 0.25,
+    "published": true,
     "inStock": true,
     "name": {
       "sv": "Odlingskit – ostronskivling",
@@ -59,6 +63,7 @@
     "slug": "svampboken-faltguide",
     "priceOre": 19900,
     "vatRate": 0.06,
+    "published": true,
     "inStock": true,
     "name": {
       "sv": "Svampboken – en fälthandbok",
@@ -73,6 +78,7 @@
     "slug": "tygkasse-med-tryck",
     "priceOre": 14900,
     "vatRate": 0.25,
+    "published": true,
     "inStock": true,
     "name": {
       "sv": "Tygkasse med tryck",
