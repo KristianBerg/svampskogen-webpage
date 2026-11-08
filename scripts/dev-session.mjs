@@ -124,7 +124,9 @@ async function startService(name, state) {
 
   const deadline = Date.now() + START_TIMEOUT_MS
   while (!exited && Date.now() < deadline) {
-    if (await isUp(port)) return { port, pid: child.pid, url: `http://localhost:${port}` }
+    if (await isUp(port)) {
+      return { port, pid: child.pid, url: `http://localhost:${port}`, sessionId: process.env.CLAUDE_CODE_SESSION_ID }
+    }
     await wait(200)
   }
   if (!exited) killGroup(child.pid)
@@ -175,10 +177,31 @@ async function statusline() {
   if (parts.length > 0) console.log(parts.join('  |  '))
 }
 
+function worktreeDirs() {
+  const worktrees = path.join(repoRoot, '.claude', 'worktrees')
+  try {
+    return fs.readdirSync(worktrees).map((name) => path.join(worktrees, name))
+  } catch {
+    return []
+  }
+}
+
 async function sessionEnd() {
   const input = readStdinJson()
+  fs.mkdirSync(path.join(repoRoot, '.dev-session'), { recursive: true })
+  fs.appendFileSync(
+    path.join(repoRoot, '.dev-session', 'session-end.log'),
+    `${new Date().toISOString()} reason=${input.reason} cwd=${input.cwd} session=${input.session_id}\n`,
+  )
   // /clear keeps working in the same checkout, so its servers stay useful.
-  if (input.reason !== 'clear' && input.cwd) await stop(input.cwd)
+  if (input.reason === 'clear' || !input.session_id) return
+
+  // Matched by session, not cwd: the session may have left its worktree before ending.
+  const dirs = new Set([input.cwd, repoRoot, ...worktreeDirs()].filter(Boolean))
+  for (const dir of dirs) {
+    const services = Object.values(readState(dir))
+    if (services.some((service) => service.sessionId === input.session_id)) await stop(dir)
+  }
 }
 
 const [first, ...rest] = process.argv.slice(2)
