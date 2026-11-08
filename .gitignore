@@ -24,8 +24,9 @@ dist-ssr
 *.sln
 *.sw?
 
-# Local notes, not tracked
+# Local notes and Claude Code setup, not tracked
 CLAUDE.md
+.claude/
 docs/
 
 # Raw/unprocessed image source files, not for the built site
