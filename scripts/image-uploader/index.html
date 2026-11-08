@@ -44,6 +44,7 @@
   .commit-message { flex: 1; min-width: 0; font: inherit; font-size: 0.85rem; padding: 0.25rem 0.5rem; }
   .commit-status { font-size: 0.85rem; color: #666; overflow-wrap: anywhere; }
   .commit-status.error { color: #b00; }
+  .commit-files { margin: 0 0 1rem; padding: 0.5rem 0.75rem; max-height: 50vh; overflow-y: auto; list-style: none; border: 1px solid #ddd; border-radius: 4px; font-family: monospace; font-size: 0.8rem; overflow-wrap: anywhere; }
   .page-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
   dialog select { display: block; width: 100%; margin-top: 0.25rem; font: inherit; padding: 0.35rem 0.5rem; }
   .field-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; }
@@ -117,6 +118,17 @@
       <span class="dialog-status" id="photos-status"></span>
       <button type="button" id="photos-cancel">Cancel</button>
       <button type="submit" id="photos-save">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="commit-dialog">
+  <form id="commit-form" method="dialog">
+    <h3 id="commit-title">Commit</h3>
+    <ul class="commit-files" id="commit-files"></ul>
+    <div class="dialog-actions">
+      <button type="button" id="commit-cancel">Cancel</button>
+      <button type="submit" id="commit-confirm">Commit</button>
     </div>
   </form>
 </dialog>
@@ -632,10 +644,42 @@ async function refreshCommitBar() {
   }
 }
 
+function openCommitDialog(files) {
+  document.getElementById('commit-title').textContent =
+    `Commit ${files.length} file${files.length === 1 ? '' : 's'}?`
+  document.getElementById('commit-files').replaceChildren(...files.map((file) => {
+    const item = document.createElement('li')
+    item.textContent = file
+    return item
+  }))
+  document.getElementById('commit-dialog').showModal()
+}
+
 function setupCommitBar() {
   const button = document.getElementById('commit-button')
   const message = document.getElementById('commit-message')
+  const dialog = document.getElementById('commit-dialog')
+  document.getElementById('commit-cancel').onclick = () => dialog.close()
+
+  // Asks the server rather than reusing the commit bar's last check, so the
+  // list matches what's on disk at the moment of committing.
   button.onclick = async () => {
+    button.disabled = true
+    try {
+      const res = await fetch('/api/changes')
+      if (!res.ok) throw new Error(`Status ${res.status}`)
+      const { files } = await res.json()
+      if (files.length === 0) return refreshCommitBar()
+      openCommitDialog(files)
+      button.disabled = false
+    } catch (error) {
+      button.disabled = false
+      setCommitStatus(`Couldn't check for changes: ${error.message}`, true)
+    }
+  }
+
+  // No preventDefault: method="dialog" closes the popup on submit.
+  document.getElementById('commit-form').onsubmit = async () => {
     button.disabled = true
     setCommitStatus('Committing…')
     try {
