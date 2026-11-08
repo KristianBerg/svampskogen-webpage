@@ -6,10 +6,8 @@ on:
     paths:
       - 'worker/**'
       # The Worker bundles the in-repo catalog for prices, names and VAT rates, so catalog edits must redeploy it.
-      - 'src/data/products.live.ts'
-      - 'src/data/products.live.json'
-      - 'src/data/products.sandbox.ts'
-      - 'src/data/products.sandbox.json'
+      - 'src/data/products.ts'
+      - 'src/data/products.json'
       - 'src/data/productTypes.ts'
       - 'src/data/shippingMethods.live.ts'
       - 'src/data/shippingMethods.sandbox.ts'

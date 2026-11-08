@@ -5,15 +5,13 @@
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 
-const dataDir = path.resolve(import.meta.dirname, '..', 'src', 'data')
+const catalogPath = path.resolve(import.meta.dirname, '..', 'src', 'data', 'products.json')
 const problems = []
 
-for (const file of ['products.live.json', 'products.sandbox.json']) {
-  const products = JSON.parse(await readFile(path.join(dataDir, file), 'utf8'))
-  for (const { slug, priceOre } of products) {
-    if (!Number.isInteger(priceOre) || priceOre <= 0 || priceOre % 100 !== 0) {
-      problems.push(`${file}: ${slug} has priceOre ${priceOre}, expected a positive whole number of kronor in öre`)
-    }
+const products = JSON.parse(await readFile(catalogPath, 'utf8'))
+for (const { slug, priceOre } of products) {
+  if (!Number.isInteger(priceOre) || priceOre <= 0 || priceOre % 100 !== 0) {
+    problems.push(`products.json: ${slug} has priceOre ${priceOre}, expected a positive whole number of kronor in öre`)
   }
 }
 

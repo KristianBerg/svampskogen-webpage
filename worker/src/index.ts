@@ -1,6 +1,5 @@
 import Stripe from 'stripe'
-import { products as liveProducts } from '../../src/data/products.live'
-import { products as sandboxProducts } from '../../src/data/products.sandbox'
+import { products } from '../../src/data/products'
 import { shippingMethod as liveShippingMethod } from '../../src/data/shippingMethods.live'
 import { shippingMethod as sandboxShippingMethod } from '../../src/data/shippingMethods.sandbox'
 import type { DeliveryMethod } from '../../src/data/shippingMethodTypes'
@@ -9,8 +8,8 @@ import { lineItemName, resolveVariantSelection, type VariantSelection } from '..
 export interface Env {
   STRIPE_SECRET_KEY: string
   SITE_ORIGIN: string
-  // Which in-repo catalog to resolve line items against. Must match the Stripe mode of
-  // STRIPE_SECRET_KEY, the same way the frontend's VITE_CATALOG_MODE does.
+  // Which shipping method to charge. Must match the Stripe mode of STRIPE_SECRET_KEY,
+  // the same way the frontend's VITE_CATALOG_MODE does.
   CATALOG_MODE: 'sandbox' | 'live'
   TAX_RATE_6: string
   TAX_RATE_12: string
@@ -39,9 +38,8 @@ interface ResolvedLineItem {
 const SHIPPING_LABEL: Record<Locale, string> = { sv: 'Frakt', en: 'Shipping' }
 const PICKUP_LABEL: Record<Locale, string> = { sv: 'Hämtas i butiken', en: 'Pickup in store' }
 
-function resolveProduct(env: Env, item: CheckoutLineItem, locale: Locale): ResolvedLineItem | null {
-  const products = env.CATALOG_MODE === 'live' ? liveProducts : sandboxProducts
-  const product = products.find((entry) => entry.slug === item.slug && entry.published)
+function resolveProduct(item: CheckoutLineItem, locale: Locale): ResolvedLineItem | null {
+  const product = products.find((entry) => entry.slug === item.slug)
   if (!product) return null
   const chosen = resolveVariantSelection(product, item.variants)
   if (!chosen) return null
@@ -178,7 +176,7 @@ export default {
     // what the receipt and packing list say.
     const resolved: ResolvedLineItem[] = []
     for (const item of lineItems) {
-      const entry = resolveProduct(env, item, locale)
+      const entry = resolveProduct(item, locale)
       if (!entry) {
         return jsonResponse({ error: `Unknown product or variant: ${item.slug}` }, 400, origin)
       }

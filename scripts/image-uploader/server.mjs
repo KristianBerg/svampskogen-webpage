@@ -1,11 +1,11 @@
-// Local-only admin tool: lists products from products.live.json, lets you pick
+// Local-only admin tool: lists products from products.json, lets you pick
 // photos for one through the browser's file picker, and writes them into
 // assets/<slug>/ in submission order. Existing photos can be reordered or
 // deleted, which renumbers both the raw files and their processed webp
 // outputs. Also lets you add a product (created unpublished), publish or
 // unpublish one, and set its price,
 // category, VAT rate, variants and Swedish/English name and description, which are
-// written back into products.live.json. Those changes can then be committed
+// written back into products.json. Those changes can then be committed
 // to git from the same page (commit only, pushing stays a manual step).
 // Never deployed, never exposed off this machine — the server only binds to 127.0.0.1.
 import { execFile, spawn } from 'node:child_process'
@@ -20,20 +20,20 @@ const repoRoot = path.resolve(import.meta.dirname, '..', '..')
 const rawDir = path.join(repoRoot, 'assets')
 const publicProductsDir = path.join(repoRoot, 'public', 'products')
 const indexHtmlPath = path.join(import.meta.dirname, 'index.html')
-const liveProductsPath = path.join(repoRoot, 'src', 'data', 'products.live.json')
+const productsPath = path.join(repoRoot, 'src', 'data', 'products.json')
 const PORT = 4500
 
 // Everything the CMS writes that's tracked in git. Commits are limited to
 // these paths so unrelated work in the tree never gets swept in. assets/ is
 // gitignored, so raw photos aren't part of this.
-const CMS_PATHS = ['src/data/products.live.json', 'src/data/productImageCounts.generated.ts', 'public/products']
+const CMS_PATHS = ['src/data/products.json', 'src/data/productImageCounts.generated.ts', 'public/products']
 const DEFAULT_COMMIT_MESSAGE = 'Update product catalog from the CMS'
 const execFileAsync = promisify(execFile)
 
-// Read per request (not cached) so hand edits to products.live.json show up
+// Read per request (not cached) so hand edits to products.json show up
 // without restarting the server.
 async function loadLiveProducts() {
-  return JSON.parse(await readFile(liveProductsPath, 'utf8'))
+  return JSON.parse(await readFile(productsPath, 'utf8'))
 }
 
 // Matches the field order in productTypes.ts, so a field the uploader adds
@@ -54,7 +54,7 @@ async function updateLiveProduct(slug, update) {
   const index = products.findIndex((product) => product.slug === slug)
   if (index === -1) throw new Error(`Unknown product slug: ${slug}`)
   products[index] = orderFields(update({ ...products[index] }))
-  await writeFile(liveProductsPath, `${JSON.stringify(products, null, 2)}\n`)
+  await writeFile(productsPath, `${JSON.stringify(products, null, 2)}\n`)
 }
 
 async function loadImageCounts() {
@@ -477,7 +477,7 @@ async function handleCreateProduct(req, res) {
     description,
   })
   products.push(product)
-  await writeFile(liveProductsPath, `${JSON.stringify(products, null, 2)}\n`)
+  await writeFile(productsPath, `${JSON.stringify(products, null, 2)}\n`)
   sendJson(res, 201, product)
 }
 
