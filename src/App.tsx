@@ -10,6 +10,8 @@ import CartPage from './pages/CartPage'
 import CheckoutSuccessPage from './pages/CheckoutSuccessPage'
 import CheckoutCancelPage from './pages/CheckoutCancelPage'
 import ReturnsPage from './pages/ReturnsPage'
+import WithdrawPage from './pages/WithdrawPage'
+import PrivacyPage from './pages/PrivacyPage'
 import NotFoundPage from './pages/NotFoundPage'
 import { useCart } from './hooks/useCart'
 import { usePreviewFlags } from './hooks/usePreviewFlags'
@@ -136,6 +138,8 @@ function AppContent() {
         <Route path="/checkout/success" element={<StoreGate enabled={storePreviewEnabled}><CheckoutSuccessPage pickupEnabled={pickupEnabled} /></StoreGate>} />
         <Route path="/checkout/cancel" element={<StoreGate enabled={storePreviewEnabled}><CheckoutCancelPage /></StoreGate>} />
         <Route path="/returns" element={<ReturnsPage />} />
+        <Route path="/withdraw" element={<WithdrawPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <SiteFooter />

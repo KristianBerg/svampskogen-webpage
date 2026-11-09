@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { Page } from '../components/Page'
+import { returnAddressOneLine } from '../data/returnAddress'
 
 const Heading = styled.h1`
   font-size: 1.4rem;
@@ -94,6 +96,22 @@ const ExternalLink = styled.a`
   }
 `
 
+const WithdrawLink = styled(Link)`
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0.75rem 2rem;
+  margin-bottom: 2.5rem;
+  border: 1px solid var(--color-text-primary);
+  color: var(--color-text-primary);
+
+  &:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+`
+
 const LinkList = styled.p`
   display: flex;
   gap: 1.5rem;
@@ -107,6 +125,7 @@ export default function ReturnsPage() {
     <Page style={{ minHeight: '60vh' }}>
       <Heading>{t('returns_heading')}</Heading>
       <Intro>{t('returns_intro')}</Intro>
+      <WithdrawLink to="/withdraw">{t('withdraw_link')}</WithdrawLink>
 
       <Section>
         <SectionHeading>{t('returns_withdrawal_heading')}</SectionHeading>
@@ -118,7 +137,7 @@ export default function ReturnsPage() {
       <Section>
         <SectionHeading>{t('returns_how_heading')}</SectionHeading>
         <BodyText>{t('returns_how_p1')}</BodyText>
-        <BodyText>{t('returns_how_p2')}</BodyText>
+        <BodyText>{t('returns_how_p2', { address: returnAddressOneLine })}</BodyText>
         <BodyText>{t('returns_how_p3')}</BodyText>
       </Section>
 
@@ -131,7 +150,7 @@ export default function ReturnsPage() {
             <br />
             Claesgatan 8, 214 26 Malmö
             <br />
-            kristian@svampskogen.com
+            retur@svampskogen.com
           </CompanyDetails>
           <FormStatement>{t('returns_form_statement')}</FormStatement>
           <FormBlank />
@@ -183,6 +202,8 @@ export default function ReturnsPage() {
           <br />
           Org.nr 559583-9159
           <br />
+          {t('company_vat_label')} SE559583915901
+          <br />
           Claesgatan 8, 214 26 Malmö
           <br />
           kristian@svampskogen.com
@@ -195,11 +216,7 @@ export default function ReturnsPage() {
         <LinkList>
           <ExternalLink href="https://www.arn.se" target="_blank" rel="noopener noreferrer">
             {t('returns_dispute_arn_link')}
-          </ExternalLink>
-          <ExternalLink href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer">
-            {t('returns_dispute_odr_link')}
-          </ExternalLink>
-        </LinkList>
+          </ExternalLink>        </LinkList>
       </Section>
     </Page>
   )

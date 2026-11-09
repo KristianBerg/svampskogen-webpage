@@ -136,6 +136,9 @@ export default function CheckoutSuccessPage({ pickupEnabled }: { pickupEnabled: 
       )}
       <p>{t('checkout_success_body')}</p>
       {rows.length > 0 && deliveryMethod === 'pickup' && <p>{t('checkout_success_pickup_body')}</p>}
+      <p>
+        {t('checkout_success_withdraw')} <Link to="/withdraw">{t('withdraw_link')}</Link>
+      </p>
       <BackLink to="/store">{t('back_to_store')}</BackLink>
     </Page>
   )

@@ -3,8 +3,9 @@ import { products } from '../../src/data/products'
 import { shippingMethod } from '../../src/data/shippingMethods'
 import type { DeliveryMethod } from '../../src/data/shippingMethodTypes'
 import { lineItemName, resolveVariantSelection, type VariantSelection } from '../../src/lib/productVariants'
+import { handleWithdraw, type WithdrawEnv } from './withdraw'
 
-export interface Env {
+export interface Env extends WithdrawEnv {
   STRIPE_SECRET_KEY: string
   SITE_ORIGIN: string
   TAX_RATE_6: string
@@ -79,11 +80,11 @@ function resolvePickup(locale: Locale): ResolvedLineItem {
 
 const LOCAL_ORIGIN = /^http:\/\/(localhost|127\.0\.0\.1):\d+$/
 
-// Each Claude session can run its own frontend on its own port, so sandbox mode
+// Each Claude session can run its own frontend on its own port, so a local Worker
 // accepts any local origin. Production only ever answers to SITE_ORIGIN.
 function allowedOrigin(request: Request, env: Env): string {
   const requestOrigin = request.headers.get('Origin')
-  if (env.CATALOG_MODE !== 'live' && requestOrigin && LOCAL_ORIGIN.test(requestOrigin)) return requestOrigin
+  if (LOCAL_ORIGIN.test(env.SITE_ORIGIN) && requestOrigin && LOCAL_ORIGIN.test(requestOrigin)) return requestOrigin
   return env.SITE_ORIGIN
 }
 
@@ -153,6 +154,9 @@ export default {
     }
 
     const url = new URL(request.url)
+    if (request.method === 'POST' && url.pathname === '/withdraw') {
+      return handleWithdraw(request, env, (body, status) => jsonResponse(body, status, origin))
+    }
     if (request.method !== 'POST' || url.pathname !== '/create-checkout-session') {
       return jsonResponse({ error: 'Not found' }, 404, origin)
     }
