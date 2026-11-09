@@ -12,6 +12,7 @@ on:
       - 'src/data/shippingMethods.ts'
       - 'src/data/shippingMethodTypes.ts'
       - 'src/lib/productVariants.ts'
+      - 'src/data/returnAddress.ts'
       - '.github/workflows/deploy-worker.yml'
   workflow_dispatch:
 
