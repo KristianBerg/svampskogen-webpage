@@ -5,7 +5,8 @@
 // outputs. Also lets you add a product (created unpublished), publish or
 // unpublish one, and set its price,
 // category, VAT rate, variants and Swedish/English name and description, which are
-// written back into products.json. Those changes can then be committed
+// written back into products.json. Store categories are managed in their own
+// tab and written to categories.json. Those changes can then be committed
 // to git from the same page (commit only, pushing stays a manual step).
 // Never deployed, never exposed off this machine — the server only binds to 127.0.0.1.
 import { execFile, spawn } from 'node:child_process'
@@ -21,12 +22,13 @@ const rawDir = path.join(repoRoot, 'assets')
 const publicProductsDir = path.join(repoRoot, 'public', 'products')
 const indexHtmlPath = path.join(import.meta.dirname, 'index.html')
 const productsPath = path.join(repoRoot, 'src', 'data', 'products.json')
+const categoriesPath = path.join(repoRoot, 'src', 'data', 'categories.json')
 const PORT = Number(process.env.CMS_PORT) || 4500
 
 // Everything the CMS writes that's tracked in git. Commits are limited to
 // these paths so unrelated work in the tree never gets swept in. assets/ is
 // gitignored, so raw photos aren't part of this.
-const CMS_PATHS = ['src/data/products.json', 'src/data/productImageCounts.generated.ts', 'public/products']
+const CMS_PATHS = ['src/data/products.json', 'src/data/categories.json', 'src/data/productImageCounts.generated.ts', 'public/products']
 const DEFAULT_COMMIT_MESSAGE = 'Update product catalog from the CMS'
 const execFileAsync = promisify(execFile)
 
@@ -34,6 +36,16 @@ const execFileAsync = promisify(execFile)
 // without restarting the server.
 async function loadLiveProducts() {
   return JSON.parse(await readFile(productsPath, 'utf8'))
+}
+
+async function loadCategories() {
+  return JSON.parse(await readFile(categoriesPath, 'utf8'))
+}
+
+// The same 2-space format the files are stored in, so diffs only show the
+// changed fields.
+async function writeJson(filePath, data) {
+  await writeFile(filePath, `${JSON.stringify(data, null, 2)}\n`)
 }
 
 // Matches the field order in productTypes.ts, so a field the uploader adds
@@ -47,14 +59,12 @@ function orderFields(product) {
   return Object.assign(ordered, product)
 }
 
-// Applies `update` to one product and writes the file back in the same
-// 2-space format it's stored in, so diffs only show the changed fields.
 async function updateLiveProduct(slug, update) {
   const products = await loadLiveProducts()
   const index = products.findIndex((product) => product.slug === slug)
   if (index === -1) throw new Error(`Unknown product slug: ${slug}`)
   products[index] = orderFields(update({ ...products[index] }))
-  await writeFile(productsPath, `${JSON.stringify(products, null, 2)}\n`)
+  await writeJson(productsPath, products)
 }
 
 async function loadImageCounts() {
@@ -266,14 +276,12 @@ async function handleSetPrice(req, res, slug) {
   sendJson(res, 200, { priceOre })
 }
 
-const CATEGORY_ERROR = 'Category must be a single line of at most 60 characters.'
+const UNKNOWN_CATEGORY_ERROR = 'That category no longer exists. Reload and try again.'
 
-function normalizeCategory(raw) {
-  return typeof raw === 'string' ? raw.trim() : ''
-}
-
-function isValidCategory(category) {
-  return !/[\r\n]/.test(category) && category.length <= 60
+// An empty category means none, so only a non-empty one has to exist.
+async function isAssignableCategory(category) {
+  if (!category) return true
+  return (await loadCategories()).some((entry) => entry.id === category)
 }
 
 async function handleSetCategory(req, res, slug) {
@@ -283,10 +291,9 @@ async function handleSetCategory(req, res, slug) {
     return
   }
 
-  const { category: raw } = JSON.parse((await readBody(req)).toString('utf8') || '{}')
-  const category = normalizeCategory(raw)
-  if (!isValidCategory(category)) {
-    sendJson(res, 400, { error: CATEGORY_ERROR })
+  const { category } = JSON.parse((await readBody(req)).toString('utf8') || '{}')
+  if (!(await isAssignableCategory(category))) {
+    sendJson(res, 400, { error: UNKNOWN_CATEGORY_ERROR })
     return
   }
 
@@ -365,7 +372,7 @@ const MAX_SLUG_LENGTH = 60
 
 const MAX_VARIANT_NAME_LENGTH = 60
 
-function isValidVariantName(name) {
+function isValidEntryName(name) {
   return LANGS.every(
     (lang) =>
       typeof name?.[lang] === 'string' &&
@@ -375,13 +382,13 @@ function isValidVariantName(name) {
   )
 }
 
-// Ids are what saved carts and Stripe orders refer to, so each must be unique
-// among its siblings. The browser keeps them stable when a name is edited.
-function validateVariantEntries(entries, label) {
+// Ids are what saved carts, Stripe orders and products refer to, so each must
+// be unique among its siblings. The browser keeps them stable when a name is edited.
+function validateNamedEntries(entries, label) {
   if (!Array.isArray(entries)) return `${label}s must be a list.`
   for (const entry of entries) {
     if (typeof entry?.id !== 'string' || !SLUG_PATTERN.test(entry.id)) return `${label} has an invalid id.`
-    if (!isValidVariantName(entry.name)) {
+    if (!isValidEntryName(entry.name)) {
       return `Each ${label.toLowerCase()} needs a Swedish and English name, single line, at most ${MAX_VARIANT_NAME_LENGTH} characters.`
     }
   }
@@ -390,10 +397,10 @@ function validateVariantEntries(entries, label) {
 }
 
 function validateVariants(variants) {
-  const categoryError = validateVariantEntries(variants, 'Category')
+  const categoryError = validateNamedEntries(variants, 'Category')
   if (categoryError) return categoryError
   for (const category of variants) {
-    const optionError = validateVariantEntries(category.options, 'Option')
+    const optionError = validateNamedEntries(category.options, 'Option')
     if (optionError) return optionError
     // A category with nothing to pick would make the product impossible to buy.
     if (category.options.length === 0) return `${category.name.en} needs at least one option.`
@@ -401,7 +408,7 @@ function validateVariants(variants) {
   return null
 }
 
-function normalizeVariantEntry({ id, name }) {
+function normalizeNamedEntry({ id, name }) {
   return { id, name: { sv: name.sv.trim(), en: name.en.trim() } }
 }
 
@@ -420,8 +427,8 @@ async function handleSetVariants(req, res, slug) {
   }
 
   const normalized = variants.map((category) => ({
-    ...normalizeVariantEntry(category),
-    options: category.options.map(normalizeVariantEntry),
+    ...normalizeNamedEntry(category),
+    options: category.options.map(normalizeNamedEntry),
   }))
   await updateLiveProduct(slug, (product) => {
     if (normalized.length > 0) product.variants = normalized
@@ -431,10 +438,84 @@ async function handleSetVariants(req, res, slug) {
   sendJson(res, 200, { variants: normalized })
 }
 
+// Two categories with the same name would be indistinguishable, both in the
+// CMS selector and as store buttons.
+function validateCategories(categories) {
+  const entryError = validateNamedEntries(categories, 'Category')
+  if (entryError) return entryError
+  for (const lang of LANGS) {
+    const names = categories.map((category) => category.name[lang].trim().toLowerCase())
+    if (new Set(names).size !== names.length) return `Two categories can't have the same ${lang} name.`
+  }
+  return null
+}
+
+async function saveCategories(res, categories, status = 200) {
+  const error = validateCategories(categories)
+  if (error) {
+    sendJson(res, 400, { error })
+    return
+  }
+  const normalized = categories.map(normalizeNamedEntry)
+  await writeJson(categoriesPath, normalized)
+  sendJson(res, status, normalized)
+}
+
+async function handleGetCategories(res) {
+  sendJson(res, 200, await loadCategories())
+}
+
+async function handleCreateCategory(req, res) {
+  const { id, name } = JSON.parse((await readBody(req)).toString('utf8') || '{}')
+  await saveCategories(res, [...(await loadCategories()), { id, name }], 201)
+}
+
+async function handleUpdateCategory(req, res, id) {
+  const categories = await loadCategories()
+  if (!categories.some((category) => category.id === id)) {
+    sendJson(res, 404, { error: UNKNOWN_CATEGORY_ERROR })
+    return
+  }
+  const { name } = JSON.parse((await readBody(req)).toString('utf8') || '{}')
+  await saveCategories(res, categories.map((category) => (category.id === id ? { id, name } : category)))
+}
+
+async function handleReorderCategories(req, res) {
+  const categories = await loadCategories()
+  const byId = new Map(categories.map((category) => [category.id, category]))
+  const { order } = JSON.parse((await readBody(req)).toString('utf8') || '{}')
+  const valid =
+    Array.isArray(order) &&
+    order.length === categories.length &&
+    new Set(order).size === order.length &&
+    order.every((id) => byId.has(id))
+  if (!valid) {
+    sendJson(res, 400, { error: 'Category order is out of date. Reload and try again.' })
+    return
+  }
+  await saveCategories(res, order.map((id) => byId.get(id)))
+}
+
+// Products are cleared first, so stopping halfway can leave an unused
+// category but never a product pointing at one that's gone.
+async function handleDeleteCategory(res, id) {
+  const categories = await loadCategories()
+  if (!categories.some((category) => category.id === id)) {
+    sendJson(res, 404, { error: UNKNOWN_CATEGORY_ERROR })
+    return
+  }
+  const products = await loadLiveProducts()
+  for (const product of products) {
+    if (product.category === id) delete product.category
+  }
+  await writeJson(productsPath, products)
+  await saveCategories(res, categories.filter((category) => category.id !== id))
+}
+
 // New products start unpublished with empty descriptions, so they can get
 // photos and copy in the CMS before going on the store.
 async function handleCreateProduct(req, res) {
-  const { slug, priceKr, vatRate, category: rawCategory, name } = JSON.parse((await readBody(req)).toString('utf8') || '{}')
+  const { slug, priceKr, vatRate, category, name } = JSON.parse((await readBody(req)).toString('utf8') || '{}')
 
   if (typeof slug !== 'string' || !SLUG_PATTERN.test(slug) || slug.length > MAX_SLUG_LENGTH) {
     sendJson(res, 400, { error: `Slug must be lowercase letters, digits and single hyphens, at most ${MAX_SLUG_LENGTH} characters.` })
@@ -448,9 +529,8 @@ async function handleCreateProduct(req, res) {
     sendJson(res, 400, { error: `VAT rate must be one of ${VAT_RATES.join(', ')}.` })
     return
   }
-  const category = normalizeCategory(rawCategory)
-  if (!isValidCategory(category)) {
-    sendJson(res, 400, { error: CATEGORY_ERROR })
+  if (!(await isAssignableCategory(category))) {
+    sendJson(res, 400, { error: UNKNOWN_CATEGORY_ERROR })
     return
   }
   const description = { sv: '', en: '' }
@@ -477,7 +557,7 @@ async function handleCreateProduct(req, res) {
     description,
   })
   products.push(product)
-  await writeFile(productsPath, `${JSON.stringify(products, null, 2)}\n`)
+  await writeJson(productsPath, products)
   sendJson(res, 201, product)
 }
 
@@ -540,9 +620,16 @@ const server = createServer((req, res) => {
     if (req.method === 'GET' && pathname === '/') return handleIndex(res)
     if (req.method === 'GET' && pathname === '/api/products') return handleGetProducts(res)
     if (req.method === 'POST' && pathname === '/api/products') return handleCreateProduct(req, res)
+    if (req.method === 'GET' && pathname === '/api/categories') return handleGetCategories(res)
+    if (req.method === 'POST' && pathname === '/api/categories') return handleCreateCategory(req, res)
+    if (req.method === 'POST' && pathname === '/api/categories/reorder') return handleReorderCategories(req, res)
     if (req.method === 'POST' && pathname === '/api/process') return handleProcess(res)
     if (req.method === 'GET' && pathname === '/api/changes') return handleGetChanges(res)
     if (req.method === 'POST' && pathname === '/api/commit') return handleCommit(req, res)
+
+    const storeCategoryMatch = pathname.match(/^\/api\/categories\/([^/]+)$/)
+    if (storeCategoryMatch && req.method === 'PUT') return handleUpdateCategory(req, res, decodeURIComponent(storeCategoryMatch[1]))
+    if (storeCategoryMatch && req.method === 'DELETE') return handleDeleteCategory(res, decodeURIComponent(storeCategoryMatch[1]))
 
     const uploadMatch = req.method === 'POST' && pathname.match(/^\/api\/products\/([^/]+)\/upload$/)
     if (uploadMatch) return handleUpload(req, res, decodeURIComponent(uploadMatch[1]))

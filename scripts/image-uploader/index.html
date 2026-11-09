@@ -45,7 +45,7 @@
   .commit-status { font-size: 0.85rem; color: #666; overflow-wrap: anywhere; }
   .commit-status.error { color: #b00; }
   .commit-files { margin: 0 0 1rem; padding: 0.5rem 0.75rem; max-height: 50vh; overflow-y: auto; list-style: none; border: 1px solid #ddd; border-radius: 4px; font-family: monospace; font-size: 0.8rem; overflow-wrap: anywhere; }
-  .page-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .tab-actions { display: flex; justify-content: flex-end; margin-top: 0.75rem; }
   dialog select { display: block; width: 100%; margin-top: 0.25rem; font: inherit; padding: 0.35rem 0.5rem; }
   .field-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; }
   .field-hint { display: block; font-size: 0.8rem; color: #888; margin-top: 0.2rem; }
@@ -57,20 +57,47 @@
   .variant-category-actions { display: flex; gap: 0.25rem; justify-content: flex-end; margin-top: 0.5rem; }
   .variant-delete { color: #b00; }
   .variant-add-category { margin-bottom: 1rem; }
+  .page-tabs { display: flex; gap: 0.25rem; margin-top: 1rem; border-bottom: 1px solid #ddd; }
+  .page-tabs button { border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; padding: 0.5rem 1rem; background: none; color: #666; }
+  .page-tabs button[aria-selected="true"] { border-bottom-color: #222; color: #222; font-weight: 600; }
+  /* Fixed button columns so the header row, which has no buttons, lines up. */
+  .category-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 6rem minmax(0, 1fr) 2.5rem 2.5rem 4rem 5.5rem; align-items: center; gap: 0.75rem; padding: 0.5rem 0; border-bottom: 1px solid #eee; }
+  .category-row span { overflow-wrap: anywhere; }
+  .category-header { color: #666; font-size: 0.85rem; }
 </style>
 </head>
 <body>
-<div class="page-header">
-  <h1>Svampskogen CMS</h1>
-  <button type="button" id="new-product-button">New product</button>
-</div>
+<h1>Svampskogen CMS</h1>
 <div class="commit-bar">
   <span class="commit-status" id="commit-status"></span>
   <input class="commit-message" id="commit-message" placeholder="Commit message (optional)" />
   <button type="button" id="commit-button" disabled>Commit changes</button>
 </div>
-<div id="app">Loading products…</div>
-<datalist id="category-options"></datalist>
+<div class="page-tabs" role="tablist">
+  <button type="button" role="tab" data-tab="products">Products</button>
+  <button type="button" role="tab" data-tab="categories">Categories</button>
+</div>
+<div id="products-tab">
+  <div class="tab-actions"><button type="button" id="new-product-button">New product</button></div>
+  <div id="app">Loading products…</div>
+</div>
+<div id="categories-tab" hidden>
+  <div class="tab-actions"><button type="button" id="new-category-button">New category</button></div>
+  <div id="category-list"></div>
+</div>
+
+<dialog id="category-dialog">
+  <form id="category-form" method="dialog">
+    <h3 id="category-title">New category</h3>
+    <label>Svenska <input name="name-sv" required maxlength="60" /></label>
+    <label>English <input name="name-en" required maxlength="60" /></label>
+    <div class="dialog-actions">
+      <span class="dialog-status" id="category-status"></span>
+      <button type="button" id="category-cancel">Cancel</button>
+      <button type="submit" id="category-save">Save</button>
+    </div>
+  </form>
+</dialog>
 
 <dialog id="copy-dialog">
   <form id="copy-form" method="dialog">
@@ -121,7 +148,7 @@
     <div class="field-row">
       <label>Price (kr) <input name="price" type="number" required min="1" max="99999" step="1" /></label>
       <label>VAT <select name="vat"></select></label>
-      <label>Category <input name="category" list="category-options" maxlength="60" /></label>
+      <label>Category <select name="category"></select></label>
     </div>
     <div class="dialog-actions">
       <span class="dialog-status" id="new-product-status"></span>
@@ -160,14 +187,39 @@ async function loadProducts() {
   return res.json()
 }
 
-function groupByCategory(products) {
-  const groups = new Map()
-  for (const product of products) {
-    const key = product.category ?? 'Uncategorized'
-    if (!groups.has(key)) groups.set(key, [])
-    groups.get(key).push(product)
+// The store categories as of the last render.
+let categories = []
+
+async function loadCategories() {
+  const res = await fetch('/api/categories')
+  return res.json()
+}
+
+async function sendCategoryRequest(method, path, body) {
+  const res = await fetch(`/api/categories${path}`, {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  })
+  if (!res.ok) {
+    const responseBody = await res.json().catch(() => ({}))
+    throw new Error(responseBody.error ?? `Saving category failed (${res.status})`)
   }
-  return groups
+}
+
+// In category order, with uncategorized products last.
+function groupByCategory(products) {
+  const groups = categories.map((category) => [category.name.sv, products.filter((product) => product.category === category.id)])
+  const knownIds = new Set(categories.map((category) => category.id))
+  groups.push(['Uncategorized', products.filter((product) => !knownIds.has(product.category))])
+  return groups.filter(([, items]) => items.length > 0)
+}
+
+function fillCategorySelect(select) {
+  select.replaceChildren(
+    new Option('No category', ''),
+    ...categories.map((category) => new Option(category.name.sv, category.id)),
+  )
 }
 
 async function savePublished(slug, published) {
@@ -294,6 +346,7 @@ function setupNewProductDialog() {
   slug.oninput = () => { slugEdited = slug.value !== '' }
 
   document.getElementById('new-product-button').onclick = () => {
+    fillCategorySelect(form.elements.category)
     form.reset()
     vat.value = '0.25'
     slugEdited = false
@@ -751,12 +804,11 @@ function renderProductRow(product) {
   }
   priceWrap.append(price, 'kr')
 
-  const category = document.createElement('input')
+  const category = document.createElement('select')
   category.className = 'product-category'
-  category.placeholder = 'Category'
+  category.title = 'Category'
+  fillCategorySelect(category)
   category.value = product.category ?? ''
-  category.setAttribute('list', 'category-options')
-  category.onkeydown = (event) => { if (event.key === 'Enter') category.blur() }
   category.onchange = () => {
     category.disabled = true
     status.textContent = 'Saving category…'
@@ -822,6 +874,135 @@ function renderProductRow(product) {
 
   row.append(publishedWrap, name, priceWrap, category, vat, count, variantCount, status, editCopy, variants, photos, button, input)
   return row
+}
+
+// Null while the shared dialog is creating a new category.
+let categoryDialogEntry = null
+
+function openCategoryDialog(category) {
+  const form = document.getElementById('category-form')
+  categoryDialogEntry = category
+  document.getElementById('category-title').textContent = category ? `Edit category: ${category.name.sv}` : 'New category'
+  document.getElementById('category-status').textContent = ''
+  form.elements['name-sv'].value = category?.name.sv ?? ''
+  form.elements['name-en'].value = category?.name.en ?? ''
+  document.getElementById('category-dialog').showModal()
+}
+
+function setupCategoryDialog() {
+  const dialog = document.getElementById('category-dialog')
+  const form = document.getElementById('category-form')
+  const status = document.getElementById('category-status')
+  const save = document.getElementById('category-save')
+
+  document.getElementById('new-category-button').onclick = () => openCategoryDialog(null)
+  document.getElementById('category-cancel').onclick = () => dialog.close()
+
+  form.onsubmit = (event) => {
+    event.preventDefault()
+    const name = { sv: form.elements['name-sv'].value, en: form.elements['name-en'].value }
+    let saved
+    if (categoryDialogEntry) {
+      saved = sendCategoryRequest('PUT', `/${encodeURIComponent(categoryDialogEntry.id)}`, { name })
+    } else {
+      const entry = { name }
+      assignVariantIds([...categories, entry], 'kategori')
+      saved = sendCategoryRequest('POST', '', entry)
+    }
+    save.disabled = true
+    status.textContent = ''
+    saved
+      .then(() => { dialog.close(); return render() })
+      .catch((error) => { status.textContent = `Error: ${error.message}` })
+      .finally(() => { save.disabled = false })
+  }
+}
+
+function renderCategoryRow(category, position, productCount) {
+  const row = document.createElement('div')
+  row.className = 'category-row'
+
+  const sv = document.createElement('span')
+  sv.textContent = category.name.sv
+  const en = document.createElement('span')
+  en.textContent = category.name.en
+  const count = document.createElement('span')
+  count.className = 'product-count'
+  count.textContent = `${productCount} product${productCount === 1 ? '' : 's'}`
+  const status = document.createElement('span')
+  status.className = 'product-status'
+
+  const showError = (error) => { status.textContent = `Error: ${error.message}` }
+
+  const move = (to) => {
+    const order = categories.map((entry) => entry.id)
+    order.splice(to, 0, order.splice(position, 1)[0])
+    sendCategoryRequest('POST', '/reorder', { order }).then(render).catch(showError)
+  }
+
+  const remove = variantButton('Delete', 'Delete this category', () => {
+    const warning = productCount > 0 ? ` ${productCount} product${productCount === 1 ? '' : 's'} will become uncategorized.` : ''
+    if (!confirm(`Delete ${category.name.sv}?${warning}`)) return
+    sendCategoryRequest('DELETE', `/${encodeURIComponent(category.id)}`).then(render).catch(showError)
+  })
+  remove.classList.add('variant-delete')
+
+  row.append(
+    sv,
+    en,
+    count,
+    status,
+    variantButton('↑', 'Move up (sets the order of the store buttons)', () => move(position - 1), position === 0),
+    variantButton('↓', 'Move down (sets the order of the store buttons)', () => move(position + 1), position === categories.length - 1),
+    variantButton('Edit', 'Edit the names of this category', () => openCategoryDialog(category)),
+    remove,
+  )
+  return row
+}
+
+function renderCategoriesTab(products) {
+  const list = document.getElementById('category-list')
+  if (categories.length === 0) {
+    const empty = document.createElement('p')
+    empty.className = 'photo-empty'
+    empty.textContent = 'No categories yet.'
+    list.replaceChildren(empty)
+    return
+  }
+
+  const header = document.createElement('div')
+  header.className = 'category-row category-header'
+  for (const text of ['Svenska', 'English']) {
+    const column = document.createElement('span')
+    column.textContent = text
+    header.appendChild(column)
+  }
+
+  list.replaceChildren(
+    header,
+    ...categories.map((category, position) =>
+      renderCategoryRow(category, position, products.filter((product) => product.category === category.id).length),
+    ),
+  )
+}
+
+function showTab(tab) {
+  for (const button of document.querySelectorAll('.page-tabs button')) {
+    button.setAttribute('aria-selected', String(button.dataset.tab === tab))
+  }
+  document.getElementById('products-tab').hidden = tab !== 'products'
+  document.getElementById('categories-tab').hidden = tab !== 'categories'
+}
+
+// The tab is kept in the URL so a reload stays on it.
+function setupTabs() {
+  for (const button of document.querySelectorAll('.page-tabs button')) {
+    button.onclick = () => {
+      showTab(button.dataset.tab)
+      history.replaceState(null, '', `#${button.dataset.tab}`)
+    }
+  }
+  showTab(location.hash === '#categories' ? 'categories' : 'products')
 }
 
 function setCommitStatus(text, isError = false) {
@@ -915,17 +1096,11 @@ function setupCommitBar() {
 async function render() {
   refreshCommitBar()
   const app = document.getElementById('app')
-  const products = await loadProducts()
+  const [products, loadedCategories] = await Promise.all([loadProducts(), loadCategories()])
+  categories = loadedCategories
   const groups = groupByCategory(products)
   app.innerHTML = ''
-
-  const datalist = document.getElementById('category-options')
-  datalist.innerHTML = ''
-  for (const category of new Set(products.map((p) => p.category).filter(Boolean))) {
-    const option = document.createElement('option')
-    option.value = category
-    datalist.appendChild(option)
-  }
+  renderCategoriesTab(products)
 
   for (const [category, items] of groups) {
     const heading = document.createElement('h2')
@@ -941,6 +1116,8 @@ setupNewProductDialog()
 setupCopyDialog()
 setupVariantsDialog()
 setupPhotosDialog()
+setupCategoryDialog()
+setupTabs()
 setupCommitBar()
 render().catch((error) => {
   document.getElementById('app').textContent = `Failed to load products: ${error.message}`

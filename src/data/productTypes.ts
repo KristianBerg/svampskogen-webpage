@@ -24,6 +24,16 @@ export interface ProductVariantCategory {
   options: ProductVariantOption[]
 }
 
+// A store category. The id is what products and store links refer to, so names
+// can be edited freely.
+export interface Category {
+  id: string
+  name: {
+    sv: string
+    en: string
+  }
+}
+
 export interface Product {
   slug: string
   // Whole kronor expressed in öre (24500 = 245 kr), the unit Stripe charges in.
@@ -36,9 +46,8 @@ export interface Product {
   // the whole catalog and its photos are still public files on the static site.
   published: boolean
   inStock: boolean
-  // Used only to group/sort products in the local image-upload tool's
-  // navigation — not read by the image pipeline (paths are keyed by slug
-  // alone) or shown anywhere on the storefront.
+  // The id of an entry in categories.json. Not read by the image pipeline
+  // (paths are keyed by slug alone).
   category?: string
   name: {
     sv: string

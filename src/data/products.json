@@ -5,7 +5,7 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Wildlife Garden",
+    "category": "wildlife-garden",
     "name": {
       "sv": "Nötknäppare ekorre",
       "en": "Squirrel nutcracker"
@@ -21,7 +21,7 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Wildlife Garden",
+    "category": "wildlife-garden",
     "name": {
       "sv": "Flaskkork ekorre",
       "en": "Bottle Stopper Squirrel"
@@ -37,7 +37,7 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Wildlife Garden",
+    "category": "wildlife-garden",
     "name": {
       "sv": "Flaskkork groda",
       "en": "Bottle Stopper Frog"
@@ -53,7 +53,7 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Wildlife Garden",
+    "category": "wildlife-garden",
     "name": {
       "sv": "Smyckesskrin skata",
       "en": "Magpie jewelry box"
@@ -69,7 +69,7 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Wildlife Garden",
+    "category": "wildlife-garden",
     "name": {
       "sv": "Svampkrok kantarell",
       "en": "Chanterelle Hook"
@@ -85,7 +85,7 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Wildlife Garden",
+    "category": "wildlife-garden",
     "name": {
       "sv": "Svampkrok stensopp",
       "en": "Penny Bun Hook"
@@ -101,7 +101,7 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Wildlife Garden",
+    "category": "wildlife-garden",
     "name": {
       "sv": "Svampkrok flugsvamp",
       "en": "Fly Agaric Hook"
@@ -117,7 +117,7 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Odlingskit",
+    "category": "odlingskit",
     "name": {
       "sv": "Pluggar ostronskivling",
       "en": "Oyster Mushroom Spawn Plugs"
@@ -133,7 +133,7 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Odlingskit",
+    "category": "odlingskit",
     "name": {
       "sv": "Odlingskit rosa ostronskivling \"blanda själv\"",
       "en": "Pink Oyster Mushroom Growing Kit \"Mix It Yourself\""
@@ -149,7 +149,7 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Odlingskit",
+    "category": "odlingskit",
     "name": {
       "sv": "Odlingskit citronmussling \"blanda själv\"",
       "en": "Golden Oyster Mushroom Growing Kit \"Mix It Yourself\""
@@ -165,7 +165,7 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Odlingskit",
+    "category": "odlingskit",
     "name": {
       "sv": "Odlingskit kungsmussling",
       "en": "King Oyster Mushroom Growing Kit"
@@ -181,7 +181,7 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Odlingskit",
+    "category": "odlingskit",
     "name": {
       "sv": "Odlingskit rosa ostronskivling",
       "en": "Pink Oyster Mushroom Growing Kit"
@@ -197,7 +197,7 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Odlingskit",
+    "category": "odlingskit",
     "name": {
       "sv": "Odlingskit igelkottstaggsvamp",
       "en": "Lion’s Mane Growing Kit"
@@ -213,6 +213,7 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
+    "category": "test",
     "name": {
       "sv": "Svampplockpåse broderad",
       "en": "Foraging bag with embroidery"
@@ -283,6 +284,7 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
+    "category": "test",
     "name": {
       "sv": "Svampplockpåse",
       "en": "Foraging bag"
