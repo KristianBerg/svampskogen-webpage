@@ -11,6 +11,7 @@ import { formatPrice } from '../lib/formatPrice'
 import { getProductImages } from '../lib/productImages'
 import { lineItemName } from '../lib/productVariants'
 import { createCheckoutSession } from '../lib/stripe'
+import { usePageTitle } from '../hooks/usePageTitle'
 
 // Pulled out of the component so the redirect (a plain function, not a
 // component/hook) doesn't trip react-hooks/immutability on window.location.
@@ -183,6 +184,7 @@ const TermsLink = styled(Link)`
 
 export default function CartPage({ pickupEnabled }: { pickupEnabled: boolean }) {
   const { t, i18n } = useTranslation()
+  usePageTitle(t('cart_heading'))
   const lang = i18n.resolvedLanguage === 'sv' ? 'sv' : 'en'
   const { items, setQuantity, removeItem, deliveryMethod: chosenDeliveryMethod, setDeliveryMethod } = useCart()
   // A pickup choice saved while the flag was on falls back to DHL once it's off.

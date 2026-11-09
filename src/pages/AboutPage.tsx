@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { Page } from '../components/Page'
+import { usePageTitle } from '../hooks/usePageTitle'
 
 const Divider = styled.hr`
   width: 4rem;
@@ -67,6 +68,7 @@ const BodyText = styled.p`
 
 export default function AboutPage() {
   const { t } = useTranslation()
+  usePageTitle()
 
   return (
     <Page>

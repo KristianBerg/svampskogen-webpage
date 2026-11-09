@@ -9,6 +9,7 @@ import { useCart } from '../hooks/useCart'
 import { cartItemKey, type CartItem } from '../context/cartContext'
 import { formatPrice } from '../lib/formatPrice'
 import { lineItemName } from '../lib/productVariants'
+import { usePageTitle } from '../hooks/usePageTitle'
 
 const Heading = styled.h1`
   font-size: 1.4rem;
@@ -70,6 +71,7 @@ interface OrderRow {
 
 export default function CheckoutSuccessPage({ pickupEnabled }: { pickupEnabled: boolean }) {
   const { t, i18n } = useTranslation()
+  usePageTitle(t('checkout_success_heading'))
   const lang = i18n.resolvedLanguage === 'sv' ? 'sv' : 'en'
   const { items, clear, deliveryMethod: chosenDeliveryMethod } = useCart()
   const deliveryMethod = pickupEnabled ? chosenDeliveryMethod : 'shipping'

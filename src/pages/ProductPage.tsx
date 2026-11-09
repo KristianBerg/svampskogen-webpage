@@ -8,6 +8,7 @@ import { useCart } from '../hooks/useCart'
 import { formatPrice } from '../lib/formatPrice'
 import { getProductImages } from '../lib/productImages'
 import type { VariantSelection } from '../lib/productVariants'
+import { usePageTitle } from '../hooks/usePageTitle'
 
 const Heading = styled.h1`
   font-size: 1.4rem;
@@ -139,6 +140,7 @@ export default function ProductPage() {
   const [selectedImage, setSelectedImage] = useState(0)
   const [selection, setSelection] = useState<VariantSelection>({})
   const [showMissingVariants, setShowMissingVariants] = useState(false)
+  usePageTitle(product ? product.name[lang] : t('not_found_heading'))
 
   if (!product) {
     return (

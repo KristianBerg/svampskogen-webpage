@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { Page } from '../components/Page'
+import { usePageTitle } from '../hooks/usePageTitle'
 
 const Heading = styled.h1`
   font-size: 1.4rem;
@@ -102,6 +103,7 @@ const LinkList = styled.p`
 
 export default function ReturnsPage() {
   const { t } = useTranslation()
+  usePageTitle(t('returns_heading'))
 
   return (
     <Page style={{ minHeight: '60vh' }}>

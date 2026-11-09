@@ -6,6 +6,7 @@ import { products } from '../data/products'
 import { useCart } from '../hooks/useCart'
 import { formatPrice } from '../lib/formatPrice'
 import { getProductImages } from '../lib/productImages'
+import { usePageTitle } from '../hooks/usePageTitle'
 
 const Heading = styled.h1`
   font-size: 1.4rem;
@@ -80,6 +81,7 @@ const AddToCartButton = styled.button`
 
 export default function StorePage() {
   const { t, i18n } = useTranslation()
+  usePageTitle(t('store_heading'))
   const lang = i18n.resolvedLanguage === 'sv' ? 'sv' : 'en'
   const { addItem } = useCart()
   const inStockProducts = products.filter((product) => product.inStock)

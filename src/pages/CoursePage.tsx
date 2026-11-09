@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { Page } from '../components/Page'
+import { usePageTitle } from '../hooks/usePageTitle'
 
 const CONTACT_EMAIL = 'kristian@svampskogen.com'
 
@@ -43,6 +44,7 @@ const EmailLink = styled.a`
 
 export default function CoursePage() {
   const { t } = useTranslation()
+  usePageTitle(t('course_page_heading'))
 
   return (
     <Page style={{ minHeight: '60vh' }}>
