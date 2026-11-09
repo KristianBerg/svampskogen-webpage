@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { Page } from '../components/Page'
 import { submitWithdrawal, type WithdrawalResult } from '../lib/withdraw'
+import { usePageTitle } from '../hooks/usePageTitle'
 
 const Heading = styled.h1`
   font-size: 1.4rem;
@@ -97,6 +98,7 @@ const SuccessText = styled.p`
 
 export default function WithdrawPage() {
   const { t, i18n } = useTranslation()
+  usePageTitle(t('withdraw_heading'))
   const locale = i18n.resolvedLanguage === 'sv' ? 'sv' : 'en'
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
