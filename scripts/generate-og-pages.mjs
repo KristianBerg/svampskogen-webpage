@@ -4,57 +4,135 @@
 // never executes JavaScript, so a per-route file with baked-in <meta> tags
 // is the only way to get a distinct preview without running a server.
 // React still hydrates the page normally for real visitors.
+import { existsSync } from 'node:fs'
 import { readFile, writeFile, mkdir } from 'node:fs/promises'
 import path from 'node:path'
+import sharp from 'sharp'
 
 const distDir = path.resolve(import.meta.dirname, '..', 'dist')
+const catalogPath = path.resolve(import.meta.dirname, '..', 'src', 'data', 'products.json')
+const siteUrl = 'https://svampskogen.com'
+const maxDescriptionLength = 160
 
-const pages = [
+// Off until the store gate is removed, or /store/<slug> would be indexable with
+// product metadata over the "coming soon" page. The release branch turns this on.
+const generateProductPages = false
+
+const staticPages = [
   {
     route: 'course',
+    outputFile: 'course/index.html',
     title: 'Kurser och turer – Svampskogen',
     description:
       'Säsongens svampkurser är avslutade. Nya kurser kommer under svampsäsongen 2027.',
-    image: 'https://svampskogen.com/og/course.jpg',
+    image: `${siteUrl}/og/course.jpg`,
   },
 ]
 
 function replaceTag(html, pattern, replacement) {
   if (!pattern.test(html)) {
-    throw new Error(`Expected to find ${pattern} in template HTML`)
+    throw new Error(`Expected to find ${pattern} in template`)
   }
-  return html.replace(pattern, replacement)
+  return html.replace(pattern, () => replacement)
+}
+
+// Names and descriptions come from the catalog and can contain quotes.
+function escapeHtml(text) {
+  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+}
+
+function productDescription(product) {
+  const text = product.description.sv.replace(/\s+/g, ' ').trim()
+  if (!text) {
+    return `${product.name.sv} från Svampskogen, din butik i Malmö för svampplockning och friluftsliv.`
+  }
+  if (text.length <= maxDescriptionLength) return text
+
+  const cut = text.slice(0, maxDescriptionLength - 1)
+  const lastSpace = cut.lastIndexOf(' ')
+  return `${(lastSpace > 0 ? cut.slice(0, lastSpace) : cut).replace(/[\s,;:.]+$/, '')}…`
+}
+
+// Same filter as src/data/products.ts, read as JSON because this runs under plain Node.
+async function buildProductPages() {
+  const catalog = JSON.parse(await readFile(catalogPath, 'utf8'))
+
+  return Promise.all(
+    catalog
+      .filter((product) => product.published)
+      .map(async (product) => {
+        const page = {
+          route: `store/${product.slug}`,
+          // Not <slug>/index.html: Pages answers a directory URL with a 301 to the
+          // trailing-slash form, which would redirect away from the canonical URL.
+          // A .html file is served with 200 at the extensionless path.
+          outputFile: `store/${product.slug}.html`,
+          title: `${product.name.sv} – Svampskogen`,
+          description: productDescription(product),
+          image: `${siteUrl}/og/home.jpg`,
+        }
+
+        const photoPath = `products/${product.slug}/1-full.webp`
+        const photoFile = path.join(distDir, photoPath)
+        if (existsSync(photoFile)) {
+          // The template declares home.jpg's 1200x630, which photos don't share.
+          const { width, height } = await sharp(photoFile).metadata()
+          page.image = `${siteUrl}/${photoPath}`
+          page.imageSize = { width, height }
+        }
+        return page
+      }),
+  )
+}
+
+// public/sitemap.xml lists the fixed routes. Product URLs are added here so the
+// sitemap always matches the pages this script actually emitted.
+async function addToSitemap(pages) {
+  const sitemapPath = path.join(distDir, 'sitemap.xml')
+  const entries = pages.map((page) => `  <url>\n    <loc>${siteUrl}/${page.route}</loc>\n  </url>\n`).join('')
+  const sitemap = await readFile(sitemapPath, 'utf8')
+  await writeFile(sitemapPath, replaceTag(sitemap, /<\/urlset>/, `${entries}</urlset>`))
 }
 
 async function main() {
   const template = await readFile(path.join(distDir, 'index.html'), 'utf8')
+  const productPages = generateProductPages ? await buildProductPages() : []
+  const pages = [...staticPages, ...productPages]
 
   for (const page of pages) {
-    const url = `https://svampskogen.com/${page.route}`
+    const url = `${siteUrl}/${page.route}`
+    const title = escapeHtml(page.title)
+    const description = escapeHtml(page.description)
     let html = template
-    html = replaceTag(html, /<title>.*?<\/title>/, `<title>${page.title}</title>`)
+    html = replaceTag(html, /<title>.*?<\/title>/, `<title>${title}</title>`)
     html = replaceTag(html, /<link rel="canonical" href="[^"]*" \/>/, `<link rel="canonical" href="${url}" />`)
-    html = replaceTag(html, /<meta name="description" content="[^"]*" \/>/, `<meta name="description" content="${page.description}" />`)
-    html = replaceTag(html, /<meta property="og:title" content="[^"]*" \/>/, `<meta property="og:title" content="${page.title}" />`)
+    html = replaceTag(html, /<meta name="description" content="[^"]*" \/>/, `<meta name="description" content="${description}" />`)
+    html = replaceTag(html, /<meta property="og:title" content="[^"]*" \/>/, `<meta property="og:title" content="${title}" />`)
     html = replaceTag(
       html,
       /<meta property="og:description" content="[^"]*" \/>/,
-      `<meta property="og:description" content="${page.description}" />`,
+      `<meta property="og:description" content="${description}" />`,
     )
     html = replaceTag(html, /<meta property="og:url" content="[^"]*" \/>/, `<meta property="og:url" content="${url}" />`)
     html = replaceTag(html, /<meta property="og:image" content="[^"]*" \/>/, `<meta property="og:image" content="${page.image}" />`)
-    html = replaceTag(html, /<meta name="twitter:title" content="[^"]*" \/>/, `<meta name="twitter:title" content="${page.title}" />`)
+    if (page.imageSize) {
+      html = replaceTag(html, /<meta property="og:image:width" content="[^"]*" \/>/, `<meta property="og:image:width" content="${page.imageSize.width}" />`)
+      html = replaceTag(html, /<meta property="og:image:height" content="[^"]*" \/>/, `<meta property="og:image:height" content="${page.imageSize.height}" />`)
+    }
+    html = replaceTag(html, /<meta name="twitter:title" content="[^"]*" \/>/, `<meta name="twitter:title" content="${title}" />`)
     html = replaceTag(
       html,
       /<meta name="twitter:description" content="[^"]*" \/>/,
-      `<meta name="twitter:description" content="${page.description}" />`,
+      `<meta name="twitter:description" content="${description}" />`,
     )
     html = replaceTag(html, /<meta name="twitter:image" content="[^"]*" \/>/, `<meta name="twitter:image" content="${page.image}" />`)
 
-    const outDir = path.join(distDir, page.route)
-    await mkdir(outDir, { recursive: true })
-    await writeFile(path.join(outDir, 'index.html'), html)
+    const outputPath = path.join(distDir, page.outputFile)
+    await mkdir(path.dirname(outputPath), { recursive: true })
+    await writeFile(outputPath, html)
   }
+
+  await addToSitemap(productPages)
 }
 
 main()
