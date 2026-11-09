@@ -103,6 +103,12 @@ const Shipping = styled.p`
   margin-bottom: 1.5rem;
 `
 
+const DeliveryTime = styled.p`
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 1.5rem;
+`
+
 const DeliveryFieldset = styled.fieldset`
   border: none;
   padding: 0;
@@ -293,6 +299,7 @@ export default function CartPage({ pickupEnabled }: { pickupEnabled: boolean }) 
               {formatPrice(shippingMethod.priceOre)}
             </Shipping>
           )}
+          {deliveryMethod === 'shipping' && <DeliveryTime>{t('cart_delivery_time')}</DeliveryTime>}
           <Total>
             {t('cart_total')}: {formatPrice(total)}
           </Total>
@@ -300,6 +307,15 @@ export default function CartPage({ pickupEnabled }: { pickupEnabled: boolean }) 
             {t('cart_terms_prefix')}
             {' '}
             <TermsLink to="/returns">{t('footer_returns_link')}</TermsLink>.
+            {' '}
+            {t('cart_withdraw_prefix')}
+            {' '}
+            <TermsLink to="/withdraw">{t('withdraw_link')}</TermsLink>
+            {t('cart_withdraw_suffix')}
+            {' '}
+            {t('cart_privacy_prefix')}
+            {' '}
+            <TermsLink to="/privacy">{t('footer_privacy_link')}</TermsLink>.
           </TermsNotice>
           {checkoutError && <ErrorNotice>{t('cart_checkout_error')}</ErrorNotice>}
           <CheckoutButton onClick={() => void handleCheckout()} disabled={isCheckingOut}>

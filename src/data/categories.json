@@ -1,0 +1,23 @@
+[
+  {
+    "id": "wildlife-garden",
+    "name": {
+      "sv": "Wildlife Garden",
+      "en": "Wildlife Garden"
+    }
+  },
+  {
+    "id": "odlingskit",
+    "name": {
+      "sv": "Odlingskit",
+      "en": "Growing kits"
+    }
+  },
+  {
+    "id": "test",
+    "name": {
+      "sv": "Svampplockpåsar",
+      "en": "Foraging bags"
+    }
+  }
+]

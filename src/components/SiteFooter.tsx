@@ -56,8 +56,14 @@ export function SiteFooter() {
         Claesgatan 8, 214 26 Malmö
         <br />
         Org.nr <OrgNumber>559583-9159</OrgNumber>
+        <br />
+        {t('company_vat_label')} <OrgNumber>SE559583915901</OrgNumber>
+        <br />
+        kristian@svampskogen.com
       </CompanyDetails>
       <FooterLink to="/returns">{t('footer_returns_link')}</FooterLink>
+      <FooterLink to="/withdraw">{t('withdraw_link')}</FooterLink>
+      <FooterLink to="/privacy">{t('footer_privacy_link')}</FooterLink>
     </Footer>
   )
 }

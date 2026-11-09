@@ -5,14 +5,14 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Wildlife Garden",
+    "category": "wildlife-garden",
     "name": {
       "sv": "Nötknäppare ekorre",
       "en": "Squirrel nutcracker"
     },
     "description": {
-      "sv": "",
-      "en": ""
+      "sv": "Dekorativ nötknäppare i massivt handsnidat trä, formad som en ekorre som knäcker nötter upp till 3 cm i famnen. Målad med vattenbaserad färg och 23 cm hög.",
+      "en": "A decorative nutcracker in solid hand-carved wood, shaped like a squirrel that cracks nuts up to 3 cm in its arms. Painted with water-based paint and 23 cm tall."
     }
   },
   {
@@ -21,14 +21,14 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Wildlife Garden",
+    "category": "wildlife-garden",
     "name": {
       "sv": "Flaskkork ekorre",
       "en": "Bottle Stopper Squirrel"
     },
     "description": {
-      "sv": "",
-      "en": ""
+      "sv": "Handsnidad flaskkork i lindträ med en ekorre, handmålad med vattenbaserad färg. Passar många typer av flaskor och är 7,5 cm hög.",
+      "en": "A hand-carved bottle stopper in linden wood with a squirrel, hand-painted with water-based paint. Fits many types of bottle and stands 7.5 cm tall."
     }
   },
   {
@@ -37,14 +37,14 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Wildlife Garden",
+    "category": "wildlife-garden",
     "name": {
       "sv": "Flaskkork groda",
       "en": "Bottle Stopper Frog"
     },
     "description": {
-      "sv": "",
-      "en": ""
+      "sv": "Handsnidad flaskkork i lindträ med en groda, handmålad med vattenbaserad färg. Passar många typer av flaskor och är 6 cm hög.",
+      "en": "A hand-carved bottle stopper in linden wood with a frog, hand-painted with water-based paint. Fits many types of bottle and stands 6 cm tall."
     }
   },
   {
@@ -53,14 +53,14 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Wildlife Garden",
+    "category": "wildlife-garden",
     "name": {
       "sv": "Smyckesskrin skata",
       "en": "Magpie jewelry box"
     },
     "description": {
-      "sv": "",
-      "en": ""
+      "sv": "Handgjort smyckesskrin i trä med en skata i karvsnitt på locket. Mäter 15 x 15 cm och är 6,4 cm högt.",
+      "en": "A handmade wooden jewelry box with a chip-carved magpie on the lid. It measures 15 x 15 cm and is 6.4 cm high."
     }
   },
   {
@@ -69,14 +69,14 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Wildlife Garden",
+    "category": "wildlife-garden",
     "name": {
       "sv": "Svampkrok kantarell",
       "en": "Chanterelle Hook"
     },
     "description": {
-      "sv": "",
-      "en": ""
+      "sv": "Handsnidad väggkrok i lindträ, formad som en kantarell och målad med vattenbaserad färg. Kroken är i metall och skruvas fast i väggen, och med varje krok följer ett häfte med fakta om arten.",
+      "en": "A hand-carved wall hook in linden wood, shaped like a chanterelle and painted with water-based paint. The hook itself is metal and screws to the wall, and each one comes with a booklet of facts about the species."
     }
   },
   {
@@ -85,14 +85,14 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Wildlife Garden",
+    "category": "wildlife-garden",
     "name": {
       "sv": "Svampkrok stensopp",
       "en": "Penny Bun Hook"
     },
     "description": {
-      "sv": "",
-      "en": ""
+      "sv": "Handsnidad väggkrok i lindträ, formad som en stensopp och målad med vattenbaserad färg. Kroken är i metall och skruvas fast i väggen, och med varje krok följer ett häfte med fakta om arten.",
+      "en": "A hand-carved wall hook in linden wood, shaped like a penny bun and painted with water-based paint. The hook itself is metal and screws to the wall, and each one comes with a booklet of facts about the species."
     }
   },
   {
@@ -101,14 +101,14 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Wildlife Garden",
+    "category": "wildlife-garden",
     "name": {
       "sv": "Svampkrok flugsvamp",
       "en": "Fly Agaric Hook"
     },
     "description": {
-      "sv": "",
-      "en": ""
+      "sv": "Handsnidad väggkrok i lindträ, formad som en röd flugsvamp och målad med vattenbaserad färg. Kroken är i metall och skruvas fast i väggen, och med varje krok följer ett häfte med fakta om arten.",
+      "en": "A hand-carved wall hook in linden wood, shaped like a fly agaric and painted with water-based paint. The hook itself is metal and screws to the wall, and each one comes with a booklet of facts about the species."
     }
   },
   {
@@ -117,7 +117,7 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Odlingskit",
+    "category": "odlingskit",
     "name": {
       "sv": "Pluggar ostronskivling",
       "en": "Oyster Mushroom Spawn Plugs"
@@ -133,7 +133,7 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Odlingskit",
+    "category": "odlingskit",
     "name": {
       "sv": "Odlingskit rosa ostronskivling \"blanda själv\"",
       "en": "Pink Oyster Mushroom Growing Kit \"Mix It Yourself\""
@@ -149,7 +149,7 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Odlingskit",
+    "category": "odlingskit",
     "name": {
       "sv": "Odlingskit citronmussling \"blanda själv\"",
       "en": "Golden Oyster Mushroom Growing Kit \"Mix It Yourself\""
@@ -165,7 +165,7 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Odlingskit",
+    "category": "odlingskit",
     "name": {
       "sv": "Odlingskit kungsmussling",
       "en": "King Oyster Mushroom Growing Kit"
@@ -181,7 +181,7 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Odlingskit",
+    "category": "odlingskit",
     "name": {
       "sv": "Odlingskit rosa ostronskivling",
       "en": "Pink Oyster Mushroom Growing Kit"
@@ -197,7 +197,7 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
-    "category": "Odlingskit",
+    "category": "odlingskit",
     "name": {
       "sv": "Odlingskit igelkottstaggsvamp",
       "en": "Lion’s Mane Growing Kit"
@@ -213,13 +213,14 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
+    "category": "test",
     "name": {
       "sv": "Svampplockpåse broderad",
       "en": "Foraging bag with embroidery"
     },
     "description": {
       "sv": "Dessa plockpåsar är perfekta att ta med ut i skogen när du plockar svamp. Du fäster påsen i ditt bälte eller i en karbinhake och har händerna fria att plocka och rensa med kniv.\n\nPåsarna är gjorda i Sverige av Fabrikörerna i Göteborg och handbroderade av oss.",
-      "en": "TODO: write copy"
+      "en": "These foraging bags are perfect to bring along when you head into the forest to pick mushrooms. Fasten the bag to your belt or a carabiner and your hands stay free to pick and clean mushrooms with a knife.\n\nThe bags are made in Sweden by Fabrikörerna in Gothenburg and hand-embroidered by us."
     },
     "variants": [
       {
@@ -283,13 +284,14 @@
     "vatRate": 0.25,
     "published": true,
     "inStock": true,
+    "category": "test",
     "name": {
       "sv": "Svampplockpåse",
       "en": "Foraging bag"
     },
     "description": {
       "sv": "Dessa plockpåsar är perfekta att ta med ut i skogen när du plockar svamp. Du fäster påsen i ditt bälte eller i en karbinhake och har händerna fria att plocka och rensa med kniv.\n\nPåsarna är gjorda i Sverige av Fabrikörerna i Göteborg.",
-      "en": "TODO: write copy"
+      "en": "These foraging bags are perfect to bring along when you head into the forest to pick mushrooms. Fasten the bag to your belt or a carabiner and your hands stay free to pick and clean mushrooms with a knife.\n\nThe bags are made in Sweden by Fabrikörerna in Gothenburg."
     },
     "variants": [
       {

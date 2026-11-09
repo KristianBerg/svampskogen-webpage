@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { Page } from '../components/Page'
+import { categories } from '../data/categories'
 import { products } from '../data/products'
 import { useCart } from '../hooks/useCart'
 import { formatPrice } from '../lib/formatPrice'
@@ -79,12 +80,44 @@ const AddToCartButton = styled.button`
   }
 `
 
+const CategoryBar = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  width: min(960px, 92vw);
+  margin-bottom: 1.5rem;
+`
+
+const CategoryButton = styled(AddToCartButton)`
+  &[aria-pressed='true'],
+  &[aria-pressed='true']:hover {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-background);
+  }
+`
+
 export default function StorePage() {
   const { t, i18n } = useTranslation()
   usePageTitle(t('store_heading'))
   const lang = i18n.resolvedLanguage === 'sv' ? 'sv' : 'en'
   const { addItem } = useCart()
+  const [searchParams, setSearchParams] = useSearchParams()
   const inStockProducts = products.filter((product) => product.inStock)
+  // Only categories with something for sale, so no button leads to an empty page.
+  const availableCategories = categories.filter((category) =>
+    inStockProducts.some((product) => product.category === category.id),
+  )
+  const activeCategoryId =
+    availableCategories.find((category) => category.id === searchParams.get('category'))?.id ?? null
+  const visibleProducts = activeCategoryId
+    ? inStockProducts.filter((product) => product.category === activeCategoryId)
+    : inStockProducts
+
+  const selectCategory = (categoryId: string | null) => {
+    setSearchParams(categoryId ? { category: categoryId } : {}, { replace: true })
+  }
 
   return (
     <Page style={{ minHeight: '60vh' }}>
@@ -92,24 +125,43 @@ export default function StorePage() {
       {inStockProducts.length === 0 ? (
         <p>{t('store_coming_soon')}</p>
       ) : (
-        <ProductGrid>
-          {inStockProducts.map((product) => (
-            <ProductCard key={product.slug}>
-              <ProductImageLink to={`/store/${product.slug}`}>
-                <ProductImage src={getProductImages(product)[0].thumb} alt={product.name[lang]} loading="lazy" />
-              </ProductImageLink>
-              <ProductName to={`/store/${product.slug}`}>{product.name[lang]}</ProductName>
-              <ProductPrice>{formatPrice(product.priceOre)}</ProductPrice>
-              {product.variants?.length ? (
-                <AddToCartButton as={Link} to={`/store/${product.slug}`}>
-                  {t('choose_options')}
-                </AddToCartButton>
-              ) : (
-                <AddToCartButton onClick={() => addItem(product.slug)}>{t('add_to_cart')}</AddToCartButton>
-              )}
-            </ProductCard>
-          ))}
-        </ProductGrid>
+        <>
+          {availableCategories.length > 0 && (
+            <CategoryBar>
+              <CategoryButton type="button" aria-pressed={activeCategoryId === null} onClick={() => selectCategory(null)}>
+                {t('store_category_all')}
+              </CategoryButton>
+              {availableCategories.map((category) => (
+                <CategoryButton
+                  key={category.id}
+                  type="button"
+                  aria-pressed={activeCategoryId === category.id}
+                  onClick={() => selectCategory(category.id)}
+                >
+                  {category.name[lang]}
+                </CategoryButton>
+              ))}
+            </CategoryBar>
+          )}
+          <ProductGrid>
+            {visibleProducts.map((product) => (
+              <ProductCard key={product.slug}>
+                <ProductImageLink to={`/store/${product.slug}`}>
+                  <ProductImage src={getProductImages(product)[0].thumb} alt={product.name[lang]} loading="lazy" />
+                </ProductImageLink>
+                <ProductName to={`/store/${product.slug}`}>{product.name[lang]}</ProductName>
+                <ProductPrice>{formatPrice(product.priceOre)}</ProductPrice>
+                {product.variants?.length ? (
+                  <AddToCartButton as={Link} to={`/store/${product.slug}`}>
+                    {t('choose_options')}
+                  </AddToCartButton>
+                ) : (
+                  <AddToCartButton onClick={() => addItem(product.slug)}>{t('add_to_cart')}</AddToCartButton>
+                )}
+              </ProductCard>
+            ))}
+          </ProductGrid>
+        </>
       )}
     </Page>
   )
