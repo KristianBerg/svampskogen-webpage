@@ -74,9 +74,11 @@ function confirmationEmail(withdrawal: Withdrawal, receivedAt: string, locale: L
   const { name, email, items, orderReference } = withdrawal
   const address = `${returnAddress.recipient}\n${returnAddress.street}\n${returnAddress.postalCity}`
 
+  // The time received makes each subject unique, so Gmail gives every
+  // withdrawal its own thread instead of grouping them by subject.
   if (locale === 'sv') {
     return {
-      subject: 'Vi har tagit emot att du ångrar ditt köp',
+      subject: `Vi har tagit emot att du ångrar ditt köp (${receivedAt})`,
       text: [
         `Hej ${name},`,
         `Vi tog emot ditt meddelande om att ångra köpet den ${receivedAt}.`,
@@ -91,7 +93,7 @@ function confirmationEmail(withdrawal: Withdrawal, receivedAt: string, locale: L
   }
 
   return {
-    subject: "We've received your cancellation",
+    subject: `We've received your cancellation (${receivedAt})`,
     text: [
       `Hi ${name},`,
       `We received your message cancelling your purchase on ${receivedAt}.`,
