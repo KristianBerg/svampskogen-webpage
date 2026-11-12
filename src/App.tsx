@@ -14,11 +14,9 @@ import WithdrawPage from './pages/WithdrawPage'
 import PrivacyPage from './pages/PrivacyPage'
 import NotFoundPage from './pages/NotFoundPage'
 import { useCart } from './hooks/useCart'
-import { usePreviewFlags } from './hooks/usePreviewFlags'
 import { CartIcon } from './components/icons/CartIcon'
 import { SiteHeader } from './components/SiteHeader'
 import { SiteFooter } from './components/SiteFooter'
-import { StoreGate } from './components/StoreGate'
 import { SandboxBadge } from './components/SandboxBadge'
 
 const TopBar = styled.div`
@@ -97,7 +95,6 @@ const LangButton = styled.button<{ $active: boolean }>`
 function AppContent() {
   const { t, i18n } = useTranslation()
   const { itemCount } = useCart()
-  const { store: storePreviewEnabled, pickup: pickupEnabled } = usePreviewFlags()
   const [isFlashing, setIsFlashing] = useState(false)
   const previousItemCount = useRef(itemCount)
 
@@ -116,27 +113,25 @@ function AppContent() {
       <SiteHeader />
       <SandboxBadge />
       <TopBar>
-        {storePreviewEnabled && (
-          <CartLink to="/cart" $flash={isFlashing}>
-            <CartIcon />
-            {t('cart_link')}
-            {itemCount > 0 ? ` (${itemCount})` : ''}
-          </CartLink>
-        )}
+        <CartLink to="/cart" $flash={isFlashing}>
+          <CartIcon />
+          {t('cart_link')}
+          {itemCount > 0 ? ` (${itemCount})` : ''}
+        </CartLink>
         <LangSwitcher>
           <LangButton $active={i18n.resolvedLanguage === 'sv'} onClick={() => void i18n.changeLanguage('sv')}>SV</LangButton>
           <LangButton $active={i18n.resolvedLanguage === 'en'} onClick={() => void i18n.changeLanguage('en')}>EN</LangButton>
         </LangSwitcher>
       </TopBar>
       <Routes>
-        <Route path="/" element={<AboutPage />} />
-        <Route path="/about" element={<Navigate to="/" replace />} />
+        <Route path="/" element={<StorePage />} />
+        <Route path="/about" element={<AboutPage />} />
         <Route path="/course" element={<CoursePage />} />
-        <Route path="/store" element={<StoreGate enabled={storePreviewEnabled}><StorePage /></StoreGate>} />
-        <Route path="/store/:slug" element={<StoreGate enabled={storePreviewEnabled}><ProductPage /></StoreGate>} />
-        <Route path="/cart" element={<StoreGate enabled={storePreviewEnabled}><CartPage pickupEnabled={pickupEnabled} /></StoreGate>} />
-        <Route path="/checkout/success" element={<StoreGate enabled={storePreviewEnabled}><CheckoutSuccessPage pickupEnabled={pickupEnabled} /></StoreGate>} />
-        <Route path="/checkout/cancel" element={<StoreGate enabled={storePreviewEnabled}><CheckoutCancelPage /></StoreGate>} />
+        <Route path="/store" element={<Navigate to="/" replace />} />
+        <Route path="/store/:slug" element={<ProductPage />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
+        <Route path="/checkout/cancel" element={<CheckoutCancelPage />} />
         <Route path="/returns" element={<ReturnsPage />} />
         <Route path="/withdraw" element={<WithdrawPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />

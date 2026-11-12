@@ -35,6 +35,7 @@ jobs:
           cache-dependency-path: worker/package-lock.json
       - run: npm ci
       - run: node ../scripts/check-catalog.mjs
+      - run: npm run typecheck
       - name: Sync Stripe secret
         run: printf '%s' "$STRIPE_SECRET_KEY" | npx wrangler secret put STRIPE_SECRET_KEY --env production
         env:

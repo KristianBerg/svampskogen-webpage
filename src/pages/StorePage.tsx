@@ -50,6 +50,13 @@ const ProductName = styled(Link)`
   color: var(--color-text-primary);
   text-decoration: none;
   font-size: 0.95rem;
+  line-height: 1.4;
+  /* Every name gets two lines, so prices and buttons line up across a row. */
+  min-height: 2.8em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 
   &:hover {
     color: var(--color-accent);
@@ -100,7 +107,7 @@ const CategoryButton = styled(AddToCartButton)`
 
 export default function StorePage() {
   const { t, i18n } = useTranslation()
-  usePageTitle(t('store_heading'))
+  usePageTitle()
   const lang = i18n.resolvedLanguage === 'sv' ? 'sv' : 'en'
   const { addItem } = useCart()
   const [searchParams, setSearchParams] = useSearchParams()

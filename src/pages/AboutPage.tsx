@@ -68,7 +68,7 @@ const BodyText = styled.p`
 
 export default function AboutPage() {
   const { t } = useTranslation()
-  usePageTitle()
+  usePageTitle(t('nav_about'))
 
   return (
     <Page>

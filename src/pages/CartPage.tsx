@@ -48,6 +48,53 @@ const Table = styled.table`
     padding: 1rem 0;
     border-bottom: 1px solid var(--color-border);
   }
+
+  /* On phones each item takes two rows: picture and name, then quantity, price and remove. */
+  @media (max-width: 600px) {
+    display: block;
+
+    thead {
+      display: none;
+    }
+
+    tbody {
+      display: block;
+    }
+
+    tr {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      grid-template-areas:
+        'product product product'
+        'quantity price remove';
+      align-items: center;
+      column-gap: 1rem;
+      row-gap: 0.75rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    td {
+      padding: 0;
+      border-bottom: none;
+    }
+
+    td:nth-child(1) {
+      grid-area: product;
+    }
+
+    td:nth-child(2) {
+      grid-area: quantity;
+    }
+
+    td:nth-child(3) {
+      grid-area: price;
+    }
+
+    td:nth-child(4) {
+      grid-area: remove;
+    }
+  }
 `
 
 const ProductCell = styled.div`
@@ -98,11 +145,6 @@ const Total = styled.p`
   margin-bottom: 1.5rem;
 `
 
-const Shipping = styled.p`
-  font-size: 1rem;
-  margin-bottom: 1.5rem;
-`
-
 const DeliveryTime = styled.p`
   font-size: 0.85rem;
   color: var(--color-text-secondary);
@@ -113,9 +155,11 @@ const DeliveryFieldset = styled.fieldset`
   border: none;
   padding: 0;
   margin: 0 0 1.5rem;
+  max-width: min(560px, 90vw);
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  text-align: left;
 
   legend {
     font-size: 1rem;
@@ -123,14 +167,17 @@ const DeliveryFieldset = styled.fieldset`
     margin-bottom: 0.5rem;
   }
 
+  /* Top-aligned so a wrapped option keeps its radio button level with the first line. */
   label {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.5rem;
     cursor: pointer;
   }
 
   input {
+    flex-shrink: 0;
+    margin-top: 0.2em;
     accent-color: var(--color-text-primary);
   }
 `
@@ -165,8 +212,19 @@ const BackLink = styled(Link)`
   margin-top: 1.5rem;
 `
 
+const ProductLink = styled(Link)`
+  color: var(--color-text-primary);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--color-accent);
+  }
+`
+
 const TermsNotice = styled.p`
+  width: min(560px, 90vw);
   font-size: 0.8rem;
+  line-height: 1.6;
   color: var(--color-text-secondary);
   margin-bottom: 1.5rem;
 `
@@ -179,6 +237,7 @@ const ErrorNotice = styled.p`
 
 const TermsLink = styled(Link)`
   color: var(--color-text-secondary);
+  text-decoration: none;
   border-bottom: 1px solid var(--color-border);
   padding-bottom: 1px;
 
@@ -188,13 +247,11 @@ const TermsLink = styled(Link)`
   }
 `
 
-export default function CartPage({ pickupEnabled }: { pickupEnabled: boolean }) {
+export default function CartPage() {
   const { t, i18n } = useTranslation()
   usePageTitle(t('cart_heading'))
   const lang = i18n.resolvedLanguage === 'sv' ? 'sv' : 'en'
-  const { items, setQuantity, removeItem, deliveryMethod: chosenDeliveryMethod, setDeliveryMethod } = useCart()
-  // A pickup choice saved while the flag was on falls back to DHL once it's off.
-  const deliveryMethod = pickupEnabled ? chosenDeliveryMethod : 'shipping'
+  const { items, setQuantity, removeItem, deliveryMethod, setDeliveryMethod } = useCart()
   const [isCheckingOut, setIsCheckingOut] = useState(false)
   const [checkoutError, setCheckoutError] = useState(false)
 
@@ -249,12 +306,13 @@ export default function CartPage({ pickupEnabled }: { pickupEnabled: boolean }) 
                   <td>
                     <ProductCell>
                       <ProductImage src={getProductImages(product)[0].thumb} alt="" loading="lazy" />
-                      <Link to={`/store/${product.slug}`}>{lineItemName(product, item.variants, lang)}</Link>
+                      <ProductLink to={`/store/${product.slug}`}>{lineItemName(product, item.variants, lang)}</ProductLink>
                     </ProductCell>
                   </td>
                   <td>
                     <QuantityInput
                       type="number"
+                      aria-label={t('cart_quantity_column')}
                       min={1}
                       value={item.quantity}
                       onChange={(event) => setQuantity(cartItemKey(item), Number(event.target.value))}
@@ -271,34 +329,27 @@ export default function CartPage({ pickupEnabled }: { pickupEnabled: boolean }) 
           <Subtotal>
             {t('cart_subtotal')}: {formatPrice(subtotal)}
           </Subtotal>
-          {pickupEnabled ? (
-            <DeliveryFieldset>
-              <legend>{t('cart_delivery_heading')}</legend>
-              <label>
-                <input
-                  type="radio"
-                  name="delivery"
-                  checked={deliveryMethod === 'shipping'}
-                  onChange={() => setDeliveryMethod('shipping')}
-                />
-                {shippingMethod.name[lang]}: {formatPrice(shippingMethod.priceOre)}
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="delivery"
-                  checked={deliveryMethod === 'pickup'}
-                  onChange={() => setDeliveryMethod('pickup')}
-                />
-                {t('cart_pickup_option')}: {formatPrice(0)}
-              </label>
-            </DeliveryFieldset>
-          ) : (
-            <Shipping>
-              {t('cart_shipping_heading')} ({shippingMethod.name[lang]}):{' '}
-              {formatPrice(shippingMethod.priceOre)}
-            </Shipping>
-          )}
+          <DeliveryFieldset>
+            <legend>{t('cart_delivery_heading')}</legend>
+            <label>
+              <input
+                type="radio"
+                name="delivery"
+                checked={deliveryMethod === 'shipping'}
+                onChange={() => setDeliveryMethod('shipping')}
+              />
+              {shippingMethod.name[lang]}: {formatPrice(shippingMethod.priceOre)}
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="delivery"
+                checked={deliveryMethod === 'pickup'}
+                onChange={() => setDeliveryMethod('pickup')}
+              />
+              {t('cart_pickup_option')}: {formatPrice(0)}
+            </label>
+          </DeliveryFieldset>
           {deliveryMethod === 'shipping' && <DeliveryTime>{t('cart_delivery_time')}</DeliveryTime>}
           <Total>
             {t('cart_total')}: {formatPrice(total)}
@@ -323,7 +374,7 @@ export default function CartPage({ pickupEnabled }: { pickupEnabled: boolean }) 
           </CheckoutButton>
         </>
       )}
-      <BackLink to="/store">{t('back_to_store')}</BackLink>
+      <BackLink to="/">{t('back_to_store')}</BackLink>
     </Page>
   )
 }

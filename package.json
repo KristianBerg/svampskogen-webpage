@@ -5,7 +5,6 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently --kill-others-on-fail --names web,worker,cms --prefix-colors green,yellow,cyan \"vite --strictPort\" \"npm --prefix worker run dev\" \"npm run upload-images\"",
-    "dev:live": "VITE_CATALOG_MODE=live vite",
     "dev:session": "node scripts/dev-session.mjs",
     "dev:session:stop": "node scripts/dev-session.mjs stop",
     "build": "node scripts/check-catalog.mjs && tsc -b && vite build",

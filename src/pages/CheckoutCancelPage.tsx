@@ -28,7 +28,7 @@ export default function CheckoutCancelPage() {
     <Page style={{ minHeight: '60vh' }}>
       <Heading>{t('checkout_cancel_heading')}</Heading>
       <p>{t('checkout_cancel_body')}</p>
-      <BackLink to="/store">{t('back_to_store')}</BackLink>
+      <BackLink to="/">{t('back_to_store')}</BackLink>
     </Page>
   )
 }

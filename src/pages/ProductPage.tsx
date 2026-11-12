@@ -146,7 +146,7 @@ export default function ProductPage() {
     return (
       <Page style={{ minHeight: '60vh' }}>
         <Heading>{t('product_not_found')}</Heading>
-        <BackLink to="/store">{t('back_to_store')}</BackLink>
+        <BackLink to="/">{t('back_to_store')}</BackLink>
       </Page>
     )
   }
@@ -215,7 +215,7 @@ export default function ProductPage() {
         />
         <AddToCartButton onClick={handleAddToCart}>{t('add_to_cart')}</AddToCartButton>
       </AddToCartRow>
-      <BackLink to="/store">{t('back_to_store')}</BackLink>
+      <BackLink to="/">{t('back_to_store')}</BackLink>
     </Page>
   )
 }

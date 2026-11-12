@@ -14,9 +14,9 @@ const catalogPath = path.resolve(import.meta.dirname, '..', 'src', 'data', 'prod
 const siteUrl = 'https://svampskogen.com'
 const maxDescriptionLength = 160
 
-// Off until the store gate is removed, or /store/<slug> would be indexable with
-// product metadata over the "coming soon" page. The release branch turns this on.
-const generateProductPages = false
+// On since the store launched. Turn off to stop publishing a static page and
+// sitemap entry per product.
+const generateProductPages = true
 
 const staticPages = [
   {
@@ -26,6 +26,37 @@ const staticPages = [
     description:
       'Säsongens svampkurser är avslutade. Nya kurser kommer under svampsäsongen 2027.',
     image: `${siteUrl}/og/course.jpg`,
+  },
+  // A .html file is served with 200 at the extensionless path, while a
+  // directory URL gets a 301 to its trailing-slash form.
+  {
+    route: 'about',
+    outputFile: 'about.html',
+    title: 'Om oss – Svampskogen',
+    description:
+      'Svampskogen är en specialbutik för svampplockning och friluftsliv i Mitt Möllan i Malmö. Öppettider, kontakt och mer om butiken.',
+    image: `${siteUrl}/og/home.jpg`,
+  },
+  {
+    route: 'returns',
+    outputFile: 'returns.html',
+    title: 'Retur och villkor – Svampskogen',
+    description: 'Ångerrätt, reklamation, leverans och köpvillkor för Svampskogens webbutik.',
+    image: `${siteUrl}/og/home.jpg`,
+  },
+  {
+    route: 'withdraw',
+    outputFile: 'withdraw.html',
+    title: 'Ångra köp – Svampskogen',
+    description: 'Ångra ditt köp från Svampskogens webbutik.',
+    image: `${siteUrl}/og/home.jpg`,
+  },
+  {
+    route: 'privacy',
+    outputFile: 'privacy.html',
+    title: 'Integritetspolicy – Svampskogen',
+    description: 'Så behandlar Svampskogen dina personuppgifter.',
+    image: `${siteUrl}/og/home.jpg`,
   },
 ]
 

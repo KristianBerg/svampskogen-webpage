@@ -8,7 +8,7 @@ const Hero = styled.div`
   --color-text-secondary: #e4ddd0;
 
   width: 100%;
-  min-height: 28vh;
+  height: 260px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,12 +16,23 @@ const Hero = styled.div`
   padding: 1.5rem;
   text-align: center;
   background-image: linear-gradient(180deg, rgba(18, 20, 14, 0.4), rgba(18, 20, 14, 0.65)), url(${heroImage});
-  background-size: cover;
-  background-position: center 15%;
+  /* The photo stays at its own size, so its zoom doesn't change with the window;
+     a wider window only shows more of it. Scales up only past the photo's width. */
+  background-size: 100% 100%, max(2000px, 100%) auto;
+  /* Keeps the mushroom cluster left of centre in view. */
+  background-position: center, 35% 20%;
+  background-repeat: no-repeat;
+
+  /* Bottom-aligned on phones so the logo sits clear of the fixed cart and language buttons. */
+  @media (max-width: 600px) {
+    height: 250px;
+    justify-content: flex-end;
+    padding-bottom: 1.5rem;
+  }
 `
 
 const Logo = styled.img`
-  width: min(260px, 55vw);
+  width: min(205px, 43vw);
   height: auto;
 `
 
@@ -31,6 +42,10 @@ const Subtitle = styled.p`
   letter-spacing: 0.12em;
   text-transform: uppercase;
   margin-top: 1rem;
+
+  @media (max-width: 600px) {
+    margin-top: 0.75rem;
+  }
 `
 
 const NavRow = styled.nav`
@@ -63,13 +78,13 @@ export function SiteHeader() {
   return (
     <>
       <Hero>
-        <Logo src={logotype} alt="Svampskogen" />
+        <Logo src={logotype} alt="Svampskogen" width={1035} height={754} />
         <Subtitle>{t('subtitle')}</Subtitle>
       </Hero>
       <NavRow>
-        <NavLink to="/store" $active={pathname.startsWith('/store')}>{t('nav_store')}</NavLink>
+        <NavLink to="/" $active={pathname === '/' || pathname.startsWith('/store')}>{t('nav_store')}</NavLink>
         <NavLink to="/course" $active={pathname.startsWith('/course')}>{t('nav_course')}</NavLink>
-        <NavLink to="/" $active={pathname === '/'}>{t('nav_about')}</NavLink>
+        <NavLink to="/about" $active={pathname.startsWith('/about')}>{t('nav_about')}</NavLink>
       </NavRow>
     </>
   )

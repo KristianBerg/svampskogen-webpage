@@ -69,12 +69,11 @@ interface OrderRow {
   product: Product
 }
 
-export default function CheckoutSuccessPage({ pickupEnabled }: { pickupEnabled: boolean }) {
+export default function CheckoutSuccessPage() {
   const { t, i18n } = useTranslation()
   usePageTitle(t('checkout_success_heading'))
   const lang = i18n.resolvedLanguage === 'sv' ? 'sv' : 'en'
-  const { items, clear, deliveryMethod: chosenDeliveryMethod } = useCart()
-  const deliveryMethod = pickupEnabled ? chosenDeliveryMethod : 'shipping'
+  const { items, clear, deliveryMethod } = useCart()
   const [orderSnapshot] = useState(items)
   const hasCleared = useRef(false)
 
@@ -141,7 +140,7 @@ export default function CheckoutSuccessPage({ pickupEnabled }: { pickupEnabled: 
       <p>
         {t('checkout_success_withdraw')} <Link to="/withdraw">{t('withdraw_link')}</Link>
       </p>
-      <BackLink to="/store">{t('back_to_store')}</BackLink>
+      <BackLink to="/">{t('back_to_store')}</BackLink>
     </Page>
   )
 }
