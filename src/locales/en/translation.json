@@ -42,7 +42,7 @@
   "cart_checkout_error": "Something went wrong starting checkout. Please try again.",
   "checkout_success_heading": "Thank you for your order!",
   "checkout_success_body": "A receipt has been sent to your email.",
-  "checkout_success_pickup_body": "We'll email you when your order is ready to pick up at the store on Claesgatan 8 in Malmö.",
+  "checkout_success_pickup_body": "We'll email you when your order is ready to pick up.",
   "checkout_cancel_heading": "Checkout cancelled",
   "checkout_cancel_body": "Your cart has been saved, so you can pick up where you left off.",
   "returns_heading": "Returns and terms",

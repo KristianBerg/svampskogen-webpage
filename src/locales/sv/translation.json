@@ -42,7 +42,7 @@
   "cart_checkout_error": "Något gick fel när kassan skulle startas. Försök igen.",
   "checkout_success_heading": "Tack för din beställning!",
   "checkout_success_body": "Ett kvitto har skickats till din e-post.",
-  "checkout_success_pickup_body": "Vi mejlar dig när din beställning är redo att hämtas i butiken på Claesgatan 8 i Malmö.",
+  "checkout_success_pickup_body": "Vi mejlar dig när din beställning är redo att hämtas.",
   "checkout_cancel_heading": "Köpet avbröts",
   "checkout_cancel_body": "Din varukorg är sparad, så du kan fortsätta där du slutade.",
   "returns_heading": "Retur och villkor",

@@ -99,6 +99,7 @@ export default function CheckoutSuccessPage() {
   return (
     <Page style={{ minHeight: '60vh' }}>
       <Heading>{t('checkout_success_heading')}</Heading>
+      {rows.length > 0 && deliveryMethod === 'pickup' && <p>{t('checkout_success_pickup_body')}</p>}
       {rows.length > 0 && (
         <Table>
           <thead>
@@ -136,7 +137,6 @@ export default function CheckoutSuccessPage() {
         </>
       )}
       <p>{t('checkout_success_body')}</p>
-      {rows.length > 0 && deliveryMethod === 'pickup' && <p>{t('checkout_success_pickup_body')}</p>}
       <p>
         {t('checkout_success_withdraw')} <Link to="/withdraw">{t('withdraw_link')}</Link>
       </p>
