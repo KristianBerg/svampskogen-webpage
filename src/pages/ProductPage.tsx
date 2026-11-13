@@ -1,13 +1,15 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { Page } from '../components/Page'
 import { products } from '../data/products'
+import { unpublishedProducts } from '../data/unpublishedPreview'
 import { useCart } from '../hooks/useCart'
 import { formatPrice } from '../lib/formatPrice'
 import { getProductImages } from '../lib/productImages'
 import type { VariantSelection } from '../lib/productVariants'
+import { getStoreListing, readStoreSearch, type StoreLinkState } from '../lib/storeListing'
 import { usePageTitle } from '../hooks/usePageTitle'
 
 const Heading = styled.h1`
@@ -18,11 +20,11 @@ const Heading = styled.h1`
   margin-bottom: 1.5rem;
 `
 
-const ProductImage = styled.img`
+const ProductImage = styled.img<{ $whole?: boolean }>`
   display: block;
   width: min(320px, 90vw);
   aspect-ratio: 1;
-  object-fit: cover;
+  object-fit: ${({ $whole }) => ($whole ? 'contain' : 'cover')};
   border: 1px solid var(--color-border);
 `
 
@@ -33,7 +35,7 @@ const ThumbRow = styled.div`
   margin-bottom: 1.5rem;
 `
 
-const Thumb = styled.button<{ $active: boolean }>`
+const Thumb = styled.button<{ $active: boolean; $whole?: boolean }>`
   display: block;
   width: 56px;
   aspect-ratio: 1;
@@ -46,7 +48,7 @@ const Thumb = styled.button<{ $active: boolean }>`
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: ${({ $whole }) => ($whole ? 'contain' : 'cover')};
   }
 `
 
@@ -130,17 +132,59 @@ const BackLink = styled(Link)`
   padding-bottom: 2px;
 `
 
+// As wide as ProductImage, so the link lines up with the image's left edge.
+const BackRow = styled.div`
+  width: min(320px, 90vw);
+  text-align: left;
+  margin-bottom: 1rem;
+`
+
+// Keyed by slug so moving to another product (e.g. with the arrow keys) starts
+// fresh, instead of carrying over the selected photo, quantity and variants.
 export default function ProductPage() {
-  const { t, i18n } = useTranslation()
   const { slug } = useParams()
+  return <ProductDetails key={slug} slug={slug} />
+}
+
+function ProductDetails({ slug }: { slug: string | undefined }) {
+  const { t, i18n } = useTranslation()
   const lang = i18n.resolvedLanguage === 'sv' ? 'sv' : 'en'
-  const product = products.find((candidate) => candidate.slug === slug)
+  // Unpublished products only resolve in the sandbox (see unpublishedPreview).
+  const product =
+    products.find((candidate) => candidate.slug === slug) ??
+    unpublishedProducts.find((candidate) => candidate.slug === slug)
   const { addItem } = useCart()
   const [quantity, setQuantity] = useState(1)
   const [selectedImage, setSelectedImage] = useState(0)
   const [selection, setSelection] = useState<VariantSelection>({})
   const [showMissingVariants, setShowMissingVariants] = useState(false)
   usePageTitle(product ? product.name[lang] : t('not_found_heading'))
+
+  // The store filter this product was opened from ("" for All, or a direct
+  // visit). The arrow keys step through that list, and Back returns to it.
+  const location = useLocation()
+  const navigate = useNavigate()
+  const storeSearch = readStoreSearch(location.state)
+  const listing = getStoreListing(new URLSearchParams(storeSearch)).visibleProducts
+  const position = listing.findIndex((candidate) => candidate.slug === slug)
+  const previousSlug = position > 0 ? listing[position - 1].slug : null
+  const nextSlug = position !== -1 && position < listing.length - 1 ? listing[position + 1].slug : null
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
+      // Leave the arrows alone while typing, e.g. in the quantity field.
+      const target = event.target as HTMLElement
+      if (target.closest('input, select, textarea, [contenteditable="true"]')) return
+      const targetSlug = event.key === 'ArrowLeft' ? previousSlug : event.key === 'ArrowRight' ? nextSlug : null
+      if (!targetSlug) return
+      event.preventDefault()
+      const state: StoreLinkState = { storeSearch }
+      navigate(`/store/${targetSlug}`, { state })
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [previousSlug, nextSlug, storeSearch, navigate])
 
   if (!product) {
     return (
@@ -165,14 +209,23 @@ export default function ProductPage() {
 
   return (
     <Page style={{ minHeight: '60vh' }}>
+      <BackRow>
+        <BackLink to={`/${storeSearch}`}>{t('back_to_store')}</BackLink>
+      </BackRow>
       <ProductImage
         src={images[Math.min(selectedImage, images.length - 1)].full}
         alt={product.name[lang]}
+        $whole={product.wholeImage}
       />
       {images.length > 1 && (
         <ThumbRow>
           {images.map((image, index) => (
-            <Thumb key={image.thumb} $active={index === selectedImage} onClick={() => setSelectedImage(index)}>
+            <Thumb
+              key={image.thumb}
+              $active={index === selectedImage}
+              $whole={product.wholeImage}
+              onClick={() => setSelectedImage(index)}
+            >
               <img src={image.thumb} alt="" />
             </Thumb>
           ))}
@@ -206,16 +259,19 @@ export default function ProductPage() {
           })}
         </MissingVariantNotice>
       )}
-      <AddToCartRow>
-        <QuantityInput
-          type="number"
-          min={1}
-          value={quantity}
-          onChange={(event) => setQuantity(Math.max(1, Number(event.target.value)))}
-        />
-        <AddToCartButton onClick={handleAddToCart}>{t('add_to_cart')}</AddToCartButton>
-      </AddToCartRow>
-      <BackLink to="/">{t('back_to_store')}</BackLink>
+      {product.published ? (
+        <AddToCartRow>
+          <QuantityInput
+            type="number"
+            min={1}
+            value={quantity}
+            onChange={(event) => setQuantity(Math.max(1, Number(event.target.value)))}
+          />
+          <AddToCartButton onClick={handleAddToCart}>{t('add_to_cart')}</AddToCartButton>
+        </AddToCartRow>
+      ) : (
+        <Price>Unpublished: only visible in the sandbox, can't be added to the cart.</Price>
+      )}
     </Page>
   )
 }

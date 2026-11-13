@@ -1,8 +1,5 @@
 import styled from 'styled-components'
-
-// The Vite dev server is the only place the site runs against the Stripe
-// sandbox; deployed builds use live Stripe and have this compiled out.
-const isSandbox = import.meta.env.DEV
+import { isSandbox } from '../lib/sandbox'
 
 const Badge = styled.div`
   position: fixed;

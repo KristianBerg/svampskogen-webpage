@@ -46,6 +46,10 @@ export interface Product {
   // the whole catalog and its photos are still public files on the static site.
   published: boolean
   inStock: boolean
+  // true shows the photos whole, with empty space around them, instead of
+  // cropping them to fill a square. For book covers and anything else where
+  // the edges matter. Omitted means cropped.
+  wholeImage?: boolean
   // The id of an entry in categories.json. Not read by the image pipeline
   // (paths are keyed by slug alone).
   category?: string

@@ -9,7 +9,7 @@
   h2 { font-size: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: #666; margin-top: 2rem; }
   /* Fixed columns so the controls line up across rows whatever the name or
      status length; long text wraps inside its own column. */
-  .product { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr) 6.5rem 9rem 7.5rem 5rem 5.5rem 8rem auto auto auto auto; align-items: center; gap: 0.75rem; padding: 0.5rem 0; border-bottom: 1px solid #eee; }
+  .product { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr) 6.5rem 9rem 7.5rem 5rem 7rem 5.5rem 8rem auto auto auto auto; align-items: center; gap: 0.75rem; padding: 0.5rem 0; border-bottom: 1px solid #eee; }
   .product-name { overflow-wrap: anywhere; }
   .product-published { display: flex; align-items: center; gap: 0.3rem; font-size: 0.8rem; color: #666; cursor: pointer; }
   .product.unpublished .product-name { color: #999; font-style: italic; }
@@ -231,6 +231,18 @@ async function savePublished(slug, published) {
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
     throw new Error(body.error ?? `Saving published state failed (${res.status})`)
+  }
+}
+
+async function saveWholeImage(slug, wholeImage) {
+  const res = await fetch(`/api/products/${encodeURIComponent(slug)}/whole-image`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ wholeImage }),
+  })
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    throw new Error(body.error ?? `Saving whole image setting failed (${res.status})`)
   }
 }
 
@@ -783,6 +795,25 @@ function renderProductRow(product) {
   }
   publishedWrap.append(published, 'Published')
 
+  const wholeImageWrap = document.createElement('label')
+  wholeImageWrap.className = 'product-published'
+  wholeImageWrap.title = 'Show the whole photo in the store, with empty space around it, instead of cropping it to a square. For book covers and other photos where nothing may be cut off.'
+  const wholeImage = document.createElement('input')
+  wholeImage.type = 'checkbox'
+  wholeImage.checked = product.wholeImage
+  wholeImage.onchange = () => {
+    wholeImage.disabled = true
+    status.textContent = 'Saving…'
+    saveWholeImage(product.slug, wholeImage.checked)
+      .then(() => render())
+      .catch((error) => {
+        status.textContent = `Error: ${error.message}`
+        wholeImage.checked = !wholeImage.checked
+        wholeImage.disabled = false
+      })
+  }
+  wholeImageWrap.append(wholeImage, 'Whole image')
+
   const priceWrap = document.createElement('label')
   priceWrap.className = 'product-price'
   priceWrap.title = 'Price including VAT, in whole kronor'
@@ -872,7 +903,7 @@ function renderProductRow(product) {
       .finally(() => { button.disabled = false; input.value = '' })
   }
 
-  row.append(publishedWrap, name, priceWrap, category, vat, count, variantCount, status, editCopy, variants, photos, button, input)
+  row.append(publishedWrap, name, priceWrap, category, vat, count, wholeImageWrap, variantCount, status, editCopy, variants, photos, button, input)
   return row
 }
 

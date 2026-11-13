@@ -51,7 +51,7 @@ async function writeJson(filePath, data) {
 // Matches the field order in productTypes.ts, so a field the uploader adds
 // (e.g. a first category) lands where a hand-written entry would put it
 // instead of at the end. Unknown fields keep their place after these.
-const FIELD_ORDER = ['slug', 'priceOre', 'vatRate', 'published', 'inStock', 'category', 'name', 'description', 'variants']
+const FIELD_ORDER = ['slug', 'priceOre', 'vatRate', 'published', 'inStock', 'wholeImage', 'category', 'name', 'description', 'variants']
 
 function orderFields(product) {
   const ordered = {}
@@ -108,6 +108,7 @@ async function handleGetProducts(res) {
     name: product.name.sv,
     category: product.category ?? null,
     published: product.published,
+    wholeImage: product.wholeImage === true,
     priceOre: product.priceOre,
     vatRate: product.vatRate,
     imageCount: counts[product.slug] ?? 0,
@@ -247,6 +248,28 @@ async function handleSetPublished(req, res, slug) {
 
   await updateLiveProduct(slug, (product) => ({ ...product, published }))
   sendJson(res, 200, { published })
+}
+
+// Stored only when on, so the catalog stays unchanged for products that crop.
+async function handleSetWholeImage(req, res, slug) {
+  const products = await loadLiveProducts()
+  if (!products.some((product) => product.slug === slug)) {
+    sendJson(res, 404, { error: `Unknown product slug: ${slug}` })
+    return
+  }
+
+  const { wholeImage } = JSON.parse((await readBody(req)).toString('utf8') || '{}')
+  if (typeof wholeImage !== 'boolean') {
+    sendJson(res, 400, { error: 'wholeImage must be true or false.' })
+    return
+  }
+
+  await updateLiveProduct(slug, (product) => {
+    if (wholeImage) product.wholeImage = true
+    else delete product.wholeImage
+    return product
+  })
+  sendJson(res, 200, { wholeImage })
 }
 
 // Entered in whole kronor: the storefront doesn't show öre, so a price like
@@ -643,6 +666,9 @@ const server = createServer((req, res) => {
 
     const publishedMatch = req.method === 'PUT' && pathname.match(/^\/api\/products\/([^/]+)\/published$/)
     if (publishedMatch) return handleSetPublished(req, res, decodeURIComponent(publishedMatch[1]))
+
+    const wholeImageMatch = req.method === 'PUT' && pathname.match(/^\/api\/products\/([^/]+)\/whole-image$/)
+    if (wholeImageMatch) return handleSetWholeImage(req, res, decodeURIComponent(wholeImageMatch[1]))
 
     const priceMatch = req.method === 'PUT' && pathname.match(/^\/api\/products\/([^/]+)\/price$/)
     if (priceMatch) return handleSetPrice(req, res, decodeURIComponent(priceMatch[1]))

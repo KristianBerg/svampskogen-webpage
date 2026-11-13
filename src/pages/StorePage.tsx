@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { Page } from '../components/Page'
-import { categories } from '../data/categories'
-import { products } from '../data/products'
+import { unpublishedProducts } from '../data/unpublishedPreview'
+import { getStoreListing, type StoreLinkState } from '../lib/storeListing'
 import { useCart } from '../hooks/useCart'
 import { formatPrice } from '../lib/formatPrice'
 import { getProductImages } from '../lib/productImages'
@@ -39,11 +39,11 @@ const ProductImageLink = styled(Link)`
   }
 `
 
-const ProductImage = styled.img`
+const ProductImage = styled.img<{ $whole?: boolean }>`
   display: block;
   width: 100%;
   aspect-ratio: 1;
-  object-fit: cover;
+  object-fit: ${({ $whole }) => ($whole ? 'contain' : 'cover')};
 `
 
 const ProductName = styled(Link)`
@@ -111,16 +111,10 @@ export default function StorePage() {
   const lang = i18n.resolvedLanguage === 'sv' ? 'sv' : 'en'
   const { addItem } = useCart()
   const [searchParams, setSearchParams] = useSearchParams()
-  const inStockProducts = products.filter((product) => product.inStock)
-  // Only categories with something for sale, so no button leads to an empty page.
-  const availableCategories = categories.filter((category) =>
-    inStockProducts.some((product) => product.category === category.id),
-  )
-  const activeCategoryId =
-    availableCategories.find((category) => category.id === searchParams.get('category'))?.id ?? null
-  const visibleProducts = activeCategoryId
-    ? inStockProducts.filter((product) => product.category === activeCategoryId)
-    : inStockProducts
+  const { search } = useLocation()
+  const { inStockProducts, availableCategories, showUnpublished, activeCategoryId, visibleProducts } =
+    getStoreListing(searchParams)
+  const linkState: StoreLinkState = { storeSearch: search }
 
   const selectCategory = (categoryId: string | null) => {
     setSearchParams(categoryId ? { category: categoryId } : {}, { replace: true })
@@ -129,13 +123,17 @@ export default function StorePage() {
   return (
     <Page style={{ minHeight: '60vh' }}>
       <Heading>{t('store_heading')}</Heading>
-      {inStockProducts.length === 0 ? (
+      {inStockProducts.length === 0 && unpublishedProducts.length === 0 ? (
         <p>{t('store_coming_soon')}</p>
       ) : (
         <>
-          {availableCategories.length > 0 && (
+          {(availableCategories.length > 0 || unpublishedProducts.length > 0) && (
             <CategoryBar>
-              <CategoryButton type="button" aria-pressed={activeCategoryId === null} onClick={() => selectCategory(null)}>
+              <CategoryButton
+                type="button"
+                aria-pressed={activeCategoryId === null && !showUnpublished}
+                onClick={() => selectCategory(null)}
+              >
                 {t('store_category_all')}
               </CategoryButton>
               {availableCategories.map((category) => (
@@ -148,18 +146,34 @@ export default function StorePage() {
                   {category.name[lang]}
                 </CategoryButton>
               ))}
+              {unpublishedProducts.length > 0 && (
+                <CategoryButton
+                  type="button"
+                  aria-pressed={showUnpublished}
+                  onClick={() => setSearchParams({ unpublished: '' }, { replace: true })}
+                >
+                  Unpublished ({unpublishedProducts.length})
+                </CategoryButton>
+              )}
             </CategoryBar>
           )}
           <ProductGrid>
             {visibleProducts.map((product) => (
               <ProductCard key={product.slug}>
-                <ProductImageLink to={`/store/${product.slug}`}>
-                  <ProductImage src={getProductImages(product)[0].thumb} alt={product.name[lang]} loading="lazy" />
+                <ProductImageLink to={`/store/${product.slug}`} state={linkState}>
+                  <ProductImage
+                    src={getProductImages(product)[0].thumb}
+                    alt={product.name[lang]}
+                    loading="lazy"
+                    $whole={product.wholeImage}
+                  />
                 </ProductImageLink>
-                <ProductName to={`/store/${product.slug}`}>{product.name[lang]}</ProductName>
+                <ProductName to={`/store/${product.slug}`} state={linkState}>{product.name[lang]}</ProductName>
                 <ProductPrice>{formatPrice(product.priceOre)}</ProductPrice>
-                {product.variants?.length ? (
-                  <AddToCartButton as={Link} to={`/store/${product.slug}`}>
+                {!product.published ? (
+                  <ProductPrice>Unpublished</ProductPrice>
+                ) : product.variants?.length ? (
+                  <AddToCartButton as={Link} to={`/store/${product.slug}`} state={linkState}>
                     {t('choose_options')}
                   </AddToCartButton>
                 ) : (

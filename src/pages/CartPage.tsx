@@ -103,10 +103,10 @@ const ProductCell = styled.div`
   gap: 0.75rem;
 `
 
-const ProductImage = styled.img`
+const ProductImage = styled.img<{ $whole?: boolean }>`
   width: 3.5rem;
   height: 3.5rem;
-  object-fit: cover;
+  object-fit: ${({ $whole }) => ($whole ? 'contain' : 'cover')};
   border: 1px solid var(--color-border);
   flex-shrink: 0;
 `
@@ -305,7 +305,12 @@ export default function CartPage() {
                 <tr key={cartItemKey(item)}>
                   <td>
                     <ProductCell>
-                      <ProductImage src={getProductImages(product)[0].thumb} alt="" loading="lazy" />
+                      <ProductImage
+                        src={getProductImages(product)[0].thumb}
+                        alt=""
+                        loading="lazy"
+                        $whole={product.wholeImage}
+                      />
                       <ProductLink to={`/store/${product.slug}`}>{lineItemName(product, item.variants, lang)}</ProductLink>
                     </ProductCell>
                   </td>
