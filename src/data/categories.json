@@ -19,5 +19,19 @@
       "sv": "Svampplockpåsar",
       "en": "Foraging bags"
     }
+  },
+  {
+    "id": "bocker",
+    "name": {
+      "sv": "Böcker",
+      "en": "Books"
+    }
+  },
+  {
+    "id": "pyssel",
+    "name": {
+      "sv": "Pyssel",
+      "en": "Crafts"
+    }
   }
 ]

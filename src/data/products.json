@@ -325,5 +325,379 @@
         ]
       }
     ]
+  },
+  {
+    "slug": "plocka-tang-och-strandvaxter",
+    "priceOre": 36000,
+    "vatRate": 0.06,
+    "published": true,
+    "inStock": true,
+    "wholeImage": true,
+    "category": "bocker",
+    "name": {
+      "sv": "Plocka tång & strandväxter",
+      "en": "Plocka tång & strandväxter"
+    },
+    "description": {
+      "sv": "Undertitel: Recept och tillagning\nFörfattare: Karolina Martinson och Linnéa Sjögren\nFörlag: Natur & Kultur\nUtgiven: 2021\nSidor: 204\nBand: Inbunden\nFormat: 198 × 268 mm\nSpråk: Svenska\nISBN: 9789127174290",
+      "en": "Subtitle: Recept och tillagning\nAuthors: Karolina Martinson and Linnéa Sjögren\nPublisher: Natur & Kultur\nPublished: 2021\nPages: 204\nBinding: Hardcover\nSize: 198 × 268 mm\nLanguage: Swedish\nISBN: 9789127174290"
+    }
+  },
+  {
+    "slug": "sista-svampboken",
+    "priceOre": 21000,
+    "vatRate": 0.06,
+    "published": true,
+    "inStock": true,
+    "wholeImage": true,
+    "category": "bocker",
+    "name": {
+      "sv": "Sista svampboken",
+      "en": "Sista svampboken"
+    },
+    "description": {
+      "sv": "Undertitel: Om svampar som du kanske trodde att du kunde äta\nFörfattare: Bo Berger\nFörlag: Smedtorp\nUtgiven: 2025\nSidor: 214\nBand: Danskt band\nFormat: 150 × 210 mm\nSpråk: Svenska\nISBN: 9789151944661",
+      "en": "Subtitle: Om svampar som du kanske trodde att du kunde äta\nAuthor: Bo Berger\nPublisher: Smedtorp\nPublished: 2025\nPages: 214\nBinding: Flexibound\nSize: 150 × 210 mm\nLanguage: Swedish\nISBN: 9789151944661"
+    }
+  },
+  {
+    "slug": "svamparnas-forunderliga-liv",
+    "priceOre": 30000,
+    "vatRate": 0.06,
+    "published": true,
+    "inStock": true,
+    "wholeImage": true,
+    "category": "bocker",
+    "name": {
+      "sv": "Svamparnas förunderliga liv",
+      "en": "Svamparnas förunderliga liv"
+    },
+    "description": {
+      "sv": "Undertitel: Vad en svampplockare behöver veta om underjorden\nFörfattare: Anders Dahlberg och Anna Froster\nFörlag: Natur & Kultur\nUtgiven: 2025\nSidor: 327\nBand: Danskt band\nFormat: 135 × 210 mm\nSpråk: Svenska\nISBN: 9789127192300",
+      "en": "Subtitle: Vad en svampplockare behöver veta om underjorden\nAuthors: Anders Dahlberg and Anna Froster\nPublisher: Natur & Kultur\nPublished: 2025\nPages: 327\nBinding: Flexibound\nSize: 135 × 210 mm\nLanguage: Swedish\nISBN: 9789127192300"
+    }
+  },
+  {
+    "slug": "mushroom-sara-rich",
+    "priceOre": 22000,
+    "vatRate": 0.06,
+    "published": true,
+    "inStock": true,
+    "wholeImage": true,
+    "category": "bocker",
+    "name": {
+      "sv": "Mushroom",
+      "en": "Mushroom"
+    },
+    "description": {
+      "sv": "Författare: Sara Rich\nFörlag: Bloomsbury\nSerie: Object Lessons\nUtgiven: 2023\nSidor: 152\nBand: Häftad\nFormat: 120 × 165 mm\nSpråk: Engelska\nISBN: 9781501386589",
+      "en": "Author: Sara Rich\nPublisher: Bloomsbury\nSeries: Object Lessons\nPublished: 2023\nPages: 152\nBinding: Paperback\nSize: 120 × 165 mm\nLanguage: English\nISBN: 9781501386589"
+    }
+  },
+  {
+    "slug": "concise-mushroom-guide",
+    "priceOre": 18000,
+    "vatRate": 0.06,
+    "published": true,
+    "inStock": true,
+    "wholeImage": true,
+    "category": "bocker",
+    "name": {
+      "sv": "Concise Mushroom Guide",
+      "en": "Concise Mushroom Guide"
+    },
+    "description": {
+      "sv": "Förlag: Bloomsbury\nSerie: Concise Guides\nUtgiven: 2018\nSidor: 192\nBand: Häftad\nFormat: 106 × 133 mm\nSpråk: Engelska\nISBN: 9781472963789",
+      "en": "Publisher: Bloomsbury\nSeries: Concise Guides\nPublished: 2018\nPages: 192\nBinding: Paperback\nSize: 106 × 133 mm\nLanguage: English\nISBN: 9781472963789"
+    }
+  },
+  {
+    "slug": "svampskogens-hemligheter",
+    "priceOre": 22000,
+    "vatRate": 0.06,
+    "published": true,
+    "inStock": true,
+    "wholeImage": true,
+    "category": "bocker",
+    "name": {
+      "sv": "Svampskogens hemligheter",
+      "en": "Svampskogens hemligheter"
+    },
+    "description": {
+      "sv": "Författare: Stefan Casta och Mattias Olsson\nIllustratör: Mattias Olsson\nFörlag: Opal\nUtgiven: 2021\nSidor: 64\nBand: Inbunden\nFormat: 227 × 293 mm\nSpråk: Svenska\nISBN: 9789172261884",
+      "en": "Authors: Stefan Casta and Mattias Olsson\nIllustrator: Mattias Olsson\nPublisher: Opal\nPublished: 2021\nPages: 64\nBinding: Hardcover\nSize: 227 × 293 mm\nLanguage: Swedish\nISBN: 9789172261884"
+    }
+  },
+  {
+    "slug": "amigurumi-virka-en-gullig-svamp",
+    "priceOre": 20000,
+    "vatRate": 0.06,
+    "published": true,
+    "inStock": true,
+    "wholeImage": true,
+    "category": "pyssel",
+    "name": {
+      "sv": "Amigurumi: virka en gullig svamp",
+      "en": "Amigurumi: virka en gullig svamp"
+    },
+    "description": {
+      "sv": "Författare: Annick Ly\nIllustratör: Mikael Sol\nFotograf: Fabrice Besse\nÖversättare: Elin Pirttimaa Rosén\nFörlag: Tukan Förlag\nUtgiven: 2026\nInnehåll: instruktionsbok (16 sidor), virknål, garn, stoppning och ögon\nSpråk: Svenska\nISBN: 9789181165104",
+      "en": "Author: Annick Ly\nIllustrator: Mikael Sol\nPhotographer: Fabrice Besse\nTranslator: Elin Pirttimaa Rosén\nPublisher: Tukan Förlag\nPublished: 2026\nContents: instruction book (16 pages), crochet hook, yarn, stuffing and eyes\nLanguage: Swedish\nISBN: 9789181165104"
+    }
+  },
+  {
+    "slug": "laga-svamp",
+    "priceOre": 31000,
+    "vatRate": 0.06,
+    "published": true,
+    "inStock": true,
+    "wholeImage": true,
+    "category": "bocker",
+    "name": {
+      "sv": "Laga svamp",
+      "en": "Laga svamp"
+    },
+    "description": {
+      "sv": "Författare: Martin Nordin\nFörlag: Bonnier Fakta\nUtgiven: 2021\nSidor: 176\nBand: Inbunden\nFormat: 176 × 247 mm\nSpråk: Svenska\nISBN: 9789178872169",
+      "en": "Author: Martin Nordin\nPublisher: Bonnier Fakta\nPublished: 2021\nPages: 176\nBinding: Hardcover\nSize: 176 × 247 mm\nLanguage: Swedish\nISBN: 9789178872169"
+    }
+  },
+  {
+    "slug": "vildplockat",
+    "priceOre": 28000,
+    "vatRate": 0.06,
+    "published": false,
+    "inStock": true,
+    "wholeImage": true,
+    "category": "bocker",
+    "name": {
+      "sv": "Vildplockat",
+      "en": "Vildplockat"
+    },
+    "description": {
+      "sv": "Undertitel: Ätliga örter, blad, blommor, bär och svampar från den svenska naturen\nFörfattare: Niki Sjölund\nIllustratör: Terése Karlsson\nFotografer: Knotan Tobias Arnerlön, Niki Sjölund och Michael Krikorev\nFörlag: Natur & Kultur\nUtgiven: 2017\nSidor: 176\nBand: Inbunden\nFormat: 170 × 225 mm\nSpråk: Svenska\nISBN: 9789127150300",
+      "en": "Subtitle: Ätliga örter, blad, blommor, bär och svampar från den svenska naturen\nAuthor: Niki Sjölund\nIllustrator: Terése Karlsson\nPhotographers: Knotan Tobias Arnerlön, Niki Sjölund and Michael Krikorev\nPublisher: Natur & Kultur\nPublished: 2017\nPages: 176\nBinding: Hardcover\nSize: 170 × 225 mm\nLanguage: Swedish\nISBN: 9789127150300"
+    }
+  },
+  {
+    "slug": "giftsvampar-och-svampgifter",
+    "priceOre": 47000,
+    "vatRate": 0.06,
+    "published": true,
+    "inStock": true,
+    "wholeImage": true,
+    "category": "bocker",
+    "name": {
+      "sv": "Giftsvampar och svampgifter",
+      "en": "Giftsvampar och svampgifter"
+    },
+    "description": {
+      "sv": "Författare: Anna Myrnäs, Anders Hirell, Rut Folke och Peter Hultén\nFörlag: Stevali\nUtgiven: 2023\nSidor: 256\nBand: Inbunden\nFormat: 175 × 235 mm\nSpråk: Svenska\nISBN: 9789152770146",
+      "en": "Authors: Anna Myrnäs, Anders Hirell, Rut Folke and Peter Hultén\nPublisher: Stevali\nPublished: 2023\nPages: 256\nBinding: Hardcover\nSize: 175 × 235 mm\nLanguage: Swedish\nISBN: 9789152770146"
+    }
+  },
+  {
+    "slug": "svampboken",
+    "priceOre": 13000,
+    "vatRate": 0.06,
+    "published": true,
+    "inStock": true,
+    "wholeImage": true,
+    "category": "bocker",
+    "name": {
+      "sv": "Svampboken",
+      "en": "Svampboken"
+    },
+    "description": {
+      "sv": "Undertitel: Våra svenska svampar\nFörfattare: Magnus Neuendorf\nIllustratörer: Siv Zetterqvist och Karl-Erik Ingeby\nFörlag: Fortuna Förlag\nUtgiven: 2016\nSidor: 128\nBand: Flexband\nFormat: 105 × 148 mm\nSpråk: Svenska\nISBN: 9789187841132",
+      "en": "Subtitle: Våra svenska svampar\nAuthor: Magnus Neuendorf\nIllustrators: Siv Zetterqvist and Karl-Erik Ingeby\nPublisher: Fortuna Förlag\nPublished: 2016\nPages: 128\nBinding: Flexibound\nSize: 105 × 148 mm\nLanguage: Swedish\nISBN: 9789187841132"
+    }
+  },
+  {
+    "slug": "nya-svampboken",
+    "priceOre": 34000,
+    "vatRate": 0.06,
+    "published": true,
+    "inStock": true,
+    "wholeImage": true,
+    "category": "bocker",
+    "name": {
+      "sv": "Nya svampboken",
+      "en": "Nya svampboken"
+    },
+    "description": {
+      "sv": "Författare: Pelle Holmberg och Hans Marklund\nFörlag: Norstedts Förlag\nUtgiven: 2014\nSidor: 250\nBand: Inbunden\nFormat: 185 × 257 mm\nSpråk: Svenska\nISBN: 9789113066608",
+      "en": "Authors: Pelle Holmberg and Hans Marklund\nPublisher: Norstedts Förlag\nPublished: 2014\nPages: 250\nBinding: Hardcover\nSize: 185 × 257 mm\nLanguage: Swedish\nISBN: 9789113066608"
+    }
+  },
+  {
+    "slug": "lilla-svampboken",
+    "priceOre": 22000,
+    "vatRate": 0.06,
+    "published": true,
+    "inStock": true,
+    "wholeImage": true,
+    "category": "bocker",
+    "name": {
+      "sv": "Lilla svampboken",
+      "en": "Lilla svampboken"
+    },
+    "description": {
+      "sv": "Författare: Pelle Holmberg och Hans Marklund\nFörlag: Norstedts Förlag\nUtgiven: 2014\nSidor: 126\nBand: Kartonnage\nFormat: 180 × 128 mm\nSpråk: Svenska\nISBN: 9789113056142",
+      "en": "Authors: Pelle Holmberg and Hans Marklund\nPublisher: Norstedts Förlag\nPublished: 2014\nPages: 126\nBinding: Hardcover\nSize: 180 × 128 mm\nLanguage: Swedish\nISBN: 9789113056142"
+    }
+  },
+  {
+    "slug": "ut-i-sveriges-flora",
+    "priceOre": 13000,
+    "vatRate": 0.06,
+    "published": true,
+    "inStock": true,
+    "wholeImage": true,
+    "category": "bocker",
+    "name": {
+      "sv": "Ut i Sveriges flora",
+      "en": "Ut i Sveriges flora"
+    },
+    "description": {
+      "sv": "Undertitel: Våra vanligaste vilda växter i färg\nFörfattare: Ingvar Nordin\nIllustratörer: Karl-Erik Lingeby och Siv Zetterqvist\nFörlag: Fortuna Förlag\nUtgiven: 2017\nSidor: 160\nBand: Flexband\nFormat: 105 × 145 mm\nSpråk: Svenska\nISBN: 9789187841170",
+      "en": "Subtitle: Våra vanligaste vilda växter i färg\nAuthor: Ingvar Nordin\nIllustrators: Karl-Erik Lingeby and Siv Zetterqvist\nPublisher: Fortuna Förlag\nPublished: 2017\nPages: 160\nBinding: Flexibound\nSize: 105 × 145 mm\nLanguage: Swedish\nISBN: 9789187841170"
+    }
+  },
+  {
+    "slug": "mushrooms-of-britain-and-northern-europe",
+    "priceOre": 21000,
+    "vatRate": 0.06,
+    "published": true,
+    "inStock": true,
+    "wholeImage": true,
+    "category": "bocker",
+    "name": {
+      "sv": "Mushrooms of Britain and Northern Europe",
+      "en": "Mushrooms of Britain and Northern Europe"
+    },
+    "description": {
+      "sv": "Författare: Josephine Bacon\nFörlag: John Beaufoy Publishing Ltd\nSerie: Identification Guide\nUtgiven: 2020\nSidor: 160\nBand: Häftad\nFormat: 135 × 191 mm\nSpråk: Engelska\nISBN: 9781912081370",
+      "en": "Author: Josephine Bacon\nPublisher: John Beaufoy Publishing Ltd\nSeries: Identification Guide\nPublished: 2020\nPages: 160\nBinding: Paperback\nSize: 135 × 191 mm\nLanguage: English\nISBN: 9781912081370"
+    }
+  },
+  {
+    "slug": "ljus",
+    "priceOre": 29000,
+    "vatRate": 0.06,
+    "published": true,
+    "inStock": true,
+    "wholeImage": true,
+    "category": "bocker",
+    "name": {
+      "sv": "Ljus",
+      "en": "Ljus"
+    },
+    "description": {
+      "sv": "Undertitel: Stöpa, gjuta, forma & färga\nFörfattare: Anna Dykhoff\nFotograf: Christoffer Dalkarls\nFörlag: Natur & Kultur\nUtgiven: 2023\nSidor: 122\nBand: Inbunden\nFormat: 175 × 235 mm\nSpråk: Svenska\nISBN: 9789127184787",
+      "en": "Subtitle: Stöpa, gjuta, forma & färga\nAuthor: Anna Dykhoff\nPhotographer: Christoffer Dalkarls\nPublisher: Natur & Kultur\nPublished: 2023\nPages: 122\nBinding: Hardcover\nSize: 175 × 235 mm\nLanguage: Swedish\nISBN: 9789127184787"
+    }
+  },
+  {
+    "slug": "farga-garn-och-sticka",
+    "priceOre": 27000,
+    "vatRate": 0.06,
+    "published": true,
+    "inStock": true,
+    "wholeImage": true,
+    "category": "bocker",
+    "name": {
+      "sv": "Färga garn och sticka",
+      "en": "Färga garn och sticka"
+    },
+    "description": {
+      "sv": "Undertitel: Naturligt med växter, svampar, lavar och löss\nFörfattare: Anna Bauer och Eva Zethraeus\nFörlag: Bokförlaget Polaris\nUtgiven: 2021\nSidor: 153\nBand: Inbunden\nFormat: 179 × 248 mm\nSpråk: Svenska\nISBN: 9789189215573",
+      "en": "Subtitle: Naturligt med växter, svampar, lavar och löss\nAuthors: Anna Bauer and Eva Zethraeus\nPublisher: Bokförlaget Polaris\nPublished: 2021\nPages: 153\nBinding: Hardcover\nSize: 179 × 248 mm\nLanguage: Swedish\nISBN: 9789189215573"
+    }
+  },
+  {
+    "slug": "handgjord-hogtid",
+    "priceOre": 32000,
+    "vatRate": 0.06,
+    "published": true,
+    "inStock": true,
+    "wholeImage": true,
+    "category": "bocker",
+    "name": {
+      "sv": "Handgjord högtid",
+      "en": "Handgjord högtid"
+    },
+    "description": {
+      "sv": "Undertitel: Små och stora projekt året om\nFörfattare: Kerstin Neumüller\nFotograf: Ellinor Hall\nFörlag: Natur & Kultur\nUtgiven: 2026\nSidor: 147\nBand: Inbunden\nFormat: 197 × 240 mm\nSpråk: Svenska\nISBN: 9789127192652",
+      "en": "Subtitle: Små och stora projekt året om\nAuthor: Kerstin Neumüller\nPhotographer: Ellinor Hall\nPublisher: Natur & Kultur\nPublished: 2026\nPages: 147\nBinding: Hardcover\nSize: 197 × 240 mm\nLanguage: Swedish\nISBN: 9789127192652"
+    }
+  },
+  {
+    "slug": "anteckningsbok-mushrooms-and-fungi",
+    "priceOre": 17500,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "wholeImage": true,
+    "category": "bocker",
+    "name": {
+      "sv": "Anteckningsbok: Mushrooms & Fungi",
+      "en": "Notebook: Mushrooms & Fungi"
+    },
+    "description": {
+      "sv": "Design: Anna Stead\nFörlag: Flame Tree Publishing\nSerie: Flame Tree Notebooks\nUtgiven: 2025\nSidor: 176\nBand: Inbunden med foliering\nFormat: 155 × 215 mm\nISBN: 9781835625446",
+      "en": "Design: Anna Stead\nPublisher: Flame Tree Publishing\nSeries: Flame Tree Notebooks\nPublished: 2025\nPages: 176\nBinding: Foiled hardcover\nSize: 155 × 215 mm\nISBN: 9781835625446"
+    }
+  },
+  {
+    "slug": "anteckningsbok-for-spells-and-potions",
+    "priceOre": 17500,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "wholeImage": true,
+    "category": "bocker",
+    "name": {
+      "sv": "Anteckningsbok: For Spells & Potions",
+      "en": "Notebook: For Spells & Potions"
+    },
+    "description": {
+      "sv": "Design: Anna Stead\nFörlag: Flame Tree Publishing\nSerie: Flame Tree Notebooks\nUtgiven: 2026\nSidor: 176\nBand: Inbunden med foliering\nFormat: 155 × 216 mm\nISBN: 9781835626795",
+      "en": "Design: Anna Stead\nPublisher: Flame Tree Publishing\nSeries: Flame Tree Notebooks\nPublished: 2026\nPages: 176\nBinding: Foiled hardcover\nSize: 155 × 216 mm\nISBN: 9781835626795"
+    }
+  },
+  {
+    "slug": "anteckningsbok-the-forest-floor",
+    "priceOre": 17500,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "wholeImage": true,
+    "category": "bocker",
+    "name": {
+      "sv": "Anteckningsbok: The Forest Floor",
+      "en": "Notebook: The Forest Floor"
+    },
+    "description": {
+      "sv": "Design: Anna Stead\nFörlag: Flame Tree Publishing\nSerie: Flame Tree Notebooks\nUtgiven: 2026\nSidor: 176\nBand: Inbunden med foliering\nFormat: 156 × 217 mm\nISBN: 9781835626801",
+      "en": "Design: Anna Stead\nPublisher: Flame Tree Publishing\nSeries: Flame Tree Notebooks\nPublished: 2026\nPages: 176\nBinding: Foiled hardcover\nSize: 156 × 217 mm\nISBN: 9781835626801"
+    }
+  },
+  {
+    "slug": "anteckningsbok-a-medieval-herbal",
+    "priceOre": 17500,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "wholeImage": true,
+    "category": "bocker",
+    "name": {
+      "sv": "Anteckningsbok: A Medieval Herbal",
+      "en": "Notebook: A Medieval Herbal"
+    },
+    "description": {
+      "sv": "Design: Anna Stead\nFörlag: Flame Tree Publishing\nSerie: Flame Tree Notebooks\nUtgiven: 2024\nSidor: 176\nBand: Inbunden med foliering\nFormat: 155 × 216 mm\nISBN: 9781804179499",
+      "en": "Design: Anna Stead\nPublisher: Flame Tree Publishing\nSeries: Flame Tree Notebooks\nPublished: 2024\nPages: 176\nBinding: Foiled hardcover\nSize: 155 × 216 mm\nISBN: 9781804179499"
+    }
   }
 ]
