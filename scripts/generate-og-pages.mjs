@@ -5,12 +5,13 @@
 // is the only way to get a distinct preview without running a server.
 // React still hydrates the page normally for real visitors.
 import { existsSync } from 'node:fs'
-import { readFile, writeFile, mkdir } from 'node:fs/promises'
+import { readFile, readdir, writeFile, mkdir } from 'node:fs/promises'
 import path from 'node:path'
 import sharp from 'sharp'
 
 const distDir = path.resolve(import.meta.dirname, '..', 'dist')
 const catalogPath = path.resolve(import.meta.dirname, '..', 'src', 'data', 'products.json')
+const categoriesPath = path.resolve(import.meta.dirname, '..', 'src', 'data', 'categories.json')
 const siteUrl = 'https://svampskogen.com'
 const maxDescriptionLength = 160
 
@@ -50,6 +51,8 @@ const staticPages = [
     title: 'Ångra köp – Svampskogen',
     description: 'Ångra ditt köp från Svampskogens webbutik.',
     image: `${siteUrl}/og/home.jpg`,
+    // A form, not something anyone searches for. Also left out of the sitemap.
+    noindex: true,
   },
   {
     route: 'privacy',
@@ -84,9 +87,74 @@ function productDescription(product) {
   return `${(lastSpace > 0 ? cut.slice(0, lastSpace) : cut).replace(/[\s,;:.]+$/, '')}…`
 }
 
+// Matches the policy on the returns page (src/locales/sv/translation.json,
+// returns_*) and the DHL rate in src/data/shippingMethods.ts. Update together.
+const shippingPriceSek = 60
+const offerPolicies = {
+  shippingDetails: {
+    '@type': 'OfferShippingDetails',
+    shippingRate: { '@type': 'MonetaryAmount', value: shippingPriceSek, currency: 'SEK' },
+    shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'SE' },
+    deliveryTime: {
+      '@type': 'ShippingDeliveryTime',
+      handlingTime: { '@type': 'QuantitativeValue', minValue: 0, maxValue: 4, unitCode: 'DAY' },
+      transitTime: { '@type': 'QuantitativeValue', minValue: 1, maxValue: 3, unitCode: 'DAY' },
+    },
+  },
+  hasMerchantReturnPolicy: {
+    '@type': 'MerchantReturnPolicy',
+    applicableCountry: 'SE',
+    returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+    merchantReturnDays: 14,
+    returnMethod: ['https://schema.org/ReturnByMail', 'https://schema.org/ReturnInStore'],
+    returnFees: 'https://schema.org/ReturnFeesCustomerResponsibility',
+    merchantReturnLink: `${siteUrl}/returns`,
+  },
+}
+
+// Product photos are numbered 1-full.webp, 2-full.webp, ... (see src/lib/productImages.ts).
+async function productPhotoPaths(slug) {
+  const dir = path.join(distDir, 'products', slug)
+  if (!existsSync(dir)) return []
+  return (await readdir(dir))
+    .map((file) => file.match(/^(\d+)-full\.webp$/))
+    .filter(Boolean)
+    .sort((a, b) => Number(a[1]) - Number(b[1]))
+    .map((match) => `products/${slug}/${match[0]}`)
+}
+
+// schema.org Product markup, so search engines can show price and stock, and so
+// crawlers that don't run JavaScript still get the full product facts.
+function productJsonLd(product, url, photoPaths, categoryNames) {
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name.sv,
+    description: product.description.sv.replace(/\s+/g, ' ').trim() || undefined,
+    sku: product.slug,
+    url,
+    image: photoPaths.length > 0 ? photoPaths.map((photo) => `${siteUrl}/${photo}`) : undefined,
+    category: categoryNames.get(product.category),
+    offers: {
+      '@type': 'Offer',
+      url,
+      price: (product.priceOre / 100).toFixed(2),
+      priceCurrency: 'SEK',
+      availability: product.inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+      itemCondition: 'https://schema.org/NewCondition',
+      seller: { '@type': 'Organization', name: 'Svampskogen', url: `${siteUrl}/` },
+      ...offerPolicies,
+    },
+  }
+  // "<" is escaped so catalog text can never close the script tag.
+  return JSON.stringify(data, null, 2).replace(/</g, '\\u003c')
+}
+
 // Same filter as src/data/products.ts, read as JSON because this runs under plain Node.
 async function buildProductPages() {
   const catalog = JSON.parse(await readFile(catalogPath, 'utf8'))
+  const categories = JSON.parse(await readFile(categoriesPath, 'utf8'))
+  const categoryNames = new Map(categories.map((category) => [category.id, category.name.sv]))
 
   return Promise.all(
     catalog
@@ -103,14 +171,14 @@ async function buildProductPages() {
           image: `${siteUrl}/og/home.jpg`,
         }
 
-        const photoPath = `products/${product.slug}/1-full.webp`
-        const photoFile = path.join(distDir, photoPath)
-        if (existsSync(photoFile)) {
+        const photoPaths = await productPhotoPaths(product.slug)
+        if (photoPaths.length > 0) {
           // The template declares home.jpg's 1200x630, which photos don't share.
-          const { width, height } = await sharp(photoFile).metadata()
-          page.image = `${siteUrl}/${photoPath}`
+          const { width, height } = await sharp(path.join(distDir, photoPaths[0])).metadata()
+          page.image = `${siteUrl}/${photoPaths[0]}`
           page.imageSize = { width, height }
         }
+        page.jsonLd = productJsonLd(product, `${siteUrl}/${page.route}`, photoPaths, categoryNames)
         return page
       }),
   )
@@ -157,6 +225,12 @@ async function main() {
       `<meta name="twitter:description" content="${description}" />`,
     )
     html = replaceTag(html, /<meta name="twitter:image" content="[^"]*" \/>/, `<meta name="twitter:image" content="${page.image}" />`)
+    if (page.noindex) {
+      html = replaceTag(html, /<\/head>/, `  <meta name="robots" content="noindex" />\n  </head>`)
+    }
+    if (page.jsonLd) {
+      html = replaceTag(html, /<\/head>/, `  <script type="application/ld+json">\n${page.jsonLd}\n    </script>\n  </head>`)
+    }
 
     const outputPath = path.join(distDir, page.outputFile)
     await mkdir(path.dirname(outputPath), { recursive: true })
