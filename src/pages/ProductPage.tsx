@@ -28,11 +28,17 @@ const ProductImage = styled.img<{ $whole?: boolean }>`
   border: 1px solid var(--color-border);
 `
 
+const Gallery = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+`
+
 const ThumbRow = styled.div`
   display: flex;
   gap: 0.5rem;
   margin-top: 0.75rem;
-  margin-bottom: 1.5rem;
 `
 
 const Thumb = styled.button<{ $active: boolean; $whole?: boolean }>`
@@ -212,25 +218,27 @@ function ProductDetails({ slug }: { slug: string | undefined }) {
       <BackRow>
         <BackLink to={`/${storeSearch}`}>{t('back_to_store')}</BackLink>
       </BackRow>
-      <ProductImage
-        src={images[Math.min(selectedImage, images.length - 1)].full}
-        alt={product.name[lang]}
-        $whole={product.wholeImage}
-      />
-      {images.length > 1 && (
-        <ThumbRow>
-          {images.map((image, index) => (
-            <Thumb
-              key={image.thumb}
-              $active={index === selectedImage}
-              $whole={product.wholeImage}
-              onClick={() => setSelectedImage(index)}
-            >
-              <img src={image.thumb} alt="" />
-            </Thumb>
-          ))}
-        </ThumbRow>
-      )}
+      <Gallery>
+        <ProductImage
+          src={images[Math.min(selectedImage, images.length - 1)].full}
+          alt={product.name[lang]}
+          $whole={product.wholeImage}
+        />
+        {images.length > 1 && (
+          <ThumbRow>
+            {images.map((image, index) => (
+              <Thumb
+                key={image.thumb}
+                $active={index === selectedImage}
+                $whole={product.wholeImage}
+                onClick={() => setSelectedImage(index)}
+              >
+                <img src={image.thumb} alt="" />
+              </Thumb>
+            ))}
+          </ThumbRow>
+        )}
+      </Gallery>
       <Heading>{product.name[lang]}</Heading>
       <Price>{formatPrice(product.priceOre)}</Price>
       <BodyText>{product.description[lang]}</BodyText>
