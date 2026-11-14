@@ -8,6 +8,14 @@ import { useCart } from '../hooks/useCart'
 import { formatPrice } from '../lib/formatPrice'
 import { getProductImages } from '../lib/productImages'
 import { usePageTitle } from '../hooks/usePageTitle'
+import { freeShippingOffer, isFreeShippingActive } from '../data/shippingMethods'
+
+const OfferNotice = styled.p`
+  font-size: 0.95rem;
+  color: var(--color-accent);
+  margin: -0.5rem 0 1.5rem;
+  text-align: center;
+`
 
 const Heading = styled.h1`
   font-size: 1.4rem;
@@ -123,6 +131,14 @@ export default function StorePage() {
   return (
     <Page style={{ minHeight: '60vh' }}>
       <Heading>{t('store_heading')}</Heading>
+      {freeShippingOffer && isFreeShippingActive() && inStockProducts.length > 0 && (
+        <OfferNotice>
+          {t('free_shipping_notice', {
+            amount: formatPrice(freeShippingOffer.minSubtotalOre),
+            lastDay: freeShippingOffer.lastDay[lang],
+          })}
+        </OfferNotice>
+      )}
       {inStockProducts.length === 0 && unpublishedProducts.length === 0 ? (
         <p>{t('store_coming_soon')}</p>
       ) : (

@@ -11,6 +11,7 @@ import { getProductImages } from '../lib/productImages'
 import type { VariantSelection } from '../lib/productVariants'
 import { getStoreListing, readStoreSearch, type StoreLinkState } from '../lib/storeListing'
 import { usePageTitle } from '../hooks/usePageTitle'
+import { freeShippingOffer, isFreeShippingActive } from '../data/shippingMethods'
 
 const Heading = styled.h1`
   font-size: 1.4rem;
@@ -62,6 +63,12 @@ const Price = styled.p`
   font-size: 1.1rem;
   color: var(--color-text-secondary);
   margin-bottom: 1rem;
+`
+
+const OfferNotice = styled.p`
+  font-size: 0.9rem;
+  color: var(--color-accent);
+  margin: -0.5rem 0 1rem;
 `
 
 const BodyText = styled.p`
@@ -241,6 +248,14 @@ function ProductDetails({ slug }: { slug: string | undefined }) {
       </Gallery>
       <Heading>{product.name[lang]}</Heading>
       <Price>{formatPrice(product.priceOre)}</Price>
+      {product.published && freeShippingOffer && isFreeShippingActive() && (
+        <OfferNotice>
+          {t('free_shipping_notice', {
+            amount: formatPrice(freeShippingOffer.minSubtotalOre),
+            lastDay: freeShippingOffer.lastDay[lang],
+          })}
+        </OfferNotice>
+      )}
       <BodyText>{product.description[lang]}</BodyText>
       {variantCategories.map((category) => (
         <VariantField key={category.id}>

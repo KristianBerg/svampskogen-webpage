@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { Page } from '../components/Page'
 import { products, type Product } from '../data/products'
-import { shippingMethod } from '../data/shippingMethods'
+import { shippingMethod, shippingPriceOre } from '../data/shippingMethods'
 import { useCart } from '../hooks/useCart'
 import { cartItemKey, type CartItem } from '../context/cartContext'
 import { formatPrice } from '../lib/formatPrice'
@@ -93,7 +93,7 @@ export default function CheckoutSuccessPage() {
     .filter((row): row is OrderRow => Boolean(row.product))
 
   const subtotal = rows.reduce((sum, row) => sum + row.product.priceOre * row.item.quantity, 0)
-  const deliveryPriceOre = deliveryMethod === 'pickup' ? 0 : shippingMethod.priceOre
+  const deliveryPriceOre = deliveryMethod === 'pickup' ? 0 : shippingPriceOre(subtotal)
   const total = subtotal + deliveryPriceOre
 
   return (

@@ -1,6 +1,6 @@
 import Stripe from 'stripe'
 import { products } from '../../src/data/products'
-import { shippingMethod } from '../../src/data/shippingMethods'
+import { shippingMethod, shippingPriceOre } from '../../src/data/shippingMethods'
 import type { DeliveryMethod } from '../../src/data/shippingMethodTypes'
 import { lineItemName, resolveVariantSelection, type VariantSelection } from '../../src/lib/productVariants'
 import { handleWithdraw, type WithdrawEnv } from './withdraw'
@@ -28,11 +28,12 @@ interface ResolvedLineItem {
   vatRate: number
   quantity: number
   metadata: Record<string, string>
-  // Only the pickup line may be 0 kr; anything else at 0 is a catalog mistake.
+  // Only pickup and free shipping may be 0 kr; anything else at 0 is a catalog mistake.
   allowFree?: boolean
 }
 
 const SHIPPING_LABEL: Record<Locale, string> = { sv: 'Frakt', en: 'Shipping' }
+const FREE_SHIPPING_SUFFIX: Record<Locale, string> = { sv: 'fri frakt', en: 'free shipping' }
 const PICKUP_LABEL: Record<Locale, string> = { sv: 'Hämtas i butiken', en: 'Pickup in store' }
 
 function resolveProduct(item: CheckoutLineItem, locale: Locale): ResolvedLineItem | null {
@@ -55,13 +56,18 @@ function resolveProduct(item: CheckoutLineItem, locale: Locale): ResolvedLineIte
 }
 
 // Added here rather than sent by the cart, so a tampered request can't leave it out.
-function resolveShipping(locale: Locale): ResolvedLineItem {
+// The price depends on the products subtotal, which is computed here from the catalog
+// too, so the free shipping threshold can't be reached by a tampered request either.
+function resolveShipping(locale: Locale, productsSubtotalOre: number): ResolvedLineItem {
+  const amountOre = shippingPriceOre(productsSubtotalOre)
+  const free = amountOre === 0
   return {
-    name: `${SHIPPING_LABEL[locale]} – ${shippingMethod.name[locale]}`,
-    amountOre: shippingMethod.priceOre,
+    name: `${SHIPPING_LABEL[locale]} – ${shippingMethod.name[locale]}${free ? ` (${FREE_SHIPPING_SUFFIX[locale]})` : ''}`,
+    amountOre,
     vatRate: shippingMethod.vatRate,
     quantity: 1,
-    metadata: { shipping_method: shippingMethod.id },
+    metadata: { shipping_method: shippingMethod.id, ...(free && { free_shipping: 'true' }) },
+    allowFree: free,
   }
 }
 
@@ -191,7 +197,8 @@ export default {
       }
       resolved.push(entry)
     }
-    resolved.push(deliveryMethod === 'pickup' ? resolvePickup(locale) : resolveShipping(locale))
+    const productsSubtotalOre = resolved.reduce((sum, entry) => sum + entry.amountOre * entry.quantity, 0)
+    resolved.push(deliveryMethod === 'pickup' ? resolvePickup(locale) : resolveShipping(locale, productsSubtotalOre))
 
     const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
       httpClient: Stripe.createFetchHttpClient(),

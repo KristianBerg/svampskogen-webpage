@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { Page } from '../components/Page'
 import { products, type Product } from '../data/products'
-import { shippingMethod } from '../data/shippingMethods'
+import { freeShippingOffer, isFreeShippingActive, shippingMethod, shippingPriceOre } from '../data/shippingMethods'
 import { cartItemKey } from '../context/cartContext'
 import { useCart } from '../hooks/useCart'
 import { formatPrice } from '../lib/formatPrice'
@@ -145,6 +145,12 @@ const Total = styled.p`
   margin-bottom: 1.5rem;
 `
 
+const FreeShippingNotice = styled.p`
+  font-size: 0.95rem;
+  color: var(--color-accent);
+  margin-bottom: 1rem;
+`
+
 const DeliveryTime = styled.p`
   font-size: 0.85rem;
   color: var(--color-text-secondary);
@@ -265,8 +271,10 @@ export default function CartPage() {
     .filter((row): row is CartRow => Boolean(row.product))
 
   const subtotal = rows.reduce((sum, row) => sum + row.product.priceOre * row.item.quantity, 0)
-  const deliveryPriceOre = deliveryMethod === 'pickup' ? 0 : shippingMethod.priceOre
+  const shippingOre = shippingPriceOre(subtotal)
+  const deliveryPriceOre = deliveryMethod === 'pickup' ? 0 : shippingOre
   const total = subtotal + deliveryPriceOre
+  const offer = isFreeShippingActive() && deliveryMethod === 'shipping' ? freeShippingOffer : null
 
   const handleCheckout = async () => {
     setIsCheckingOut(true)
@@ -343,7 +351,7 @@ export default function CartPage() {
                 checked={deliveryMethod === 'shipping'}
                 onChange={() => setDeliveryMethod('shipping')}
               />
-              {shippingMethod.name[lang]}: {formatPrice(shippingMethod.priceOre)}
+              {shippingMethod.name[lang]}: {formatPrice(shippingOre)}
             </label>
             <label>
               <input
@@ -355,6 +363,16 @@ export default function CartPage() {
               {t('cart_pickup_option')}: {formatPrice(0)}
             </label>
           </DeliveryFieldset>
+          {offer && (
+            <FreeShippingNotice>
+              {shippingOre === 0
+                ? t('cart_free_shipping_reached')
+                : t('cart_free_shipping_remaining', {
+                    amount: formatPrice(offer.minSubtotalOre - subtotal),
+                    lastDay: offer.lastDay[lang],
+                  })}
+            </FreeShippingNotice>
+          )}
           {deliveryMethod === 'shipping' && <DeliveryTime>{t('cart_delivery_time')}</DeliveryTime>}
           <Total>
             {t('cart_total')}: {formatPrice(total)}
