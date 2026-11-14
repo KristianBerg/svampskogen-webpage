@@ -31,7 +31,7 @@ function t(key, values = {}) {
 }
 
 // Same format as src/lib/formatPrice.ts ("395 kr").
-function formatPrice(amountOre) {
+export function formatPrice(amountOre) {
   return new Intl.NumberFormat('sv-SE', { style: 'currency', currency: 'SEK', maximumFractionDigits: 0 }).format(
     amountOre / 100,
   )

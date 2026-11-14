@@ -15,12 +15,14 @@ import {
   aboutBody,
   courseBody,
   escapeHtml,
+  formatPrice,
   privacyBody,
   productBody,
   returnsBody,
   storeBody,
   withdrawBody,
 } from './lib/staticPageContent.mjs'
+import { llmsTxt, storeFromTemplate } from './lib/llmsTxt.mjs'
 
 const distDir = path.resolve(import.meta.dirname, '..', 'dist')
 const catalogPath = path.resolve(import.meta.dirname, '..', 'src', 'data', 'products.json')
@@ -266,6 +268,21 @@ async function main() {
   }
 
   await addToSitemap(productPages)
+  await writeFile(
+    path.join(distDir, 'llms.txt'),
+    llmsTxt({
+      siteUrl,
+      store: storeFromTemplate(template),
+      products: generateProductPages ? catalog.products : [],
+      categories: catalog.categories,
+      pages: staticPages
+        .filter((page) => !page.noindex)
+        .map((page) => ({ ...page, linkText: page.title.replace(/ – Svampskogen$/, '') })),
+      shippingPriceSek,
+      // Plain spaces: the non-breaking one Intl puts before "kr" means nothing in Markdown.
+      formatPrice: (amountOre) => formatPrice(amountOre).replace(/\s/g, ' '),
+    }),
+  )
   const storeProducts = generateProductPages ? catalog.products : []
   await writeFile(templatePath, withBody(template, storeBody(storeProducts, catalog.categories)))
 }
