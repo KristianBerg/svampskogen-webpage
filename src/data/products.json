@@ -699,5 +699,378 @@
       "sv": "Design: Anna Stead\nFörlag: Flame Tree Publishing\nSerie: Flame Tree Notebooks\nUtgiven: 2024\nSidor: 176\nBand: Inbunden med foliering\nFormat: 155 × 216 mm\nISBN: 9781804179499",
       "en": "Design: Anna Stead\nPublisher: Flame Tree Publishing\nSeries: Flame Tree Notebooks\nPublished: 2024\nPages: 176\nBinding: Foiled hardcover\nSize: 155 × 216 mm\nISBN: 9781804179499"
     }
+  },
+  {
+    "slug": "swedish-kasa-300-ml",
+    "priceOre": 11000,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "category": "friluftsliv",
+    "name": {
+      "sv": "Swedish Kåsa 300 ml",
+      "en": "Swedish Kåsa 300 ml"
+    },
+    "description": {
+      "sv": "Kåsan är en klassisk skandinavisk innovation med många användningsområden, och Swedish Kåsa är Light My Fires version av den. Fyll den med friskt bäckvatten eller med något varmt att dricka. Handtaget har ett rejält hål, så att du kan hänga kåsan i ryggsäcken eller bältet och alltid ha den redo.\n\nMåttmarkering på insidan. BPA-fri och livsmedelsgodkänd enligt EU och FDA, tål mikrovågsugn och diskmaskin. Tillverkad i Sverige av mass balance-polypropen, 100 % biobaserad enligt massbalansprincipen.\n\nRymmer 300 ml, lagom för soppa, gröt och varma drycker.\nMått: 120 × 120 × 55 mm\nVikt: 80 g",
+      "en": "The kåsa is a classic Scandinavian invention with many uses, and Swedish Kåsa is Light My Fire's take on it. Scoop up fresh stream water or fill it with something hot to drink. The handle has a generous hole, so you can hang the kåsa on your backpack or belt and always have it at hand.\n\nMeasuring lines inside. BPA-free and EU and FDA food approved, microwave and dishwasher safe. Made in Sweden from mass balance polypropylene, 100% bio-attributed.\n\nHolds 300 ml, enough for soup, porridge and hot drinks.\nSize: 120 × 120 × 55 mm\nWeight: 80 g"
+    },
+    "variants": [
+      {
+        "id": "farg",
+        "name": {
+          "sv": "Färg",
+          "en": "Color"
+        },
+        "options": [
+          {
+            "id": "hazyblue",
+            "name": {
+              "sv": "Blå",
+              "en": "Hazy blue"
+            }
+          },
+          {
+            "id": "rustyorange",
+            "name": {
+              "sv": "Rostorange",
+              "en": "Rusty orange"
+            }
+          },
+          {
+            "id": "mustyyellow",
+            "name": {
+              "sv": "Senapsgul",
+              "en": "Musty yellow"
+            }
+          },
+          {
+            "id": "sandygreen",
+            "name": {
+              "sv": "Ljusgrön",
+              "en": "Sandy green"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "swedish-kasa-150-ml",
+    "priceOre": 8000,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "category": "friluftsliv",
+    "name": {
+      "sv": "Swedish Kåsa 150 ml",
+      "en": "Swedish Kåsa 150 ml"
+    },
+    "description": {
+      "sv": "Kåsan är en klassisk skandinavisk innovation med många användningsområden, och Swedish Kåsa är Light My Fires version av den. Fyll den med friskt bäckvatten eller med något varmt att dricka. Handtaget har ett rejält hål, så att du kan hänga kåsan i ryggsäcken eller bältet och alltid ha den redo.\n\nMåttmarkering på insidan. BPA-fri och livsmedelsgodkänd enligt EU och FDA, tål mikrovågsugn och diskmaskin. Tillverkad i Sverige av mass balance-polypropen, 100 % biobaserad enligt massbalansprincipen.\n\nRymmer 150 ml, lagom för kaffe eller te på tur och små portioner.\nMått: 120 × 87 × 50 mm\nVikt: 47 g",
+      "en": "The kåsa is a classic Scandinavian invention with many uses, and Swedish Kåsa is Light My Fire's take on it. Scoop up fresh stream water or fill it with something hot to drink. The handle has a generous hole, so you can hang the kåsa on your backpack or belt and always have it at hand.\n\nMeasuring lines inside. BPA-free and EU and FDA food approved, microwave and dishwasher safe. Made in Sweden from mass balance polypropylene, 100% bio-attributed.\n\nHolds 150 ml, just right for coffee or tea on the trail and small servings.\nSize: 120 × 87 × 50 mm\nWeight: 47 g"
+    },
+    "variants": [
+      {
+        "id": "farg",
+        "name": {
+          "sv": "Färg",
+          "en": "Color"
+        },
+        "options": [
+          {
+            "id": "dustypink",
+            "name": {
+              "sv": "Gammelrosa",
+              "en": "Dusty pink"
+            }
+          },
+          {
+            "id": "hazyblue",
+            "name": {
+              "sv": "Blå",
+              "en": "Hazy blue"
+            }
+          },
+          {
+            "id": "sagegreen",
+            "name": {
+              "sv": "Salviagrön",
+              "en": "Sage green"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "swedish-firesteel-scout",
+    "priceOre": 14500,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "category": "friluftsliv",
+    "name": {
+      "sv": "Tändstål Swedish FireSteel Scout",
+      "en": "Swedish FireSteel Scout"
+    },
+    "description": {
+      "sv": "Light My Fires klassiska tändstål av magnesiumlegering, ursprungligen utvecklat för armén. Gnistorna håller 2 980 °C, så du kan göra upp eld i regn och blåst och på alla höjder. Tändstålet håller för upp till 3 000 tändningar och fungerar lika bra till lägerelden som till gasolköket och grillen.\n\nGreppvänlig design med inbyggd visselpipa (120 dB) för nödsituationer. Klassat som ej farligt gods, så det får följa med i handbagaget. Handtagen är gjorda av biobaserad plast.\n\nMått: 77 × 25 × 15 mm\nVikt: 25 g\nTillverkad i Sverige",
+      "en": "Light My Fire's classic magnesium alloy firesteel, originally developed for the army. The sparks reach 2,980 °C, so you can light a fire in wind and rain and at any altitude. It lasts for up to 3,000 strikes and works just as well for a campfire as for a gas stove or barbecue.\n\nGrip-friendly design with a built-in 120 dB emergency whistle. Travel safe, so it can go in your hand luggage. The handles are made from bio-based plastic.\n\nSize: 77 × 25 × 15 mm\nWeight: 25 g\nMade in Sweden"
+    },
+    "variants": [
+      {
+        "id": "farg",
+        "name": {
+          "sv": "Färg",
+          "en": "Color"
+        },
+        "options": [
+          {
+            "id": "cocoshell",
+            "name": {
+              "sv": "Kokosbrun",
+              "en": "Coco shell"
+            }
+          },
+          {
+            "id": "rustyorange",
+            "name": {
+              "sv": "Rostorange",
+              "en": "Rusty orange"
+            }
+          },
+          {
+            "id": "rockyred",
+            "name": {
+              "sv": "Röd",
+              "en": "Rocky red"
+            }
+          },
+          {
+            "id": "hazyblue",
+            "name": {
+              "sv": "Blå",
+              "en": "Hazy blue"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "firelighting-kit",
+    "priceOre": 24000,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "category": "friluftsliv",
+    "name": {
+      "sv": "FireLighting Kit",
+      "en": "FireLighting Kit"
+    },
+    "description": {
+      "sv": "Allt du behöver för att tända en eld och få fart på grillkorven, i ett set från Light My Fire:\n\n- Swedish FireSteel Scout, ett tändstål som ger 2 980 °C heta gnistor och håller för 3 000 tändningar.\n- MayaSticks \"On-a-Rope\", naturlig tändved med upp till 80 % kåda som tänder även när den är blöt.\n- GrandPa's FireFork, en grillgaffel av rostfritt stål som du fäster på valfri pinne, med skyddshätta.\n\nTändstålet och grillgaffeln är tillverkade i Sverige, tändveden i Honduras.",
+      "en": "Everything you need to light a fire and get the hot dogs cooking, in one set from Light My Fire:\n\n- Swedish FireSteel Scout, a firesteel that throws 2,980 °C sparks and lasts for 3,000 strikes.\n- MayaSticks \"On-a-Rope\", natural tinder with up to 80% resin that lights even when wet.\n- GrandPa's FireFork, a stainless steel grill fork that fits on any stick, with a safety cap.\n\nThe firesteel and fork are made in Sweden, the tinder in Honduras."
+    },
+    "variants": [
+      {
+        "id": "farg",
+        "name": {
+          "sv": "Färg",
+          "en": "Color"
+        },
+        "options": [
+          {
+            "id": "sandygreen-cocoshell",
+            "name": {
+              "sv": "Ljusgrön och kokosbrun",
+              "en": "Sandy green and coco shell"
+            }
+          },
+          {
+            "id": "hazyblue-rustyorange",
+            "name": {
+              "sv": "Blå och rostorange",
+              "en": "Hazy blue and rusty orange"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "grandpas-firefork",
+    "priceOre": 6500,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "category": "friluftsliv",
+    "name": {
+      "sv": "GrandPa's FireFork",
+      "en": "GrandPa's FireFork"
+    },
+    "description": {
+      "sv": "Farfars smarta grillgaffel: en tråd av rostfritt stål som du trär på vilken pinne som helst du hittar i skogen. De utåtböjda spetsarna håller korven eller marshmallowen på plats över elden, och gaffeln funkar också fint för att röra om i glöden.\n\nStåltråden är gjord av 80 % återvunnet rostfritt stål och skyddshättan av biobaserad plast, så gaffeln är säker att packa ner.\n\nMått: 103 × 47 × 19 mm\nTillverkad i Sverige",
+      "en": "Grandpa's clever grill fork: a single stainless steel wire that slots onto any stick you find in the forest. The curved points hold a hot dog or marshmallow firmly over the fire, and it makes a handy fire poker too.\n\nThe wire is made from 80% recycled stainless steel and the safety cap from bio-based plastic, so it packs away safely.\n\nSize: 103 × 47 × 19 mm\nMade in Sweden"
+    },
+    "variants": [
+      {
+        "id": "farg",
+        "name": {
+          "sv": "Färg",
+          "en": "Color"
+        },
+        "options": [
+          {
+            "id": "sandygreen",
+            "name": {
+              "sv": "Ljusgrön",
+              "en": "Sandy green"
+            }
+          },
+          {
+            "id": "dustypink",
+            "name": {
+              "sv": "Gammelrosa",
+              "en": "Dusty pink"
+            }
+          },
+          {
+            "id": "mustyyellow",
+            "name": {
+              "sv": "Senapsgul",
+              "en": "Musty yellow"
+            }
+          },
+          {
+            "id": "hazyblue",
+            "name": {
+              "sv": "Blå",
+              "en": "Hazy blue"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "grandpas-firegrill",
+    "priceOre": 28000,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "category": "friluftsliv",
+    "name": {
+      "sv": "GrandPa's FireGrill",
+      "en": "GrandPa's FireGrill"
+    },
+    "description": {
+      "sv": "Ett hopfällbart grillgaller av rostfritt stål som du fäster på en pinne från marken. Hopfällt fungerar det som ett halster för fisk, grönsaker, hamburgare eller bröd, och utfällt blir det ett större grillgaller att lägga över elden.\n\nLätt att rengöra, tål diskmaskin och packas smidigt ner när det är dags att gå vidare.\n\nMått: 165 × 165 × 25 mm\nVikt: 107 g",
+      "en": "A foldable stainless steel grill that you attach to a stick from the ground. Folded, it works as a grill basket for fish, vegetables, burgers or bread, and opened out it becomes a larger grill grate to rest over the fire.\n\nEasy to clean, dishwasher safe and packs away neatly when it's time to move on.\n\nSize: 165 × 165 × 25 mm\nWeight: 107 g"
+    }
+  },
+  {
+    "slug": "mayasticks-200-g",
+    "priceOre": 5000,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "category": "friluftsliv",
+    "name": {
+      "sv": "MayaSticks tändved 200 g",
+      "en": "MayaSticks fire starter 200 g"
+    },
+    "description": {
+      "sv": "En bunt naturlig tändved av stubbar från odlad tall i Honduras. Med upp till 80 % kåda brinner pinnarna hett och länge, och de tänder även när de är blöta. En eller två pinnar räcker för att få igång lägerelden, kaminen eller grillen. Inga kemiska tillsatser, inga skadliga ångor, och de luktar fantastiskt.\n\nSCS-certifierad och en del av Three Tree Pledge-programmet.\n\nMått: 205 × 55 × 40 mm\nVikt: cirka 200 g\nTillverkad i Honduras",
+      "en": "A bundle of natural tinder made from the stumps of cultivated pine in Honduras. With up to 80% resin the sticks burn hot and long, and they light even when wet. One or two sticks are enough to start a campfire, wood stove or barbecue. No chemicals, no harmful fumes, and they smell amazing.\n\nSCS certified and part of the Three Tree Pledge programme.\n\nSize: 205 × 55 × 40 mm\nWeight: about 200 g\nMade in Honduras"
+    }
+  },
+  {
+    "slug": "mayasticks-on-a-rope",
+    "priceOre": 4000,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "category": "friluftsliv",
+    "name": {
+      "sv": "MayaSticks \"On-a-Rope\"",
+      "en": "MayaSticks \"On-a-Rope\""
+    },
+    "description": {
+      "sv": "En bit naturlig tändved med snodd, så att du kan hänga den på ryggsäcken eller handleden. Gjord av stubbar från odlad tall med upp till 80 % kåda, så den tänder även när den är blöt och brinner hett och länge. Tälj av lite spån och tänd med ett tändstål. Inga kemiska tillsatser.\n\nSCS-certifierad och en del av Three Tree Pledge-programmet.\n\nMått: 155 × 20 × 20 mm\nVikt: 50 g\nTillverkad i Honduras",
+      "en": "A stick of natural tinder on a cord, so you can hang it on your backpack or wrist. Made from cultivated pine stumps with up to 80% resin, so it lights even when wet and burns hot and long. Shave off a few curls and light them with a firesteel. No chemicals.\n\nSCS certified and part of the Three Tree Pledge programme.\n\nSize: 155 × 20 × 20 mm\nWeight: 50 g\nMade in Honduras"
+    }
+  },
+  {
+    "slug": "swedish-spork-original",
+    "priceOre": 3500,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "category": "friluftsliv",
+    "name": {
+      "sv": "Swedish Spork Original",
+      "en": "Swedish Spork Original"
+    },
+    "description": {
+      "sv": "Light My Fires klassiska spork: sked i ena änden och gaffel med tandad kniv i den andra. Lätt och tålig, och ett bra alternativ till engångsbestick i lunchlådan, picknickkorgen eller ryggsäcken.\n\nBPA-fri och livsmedelsgodkänd enligt EU och FDA, tål mikrovågsugn och diskmaskin och är skonsam mot non stick-beläggning. Tillverkad av 15 % biobaserad plast från GMO-fri majs.\n\nLängd: 17 cm\nVikt: 11 g\nTillverkad i Sverige",
+      "en": "Light My Fire's classic spork: a spoon at one end and a fork with a serrated knife edge at the other. Light and durable, and a good alternative to single-use cutlery in your lunch box, picnic basket or backpack.\n\nBPA-free and EU and FDA food approved, microwave and dishwasher safe, and gentle on non-stick cookware. Made from 15% bio-based plastic from GMO-free corn.\n\nLength: 17 cm\nWeight: 11 g\nMade in Sweden"
+    },
+    "variants": [
+      {
+        "id": "farg",
+        "name": {
+          "sv": "Färg",
+          "en": "Color"
+        },
+        "options": [
+          {
+            "id": "deeplyblue",
+            "name": {
+              "sv": "Mörkblå",
+              "en": "Deeply blue"
+            }
+          },
+          {
+            "id": "rustyorange",
+            "name": {
+              "sv": "Rostorange",
+              "en": "Rusty orange"
+            }
+          },
+          {
+            "id": "mustyyellow",
+            "name": {
+              "sv": "Senapsgul",
+              "en": "Musty yellow"
+            }
+          },
+          {
+            "id": "sandygreen",
+            "name": {
+              "sv": "Ljusgrön",
+              "en": "Sandy green"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "swedish-spork-stainless",
+    "priceOre": 12500,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "category": "friluftsliv",
+    "name": {
+      "sv": "Swedish Spork Stainless",
+      "en": "Swedish Spork Stainless"
+    },
+    "description": {
+      "sv": "Sked, gaffel och kniv i ett, i rostfritt stål. Ett stadigt bestick för måltider under bar himmel som håller i generationer, och som klarar matlagning över indirekt värme.\n\nTillverkad i Sverige av 61 % återvunnet 18/8-stål. Tål diskmaskin. Upphöjd till brukskonst av Svensk Form.\n\nLängd: 17 cm\nVikt: 41 g",
+      "en": "Spoon, fork and knife in one, in stainless steel. A sturdy utensil for meals under the open sky that will last for generations, and handles cooking over indirect heat.\n\nMade in Sweden from 61% recycled 18/8 stainless steel. Dishwasher safe. Appointed Applied Art by Svensk Form.\n\nLength: 17 cm\nWeight: 41 g"
+    }
   }
 ]

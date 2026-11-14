@@ -33,5 +33,12 @@
       "sv": "Pyssel",
       "en": "Crafts"
     }
+  },
+  {
+    "id": "friluftsliv",
+    "name": {
+      "sv": "Friluftsliv",
+      "en": "Outdoors"
+    }
   }
 ]
