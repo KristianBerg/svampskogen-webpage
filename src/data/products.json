@@ -381,7 +381,7 @@
     "slug": "mushroom-sara-rich",
     "priceOre": 22000,
     "vatRate": 0.06,
-    "published": true,
+    "published": false,
     "inStock": true,
     "wholeImage": true,
     "category": "bocker",
