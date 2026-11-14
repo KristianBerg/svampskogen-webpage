@@ -21,6 +21,13 @@
     }
   },
   {
+    "id": "knivar",
+    "name": {
+      "sv": "Knivar",
+      "en": "Knives"
+    }
+  },
+  {
     "id": "bocker",
     "name": {
       "sv": "Böcker",

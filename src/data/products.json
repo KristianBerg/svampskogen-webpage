@@ -1072,5 +1072,56 @@
       "sv": "Sked, gaffel och kniv i ett, i rostfritt stål. Ett stadigt bestick för måltider under bar himmel som håller i generationer, och som klarar matlagning över indirekt värme.\n\nTillverkad i Sverige av 61 % återvunnet 18/8-stål. Tål diskmaskin. Upphöjd till brukskonst av Svensk Form.\n\nLängd: 17 cm\nVikt: 41 g",
       "en": "Spoon, fork and knife in one, in stainless steel. A sturdy utensil for meals under the open sky that will last for generations, and handles cooking over indirect heat.\n\nMade in Sweden from 61% recycled 18/8 stainless steel. Dishwasher safe. Appointed Applied Art by Svensk Form.\n\nLength: 17 cm\nWeight: 41 g"
     }
+  },
+  {
+    "slug": "opinel-svampkniv-bok",
+    "priceOre": 45000,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "wholeImage": true,
+    "category": "knivar",
+    "name": {
+      "sv": "Opinel svampkniv i bok",
+      "en": "Opinel mushroom knife, beech"
+    },
+    "description": {
+      "sv": "Opinels klassiska svampkniv har allt du behöver för att plocka och rensa svamp i skogen. Det böjda bladet skär av foten och den tandade ryggen skrapar bort jord och skadade partier. I andra änden av handtaget sitter en borste av vildsvinsborst som tar bort barr och mossa.\n\nHandtaget är av PEFC-certifierad bok och lackat för att stå emot fukt och smuts. Bladet låses i öppet läge med Opinels säkerhetsring Virobloc.\n\nBladlängd: 8 cm\nHandtagslängd: 10,9 cm\nBlad: rostfritt stål\nTillverkad i Frankrike\n\nLevereras i blisterförpackning.",
+      "en": "Opinel's classic mushroom knife has everything you need to pick and clean mushrooms in the forest. The curved blade cuts the stem and the serrated back scrapes off soil and damaged spots. At the other end of the handle is a boar bristle brush that sweeps away needles and moss.\n\nThe handle is PEFC-certified beech, varnished to resist moisture and dirt. The blade locks open with Opinel's Virobloc safety ring.\n\nBlade length: 8 cm\nHandle length: 10.9 cm\nBlade: stainless steel\nMade in France\n\nComes in a blister pack."
+    }
+  },
+  {
+    "slug": "opinel-svampkniv-ek-fodral",
+    "priceOre": 90000,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "wholeImage": true,
+    "category": "knivar",
+    "name": {
+      "sv": "Opinel svampkniv i ek med fodral",
+      "en": "Opinel mushroom knife, oak with sheath"
+    },
+    "description": {
+      "sv": "Opinels svampkniv med handtag av ek, i en trälåda tillsammans med ett fodral att bära kniven i på bältet. En fin present till den som plockar svamp. Det böjda bladet skär av foten och den tandade ryggen skrapar bort jord och skadade partier. Borsten i handtagets ände tar bort barr och mossa.\n\nHandtaget är av fransk ek, ett hårt träslag i gulbrunt med tydlig ådring. Bladet låses i öppet läge med Opinels säkerhetsring Virobloc.\n\nBladlängd: 8 cm\nHandtagslängd: 10,9 cm\nBlad: rostfritt stål\nTillverkad i Frankrike\n\nLevereras i trälåda med fodral.",
+      "en": "Opinel's mushroom knife with an oak handle, in a wooden box together with a sheath for carrying the knife on your belt. A lovely gift for anyone who forages. The curved blade cuts the stem and the serrated back scrapes off soil and damaged spots. The brush at the end of the handle sweeps away needles and moss.\n\nThe handle is French oak, a hard yellow-brown wood with distinct grain. The blade locks open with Opinel's Virobloc safety ring.\n\nBlade length: 8 cm\nHandle length: 10.9 cm\nBlade: stainless steel\nMade in France\n\nComes in a wooden box with a sheath."
+    }
+  },
+  {
+    "slug": "opinel-svampkniv-valnot",
+    "priceOre": 65000,
+    "vatRate": 0.25,
+    "published": true,
+    "inStock": true,
+    "wholeImage": true,
+    "category": "knivar",
+    "name": {
+      "sv": "Opinel svampkniv i valnöt",
+      "en": "Opinel mushroom knife, walnut"
+    },
+    "description": {
+      "sv": "Opinels svampkniv i en elegant tappning, med handtag av valnöt och en orange snodd. Kniven ligger i en presentask i trä, så den är fin att ge bort. Det böjda bladet skär av foten och den tandade ryggen skrapar bort jord och skadade partier. Borsten i handtagets ände tar bort barr och mossa.\n\nValnöten har en fin ådring i toner från ljusbrunt till mörkbrunt. Bladet låses i öppet läge med Opinels säkerhetsring Virobloc.\n\nBladlängd: 8 cm\nHandtagslängd: 10,9 cm\nBlad: rostfritt stål\nTillverkad i Frankrike\n\nLevereras i presentask i trä.",
+      "en": "An elegant take on Opinel's mushroom knife, with a walnut handle and an orange cord. The knife comes in a wooden gift case, so it's ready to give as a present. The curved blade cuts the stem and the serrated back scrapes off soil and damaged spots. The brush at the end of the handle sweeps away needles and moss.\n\nThe walnut has a fine grain in shades from light to dark brown. The blade locks open with Opinel's Virobloc safety ring.\n\nBlade length: 8 cm\nHandle length: 10.9 cm\nBlade: stainless steel\nMade in France\n\nComes in a wooden gift case."
+    }
   }
 ]
