@@ -3,11 +3,24 @@
 // Pages serves whatever file sits at a given path, and Facebook's crawler
 // never executes JavaScript, so a per-route file with baked-in <meta> tags
 // is the only way to get a distinct preview without running a server.
-// React still hydrates the page normally for real visitors.
+// React still renders the page normally for real visitors.
+//
+// Each page also gets plain readable content inside #root (see
+// lib/staticPageContent.mjs) for crawlers that don't run JavaScript.
 import { existsSync } from 'node:fs'
 import { readFile, readdir, writeFile, mkdir } from 'node:fs/promises'
 import path from 'node:path'
 import sharp from 'sharp'
+import {
+  aboutBody,
+  courseBody,
+  escapeHtml,
+  privacyBody,
+  productBody,
+  returnsBody,
+  storeBody,
+  withdrawBody,
+} from './lib/staticPageContent.mjs'
 
 const distDir = path.resolve(import.meta.dirname, '..', 'dist')
 const catalogPath = path.resolve(import.meta.dirname, '..', 'src', 'data', 'products.json')
@@ -27,6 +40,7 @@ const staticPages = [
     description:
       'Säsongens svampkurser är avslutade. Nya kurser kommer under svampsäsongen 2027.',
     image: `${siteUrl}/og/course.jpg`,
+    body: courseBody(),
   },
   // A .html file is served with 200 at the extensionless path, while a
   // directory URL gets a 301 to its trailing-slash form.
@@ -37,6 +51,7 @@ const staticPages = [
     description:
       'Svampskogen är en specialbutik för svampplockning och friluftsliv i Mitt Möllan i Malmö. Öppettider, kontakt och mer om butiken.',
     image: `${siteUrl}/og/home.jpg`,
+    body: aboutBody(),
   },
   {
     route: 'returns',
@@ -44,6 +59,7 @@ const staticPages = [
     title: 'Retur och villkor – Svampskogen',
     description: 'Ångerrätt, reklamation, leverans och köpvillkor för Svampskogens webbutik.',
     image: `${siteUrl}/og/home.jpg`,
+    body: returnsBody(),
   },
   {
     route: 'withdraw',
@@ -51,6 +67,7 @@ const staticPages = [
     title: 'Ångra köp – Svampskogen',
     description: 'Ångra ditt köp från Svampskogens webbutik.',
     image: `${siteUrl}/og/home.jpg`,
+    body: withdrawBody(),
     // A form, not something anyone searches for. Also left out of the sitemap.
     noindex: true,
   },
@@ -60,6 +77,7 @@ const staticPages = [
     title: 'Integritetspolicy – Svampskogen',
     description: 'Så behandlar Svampskogen dina personuppgifter.',
     image: `${siteUrl}/og/home.jpg`,
+    body: privacyBody(),
   },
 ]
 
@@ -68,11 +86,6 @@ function replaceTag(html, pattern, replacement) {
     throw new Error(`Expected to find ${pattern} in template`)
   }
   return html.replace(pattern, () => replacement)
-}
-
-// Names and descriptions come from the catalog and can contain quotes.
-function escapeHtml(text) {
-  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 }
 
 function productDescription(product) {
@@ -151,36 +164,40 @@ function productJsonLd(product, url, photoPaths, categoryNames) {
 }
 
 // Same filter as src/data/products.ts, read as JSON because this runs under plain Node.
-async function buildProductPages() {
+async function readCatalog() {
   const catalog = JSON.parse(await readFile(catalogPath, 'utf8'))
   const categories = JSON.parse(await readFile(categoriesPath, 'utf8'))
+  return { products: catalog.filter((product) => product.published), categories }
+}
+
+async function buildProductPages({ products, categories }) {
   const categoryNames = new Map(categories.map((category) => [category.id, category.name.sv]))
 
   return Promise.all(
-    catalog
-      .filter((product) => product.published)
-      .map(async (product) => {
-        const page = {
-          route: `store/${product.slug}`,
-          // Not <slug>/index.html: Pages answers a directory URL with a 301 to the
-          // trailing-slash form, which would redirect away from the canonical URL.
-          // A .html file is served with 200 at the extensionless path.
-          outputFile: `store/${product.slug}.html`,
-          title: `${product.name.sv} – Svampskogen`,
-          description: productDescription(product),
-          image: `${siteUrl}/og/home.jpg`,
-        }
+    products.map(async (product) => {
+      const page = {
+        route: `store/${product.slug}`,
+        // Not <slug>/index.html: Pages answers a directory URL with a 301 to the
+        // trailing-slash form, which would redirect away from the canonical URL.
+        // A .html file is served with 200 at the extensionless path.
+        outputFile: `store/${product.slug}.html`,
+        title: `${product.name.sv} – Svampskogen`,
+        description: productDescription(product),
+        image: `${siteUrl}/og/home.jpg`,
+      }
 
-        const photoPaths = await productPhotoPaths(product.slug)
-        if (photoPaths.length > 0) {
-          // The template declares home.jpg's 1200x630, which photos don't share.
-          const { width, height } = await sharp(path.join(distDir, photoPaths[0])).metadata()
-          page.image = `${siteUrl}/${photoPaths[0]}`
-          page.imageSize = { width, height }
-        }
-        page.jsonLd = productJsonLd(product, `${siteUrl}/${page.route}`, photoPaths, categoryNames)
-        return page
-      }),
+      const photoPaths = await productPhotoPaths(product.slug)
+      if (photoPaths.length > 0) {
+        // The template declares home.jpg's 1200x630, which photos don't share.
+        const { width, height } = await sharp(path.join(distDir, photoPaths[0])).metadata()
+        page.image = `${siteUrl}/${photoPaths[0]}`
+        page.imageSize = { width, height }
+      }
+      page.jsonLd = productJsonLd(product, `${siteUrl}/${page.route}`, photoPaths, categoryNames)
+      const photo = page.imageSize && { path: photoPaths[0], ...page.imageSize }
+      page.body = productBody(product, categoryNames.get(product.category), photo)
+      return page
+    }),
   )
 }
 
@@ -193,9 +210,19 @@ async function addToSitemap(pages) {
   await writeFile(sitemapPath, replaceTag(sitemap, /<\/urlset>/, `${entries}</urlset>`))
 }
 
+function withBody(html, body) {
+  return replaceTag(html, /<div id="root"><\/div>/, `<div id="root">\n${body}\n    </div>`)
+}
+
 async function main() {
-  const template = await readFile(path.join(distDir, 'index.html'), 'utf8')
-  const productPages = generateProductPages ? await buildProductPages() : []
+  // dist/index.html is the template for every page and gets the front page's
+  // content last, so read it before anything is written. 404.html was copied
+  // from it by postbuild and stays empty: it serves /cart, /checkout/* and
+  // unknown URLs, which shouldn't carry the product list.
+  const templatePath = path.join(distDir, 'index.html')
+  const template = await readFile(templatePath, 'utf8')
+  const catalog = await readCatalog()
+  const productPages = generateProductPages ? await buildProductPages(catalog) : []
   const pages = [...staticPages, ...productPages]
 
   for (const page of pages) {
@@ -231,6 +258,7 @@ async function main() {
     if (page.jsonLd) {
       html = replaceTag(html, /<\/head>/, `  <script type="application/ld+json">\n${page.jsonLd}\n    </script>\n  </head>`)
     }
+    html = withBody(html, page.body)
 
     const outputPath = path.join(distDir, page.outputFile)
     await mkdir(path.dirname(outputPath), { recursive: true })
@@ -238,6 +266,8 @@ async function main() {
   }
 
   await addToSitemap(productPages)
+  const storeProducts = generateProductPages ? catalog.products : []
+  await writeFile(templatePath, withBody(template, storeBody(storeProducts, catalog.categories)))
 }
 
 main()
