@@ -10,12 +10,12 @@ export const shippingMethod: ShippingMethod = {
   name: { sv: 'DHL', en: 'DHL' },
 }
 
-// Launch and Christmas offer. The last day is 15 Dec, the last order date for
-// delivery before Christmas. Set to null to switch the offer off.
+// Launch and Christmas offer. The last day is Sunday 13 Dec, a couple of days before
+// the last order date for delivery before Christmas. Set to null to switch the offer off.
 export const freeShippingOffer: FreeShippingOffer | null = {
   minSubtotalOre: 40000,
-  endsAt: '2026-12-16T00:00:00+01:00',
-  lastDay: { sv: '15 december', en: '15 December' },
+  endsAt: '2026-12-14T00:00:00+01:00',
+  lastDay: { sv: '13 december', en: '13 December' },
 }
 
 export function isFreeShippingActive(now: Date = new Date()): boolean {
