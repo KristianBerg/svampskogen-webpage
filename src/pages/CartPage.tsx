@@ -145,6 +145,10 @@ const Total = styled.p`
   margin-bottom: 1.5rem;
 `
 
+const OldPrice = styled.del`
+  color: var(--color-text-secondary);
+`
+
 const FreeShippingNotice = styled.p`
   font-size: 0.95rem;
   color: var(--color-accent);
@@ -351,7 +355,15 @@ export default function CartPage() {
                 checked={deliveryMethod === 'shipping'}
                 onChange={() => setDeliveryMethod('shipping')}
               />
-              {shippingMethod.name[lang]}: {formatPrice(shippingOre)}
+              <span>
+                {shippingMethod.name[lang]}:{' '}
+                {shippingOre < shippingMethod.priceOre && (
+                  <>
+                    <OldPrice>{formatPrice(shippingMethod.priceOre)}</OldPrice>{' '}
+                  </>
+                )}
+                {formatPrice(shippingOre)}
+              </span>
             </label>
             <label>
               <input
