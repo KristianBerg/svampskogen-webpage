@@ -23,6 +23,7 @@ import {
   withdrawBody,
 } from './lib/staticPageContent.mjs'
 import { llmsTxt, storeFromTemplate } from './lib/llmsTxt.mjs'
+import { merchantFeed } from './lib/merchantFeed.mjs'
 
 const distDir = path.resolve(import.meta.dirname, '..', 'dist')
 const catalogPath = path.resolve(import.meta.dirname, '..', 'src', 'data', 'products.json')
@@ -147,6 +148,8 @@ function productJsonLd(product, url, photoPaths, categoryNames) {
     name: product.name.sv,
     description: product.description.sv.replace(/\s+/g, ' ').trim() || undefined,
     sku: product.slug,
+    brand: product.brand ? { '@type': 'Brand', name: product.brand } : undefined,
+    gtin: product.gtin,
     url,
     image: photoPaths.length > 0 ? photoPaths.map((photo) => `${siteUrl}/${photo}`) : undefined,
     category: categoryNames.get(product.category),
@@ -282,6 +285,15 @@ async function main() {
       // Plain spaces: the non-breaking one Intl puts before "kr" means nothing in Markdown.
       formatPrice: (amountOre) => formatPrice(amountOre).replace(/\s/g, ' '),
     }),
+  )
+  // Follows generateProductPages: every feed item links to its product page.
+  const feedProducts = generateProductPages ? catalog.products : []
+  const photoPathsBySlug = new Map(
+    await Promise.all(feedProducts.map(async (product) => [product.slug, await productPhotoPaths(product.slug)])),
+  )
+  await writeFile(
+    path.join(distDir, 'merchant-feed.xml'),
+    merchantFeed({ siteUrl, products: feedProducts, categories: catalog.categories, photoPathsBySlug }),
   )
   const storeProducts = generateProductPages ? catalog.products : []
   await writeFile(templatePath, withBody(template, storeBody(storeProducts, catalog.categories)))

@@ -51,7 +51,7 @@ async function writeJson(filePath, data) {
 // Matches the field order in productTypes.ts, so a field the uploader adds
 // (e.g. a first category) lands where a hand-written entry would put it
 // instead of at the end. Unknown fields keep their place after these.
-const FIELD_ORDER = ['slug', 'priceOre', 'vatRate', 'published', 'inStock', 'wholeImage', 'category', 'name', 'description', 'variants']
+const FIELD_ORDER = ['slug', 'priceOre', 'vatRate', 'published', 'inStock', 'wholeImage', 'category', 'brand', 'gtin', 'name', 'description', 'variants']
 
 function orderFields(product) {
   const ordered = {}

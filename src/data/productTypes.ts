@@ -53,6 +53,12 @@ export interface Product {
   // The id of an entry in categories.json. Not read by the image pipeline
   // (paths are keyed by slug alone).
   category?: string
+  // The maker's brand, or the publisher for books. Read only by the build:
+  // the Google Merchant Center feed and the product structured data.
+  brand?: string
+  // The barcode number (EAN/ISBN-13, UPC), digits only. Same use as brand.
+  // scripts/check-catalog.mjs checks the check digit.
+  gtin?: string
   name: {
     sv: string
     en: string

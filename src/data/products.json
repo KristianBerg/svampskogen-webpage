@@ -6,6 +6,7 @@
     "published": true,
     "inStock": true,
     "category": "wildlife-garden",
+    "brand": "Wildlife Garden",
     "name": {
       "sv": "Nötknäppare ekorre",
       "en": "Squirrel nutcracker"
@@ -22,6 +23,7 @@
     "published": true,
     "inStock": true,
     "category": "wildlife-garden",
+    "brand": "Wildlife Garden",
     "name": {
       "sv": "Flaskkork ekorre",
       "en": "Bottle Stopper Squirrel"
@@ -38,6 +40,7 @@
     "published": true,
     "inStock": true,
     "category": "wildlife-garden",
+    "brand": "Wildlife Garden",
     "name": {
       "sv": "Flaskkork groda",
       "en": "Bottle Stopper Frog"
@@ -54,6 +57,7 @@
     "published": true,
     "inStock": true,
     "category": "wildlife-garden",
+    "brand": "Wildlife Garden",
     "name": {
       "sv": "Smyckesskrin skata",
       "en": "Magpie jewelry box"
@@ -70,6 +74,7 @@
     "published": true,
     "inStock": true,
     "category": "wildlife-garden",
+    "brand": "Wildlife Garden",
     "name": {
       "sv": "Svampkrok kantarell",
       "en": "Chanterelle Hook"
@@ -86,6 +91,7 @@
     "published": true,
     "inStock": true,
     "category": "wildlife-garden",
+    "brand": "Wildlife Garden",
     "name": {
       "sv": "Svampkrok stensopp",
       "en": "Penny Bun Hook"
@@ -102,6 +108,7 @@
     "published": true,
     "inStock": true,
     "category": "wildlife-garden",
+    "brand": "Wildlife Garden",
     "name": {
       "sv": "Svampkrok flugsvamp",
       "en": "Fly Agaric Hook"
@@ -118,6 +125,7 @@
     "published": true,
     "inStock": true,
     "category": "odlingskit",
+    "brand": "Ecofungi",
     "name": {
       "sv": "Pluggar ostronskivling",
       "en": "Oyster Mushroom Spawn Plugs"
@@ -134,6 +142,7 @@
     "published": true,
     "inStock": true,
     "category": "odlingskit",
+    "brand": "Ecofungi",
     "name": {
       "sv": "Odlingskit rosa ostronskivling \"blanda själv\"",
       "en": "Pink Oyster Mushroom Growing Kit \"Mix It Yourself\""
@@ -150,6 +159,7 @@
     "published": true,
     "inStock": true,
     "category": "odlingskit",
+    "brand": "Ecofungi",
     "name": {
       "sv": "Odlingskit citronmussling \"blanda själv\"",
       "en": "Golden Oyster Mushroom Growing Kit \"Mix It Yourself\""
@@ -166,6 +176,7 @@
     "published": true,
     "inStock": true,
     "category": "odlingskit",
+    "brand": "Ecofungi",
     "name": {
       "sv": "Odlingskit kungsmussling",
       "en": "King Oyster Mushroom Growing Kit"
@@ -182,6 +193,7 @@
     "published": true,
     "inStock": true,
     "category": "odlingskit",
+    "brand": "Ecofungi",
     "name": {
       "sv": "Odlingskit rosa ostronskivling",
       "en": "Pink Oyster Mushroom Growing Kit"
@@ -198,6 +210,7 @@
     "published": true,
     "inStock": true,
     "category": "odlingskit",
+    "brand": "Ecofungi",
     "name": {
       "sv": "Odlingskit igelkottstaggsvamp",
       "en": "Lion’s Mane Growing Kit"
@@ -214,6 +227,7 @@
     "published": true,
     "inStock": true,
     "category": "test",
+    "brand": "Svampskogen",
     "name": {
       "sv": "Svampplockpåse broderad",
       "en": "Foraging bag with embroidery"
@@ -285,6 +299,7 @@
     "published": true,
     "inStock": true,
     "category": "test",
+    "brand": "Svampskogen",
     "name": {
       "sv": "Svampplockpåse",
       "en": "Foraging bag"
@@ -334,6 +349,8 @@
     "inStock": true,
     "wholeImage": true,
     "category": "bocker",
+    "brand": "Natur & Kultur",
+    "gtin": "9789127174290",
     "name": {
       "sv": "Plocka tång & strandväxter",
       "en": "Plocka tång & strandväxter"
@@ -351,6 +368,8 @@
     "inStock": true,
     "wholeImage": true,
     "category": "bocker",
+    "brand": "Smedtorp",
+    "gtin": "9789151944661",
     "name": {
       "sv": "Sista svampboken",
       "en": "Sista svampboken"
@@ -368,6 +387,8 @@
     "inStock": true,
     "wholeImage": true,
     "category": "bocker",
+    "brand": "Natur & Kultur",
+    "gtin": "9789127192300",
     "name": {
       "sv": "Svamparnas förunderliga liv",
       "en": "Svamparnas förunderliga liv"
@@ -385,6 +406,8 @@
     "inStock": true,
     "wholeImage": true,
     "category": "bocker",
+    "brand": "Bloomsbury",
+    "gtin": "9781501386589",
     "name": {
       "sv": "Mushroom",
       "en": "Mushroom"
@@ -402,6 +425,8 @@
     "inStock": true,
     "wholeImage": true,
     "category": "bocker",
+    "brand": "Bloomsbury",
+    "gtin": "9781472963789",
     "name": {
       "sv": "Concise Mushroom Guide",
       "en": "Concise Mushroom Guide"
@@ -419,6 +444,8 @@
     "inStock": true,
     "wholeImage": true,
     "category": "bocker",
+    "brand": "Opal",
+    "gtin": "9789172261884",
     "name": {
       "sv": "Svampskogens hemligheter",
       "en": "Svampskogens hemligheter"
@@ -436,6 +463,8 @@
     "inStock": true,
     "wholeImage": true,
     "category": "pyssel",
+    "brand": "Tukan Förlag",
+    "gtin": "9789181165104",
     "name": {
       "sv": "Amigurumi: virka en gullig svamp",
       "en": "Amigurumi: virka en gullig svamp"
@@ -453,6 +482,8 @@
     "inStock": true,
     "wholeImage": true,
     "category": "bocker",
+    "brand": "Bonnier Fakta",
+    "gtin": "9789178872169",
     "name": {
       "sv": "Laga svamp",
       "en": "Laga svamp"
@@ -470,6 +501,8 @@
     "inStock": true,
     "wholeImage": true,
     "category": "bocker",
+    "brand": "Natur & Kultur",
+    "gtin": "9789127150300",
     "name": {
       "sv": "Vildplockat",
       "en": "Vildplockat"
@@ -487,6 +520,8 @@
     "inStock": true,
     "wholeImage": true,
     "category": "bocker",
+    "brand": "Stevali",
+    "gtin": "9789152770146",
     "name": {
       "sv": "Giftsvampar och svampgifter",
       "en": "Giftsvampar och svampgifter"
@@ -504,6 +539,8 @@
     "inStock": true,
     "wholeImage": true,
     "category": "bocker",
+    "brand": "Fortuna Förlag",
+    "gtin": "9789187841132",
     "name": {
       "sv": "Svampboken",
       "en": "Svampboken"
@@ -521,6 +558,8 @@
     "inStock": true,
     "wholeImage": true,
     "category": "bocker",
+    "brand": "Norstedts Förlag",
+    "gtin": "9789113066608",
     "name": {
       "sv": "Nya svampboken",
       "en": "Nya svampboken"
@@ -538,6 +577,8 @@
     "inStock": true,
     "wholeImage": true,
     "category": "bocker",
+    "brand": "Norstedts Förlag",
+    "gtin": "9789113056142",
     "name": {
       "sv": "Lilla svampboken",
       "en": "Lilla svampboken"
@@ -555,6 +596,8 @@
     "inStock": true,
     "wholeImage": true,
     "category": "bocker",
+    "brand": "Fortuna Förlag",
+    "gtin": "9789187841170",
     "name": {
       "sv": "Ut i Sveriges flora",
       "en": "Ut i Sveriges flora"
@@ -572,6 +615,8 @@
     "inStock": true,
     "wholeImage": true,
     "category": "bocker",
+    "brand": "John Beaufoy Publishing Ltd",
+    "gtin": "9781912081370",
     "name": {
       "sv": "Mushrooms of Britain and Northern Europe",
       "en": "Mushrooms of Britain and Northern Europe"
@@ -589,6 +634,8 @@
     "inStock": true,
     "wholeImage": true,
     "category": "bocker",
+    "brand": "Natur & Kultur",
+    "gtin": "9789127184787",
     "name": {
       "sv": "Ljus",
       "en": "Ljus"
@@ -606,6 +653,8 @@
     "inStock": true,
     "wholeImage": true,
     "category": "bocker",
+    "brand": "Bokförlaget Polaris",
+    "gtin": "9789189215573",
     "name": {
       "sv": "Färga garn och sticka",
       "en": "Färga garn och sticka"
@@ -623,6 +672,8 @@
     "inStock": true,
     "wholeImage": true,
     "category": "bocker",
+    "brand": "Natur & Kultur",
+    "gtin": "9789127192652",
     "name": {
       "sv": "Handgjord högtid",
       "en": "Handgjord högtid"
@@ -640,6 +691,8 @@
     "inStock": true,
     "wholeImage": true,
     "category": "bocker",
+    "brand": "Flame Tree Publishing",
+    "gtin": "9781835625446",
     "name": {
       "sv": "Anteckningsbok: Mushrooms & Fungi",
       "en": "Notebook: Mushrooms & Fungi"
@@ -657,6 +710,8 @@
     "inStock": true,
     "wholeImage": true,
     "category": "bocker",
+    "brand": "Flame Tree Publishing",
+    "gtin": "9781835626795",
     "name": {
       "sv": "Anteckningsbok: For Spells & Potions",
       "en": "Notebook: For Spells & Potions"
@@ -674,6 +729,8 @@
     "inStock": true,
     "wholeImage": true,
     "category": "bocker",
+    "brand": "Flame Tree Publishing",
+    "gtin": "9781835626801",
     "name": {
       "sv": "Anteckningsbok: The Forest Floor",
       "en": "Notebook: The Forest Floor"
@@ -691,6 +748,8 @@
     "inStock": true,
     "wholeImage": true,
     "category": "bocker",
+    "brand": "Flame Tree Publishing",
+    "gtin": "9781804179499",
     "name": {
       "sv": "Anteckningsbok: A Medieval Herbal",
       "en": "Notebook: A Medieval Herbal"
@@ -707,6 +766,7 @@
     "published": true,
     "inStock": true,
     "category": "friluftsliv",
+    "brand": "Light My Fire",
     "name": {
       "sv": "Swedish Kåsa 300 ml",
       "en": "Swedish Kåsa 300 ml"
@@ -762,6 +822,7 @@
     "published": true,
     "inStock": true,
     "category": "friluftsliv",
+    "brand": "Light My Fire",
     "name": {
       "sv": "Swedish Kåsa 150 ml",
       "en": "Swedish Kåsa 150 ml"
@@ -810,6 +871,7 @@
     "published": true,
     "inStock": true,
     "category": "friluftsliv",
+    "brand": "Light My Fire",
     "name": {
       "sv": "Tändstål Swedish FireSteel Scout",
       "en": "Swedish FireSteel Scout"
@@ -865,6 +927,7 @@
     "published": true,
     "inStock": true,
     "category": "friluftsliv",
+    "brand": "Light My Fire",
     "name": {
       "sv": "FireLighting Kit",
       "en": "FireLighting Kit"
@@ -906,6 +969,7 @@
     "published": true,
     "inStock": true,
     "category": "friluftsliv",
+    "brand": "Light My Fire",
     "name": {
       "sv": "GrandPa's FireFork",
       "en": "GrandPa's FireFork"
@@ -961,6 +1025,7 @@
     "published": true,
     "inStock": true,
     "category": "friluftsliv",
+    "brand": "Light My Fire",
     "name": {
       "sv": "GrandPa's FireGrill",
       "en": "GrandPa's FireGrill"
@@ -977,6 +1042,7 @@
     "published": true,
     "inStock": true,
     "category": "friluftsliv",
+    "brand": "Light My Fire",
     "name": {
       "sv": "MayaSticks tändved 200 g",
       "en": "MayaSticks fire starter 200 g"
@@ -993,6 +1059,7 @@
     "published": true,
     "inStock": true,
     "category": "friluftsliv",
+    "brand": "Light My Fire",
     "name": {
       "sv": "MayaSticks \"On-a-Rope\"",
       "en": "MayaSticks \"On-a-Rope\""
@@ -1009,6 +1076,7 @@
     "published": true,
     "inStock": true,
     "category": "friluftsliv",
+    "brand": "Light My Fire",
     "name": {
       "sv": "Swedish Spork Original",
       "en": "Swedish Spork Original"
@@ -1064,6 +1132,7 @@
     "published": true,
     "inStock": true,
     "category": "friluftsliv",
+    "brand": "Light My Fire",
     "name": {
       "sv": "Swedish Spork Stainless",
       "en": "Swedish Spork Stainless"
@@ -1081,6 +1150,7 @@
     "inStock": true,
     "wholeImage": true,
     "category": "knivar",
+    "brand": "Opinel",
     "name": {
       "sv": "Opinel svampkniv i bok",
       "en": "Opinel mushroom knife, beech"
@@ -1098,6 +1168,7 @@
     "inStock": true,
     "wholeImage": true,
     "category": "knivar",
+    "brand": "Opinel",
     "name": {
       "sv": "Opinel svampkniv i ek med fodral",
       "en": "Opinel mushroom knife, oak with sheath"
@@ -1115,6 +1186,7 @@
     "inStock": true,
     "wholeImage": true,
     "category": "knivar",
+    "brand": "Opinel",
     "name": {
       "sv": "Opinel svampkniv i valnöt",
       "en": "Opinel mushroom knife, walnut"
