@@ -35,18 +35,19 @@ const maxDescriptionLength = 160
 // sitemap entry per product.
 const generateProductPages = true
 
+// Each page is a .html file, not <route>/index.html: Pages serves a .html file
+// with 200 at the extensionless path, while a directory URL gets a 301 to its
+// trailing-slash form, which redirects away from the canonical URL.
 const staticPages = [
   {
     route: 'course',
-    outputFile: 'course/index.html',
+    outputFile: 'course.html',
     title: 'Kurser och turer – Svampskogen',
     description:
       'Säsongens svampkurser är avslutade. Nya kurser kommer under svampsäsongen 2027.',
     image: `${siteUrl}/og/course.jpg`,
     body: courseBody(),
   },
-  // A .html file is served with 200 at the extensionless path, while a
-  // directory URL gets a 301 to its trailing-slash form.
   {
     route: 'about',
     outputFile: 'about.html',
