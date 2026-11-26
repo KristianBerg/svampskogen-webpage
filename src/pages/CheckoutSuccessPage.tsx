@@ -94,6 +94,8 @@ export default function CheckoutSuccessPage() {
 
   const subtotal = rows.reduce((sum, row) => sum + row.product.priceOre * row.item.quantity, 0)
   const deliveryPriceOre = deliveryMethod === 'pickup' ? 0 : shippingPriceOre(subtotal)
+  // Worked out from the saved cart, which can't see a discount code typed on Stripe's
+  // page, so the label says so. Stripe's receipt has the amount actually charged.
   const total = subtotal + deliveryPriceOre
 
   return (
@@ -132,7 +134,7 @@ export default function CheckoutSuccessPage() {
             : {formatPrice(deliveryPriceOre)}
           </Shipping>
           <Total>
-            {t('cart_total')}: {formatPrice(total)}
+            {t('checkout_success_total')}: {formatPrice(total)}
           </Total>
         </>
       )}

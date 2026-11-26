@@ -231,6 +231,12 @@ const ProductLink = styled(Link)`
   }
 `
 
+const DiscountCodeNotice = styled.p`
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 1.5rem;
+`
+
 const TermsNotice = styled.p`
   width: min(560px, 90vw);
   font-size: 0.8rem;
@@ -389,6 +395,7 @@ export default function CartPage() {
           <Total>
             {t('cart_total')}: {formatPrice(total)}
           </Total>
+          <DiscountCodeNotice>{t('cart_discount_code_notice')}</DiscountCodeNotice>
           <TermsNotice>
             {t('cart_terms_prefix')}
             {' '}

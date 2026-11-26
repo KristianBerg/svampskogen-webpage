@@ -232,6 +232,10 @@ export default {
         locale,
         line_items: sessionLineItems,
         metadata: { delivery_method: deliveryMethod },
+        // Discount codes are created in the Stripe Dashboard and typed on Stripe's payment
+        // page, so Stripe checks validity, expiry and use limits. The free shipping
+        // threshold above still uses the undiscounted subtotal.
+        allow_promotion_codes: true,
         // Checkout always collects an email. Shipping orders get a name with the address;
         // pickup orders ask for one directly so the order can be matched at the counter.
         ...(deliveryMethod === 'shipping'

@@ -136,5 +136,7 @@
   "cart_delivery_time": "Vi skickar din beställning inom 4 arbetsdagar. Leveransen tar sedan normalt 1–3 arbetsdagar med DHL.",
   "free_shipping_notice": "Fri frakt på beställningar över {{amount}} t.o.m. {{lastDay}}.",
   "cart_free_shipping_remaining": "Handla för {{amount}} till så får du fri frakt (gäller t.o.m. {{lastDay}}).",
-  "cart_free_shipping_reached": "Du får fri frakt."
+  "cart_free_shipping_reached": "Du får fri frakt.",
+  "cart_discount_code_notice": "Har du en rabattkod? Du anger den i kassan, i nästa steg.",
+  "checkout_success_total": "Totalt före eventuell rabattkod"
 }
