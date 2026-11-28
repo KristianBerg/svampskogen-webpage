@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { Page } from '../components/Page'
@@ -9,6 +9,25 @@ import { formatPrice } from '../lib/formatPrice'
 import { getProductImages } from '../lib/productImages'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { freeShippingOffer, isFreeShippingActive } from '../data/shippingMethods'
+
+const CONTACT_EMAIL = 'kristian@svampskogen.com'
+
+const Banner = styled.div`
+  width: min(960px, 92vw);
+  margin-bottom: 1.5rem;
+  padding: 0.9rem 1.1rem;
+  background: var(--color-accent);
+  color: var(--color-background);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  text-align: center;
+
+  a {
+    color: inherit;
+    text-decoration: underline;
+    white-space: nowrap;
+  }
+`
 
 const OfferNotice = styled.p`
   font-size: 0.95rem;
@@ -130,6 +149,13 @@ export default function StorePage() {
 
   return (
     <Page style={{ minHeight: '60vh' }}>
+      <Banner role="note">
+        <Trans
+          i18nKey="mycelium_banner"
+          values={{ email: CONTACT_EMAIL }}
+          components={{ mail: <a href={`mailto:${CONTACT_EMAIL}`} /> }}
+        />
+      </Banner>
       <Heading>{t('store_heading')}</Heading>
       {freeShippingOffer && isFreeShippingActive() && inStockProducts.length > 0 && (
         <OfferNotice>

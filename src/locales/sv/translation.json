@@ -134,6 +134,7 @@
   "not_found_body": "Sidan du letar efter finns inte.",
   "back_to_home": "Tillbaka till startsidan",
   "cart_delivery_time": "Vi skickar din beställning inom 4 arbetsdagar. Leveransen tar sedan normalt 1–3 arbetsdagar med DHL.",
+  "mycelium_banner": "Köpte du ett odlingskit rund björk med rosa ostronskivling under Mitt Möllans julmarknad? Jag glömde ge dig mycelet, hör av dig till <mail>{{email}}</mail> om du ser detta!",
   "free_shipping_notice": "Fri frakt på beställningar över {{amount}} t.o.m. {{lastDay}}.",
   "cart_free_shipping_remaining": "Handla för {{amount}} till så får du fri frakt (gäller t.o.m. {{lastDay}}).",
   "cart_free_shipping_reached": "Du får fri frakt.",
